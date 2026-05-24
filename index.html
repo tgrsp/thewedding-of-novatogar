@@ -399,10 +399,9 @@ body {
 </head>
 <body>
 
-<div id="yt-iframe">
-  <iframe id="yt-frame" src="" allow="autoplay; encrypted-media" allowfullscreen
-    style="width:1px;height:1px;opacity:0;position:fixed;pointer-events:none;"></iframe>
-</div>
+<audio id="bg-audio" loop preload="none"
+  src="https://tgrsp.github.io/thewedding-of-novatogar/L-O-V-E%20%5BUZWmtxLiiFE%5D.mp3">
+</audio>
 
 <div id="music-player">
   <button id="music-btn" onclick="toggleMusic()" title="Play / Pause musik">&#9654;</button>
@@ -1020,22 +1019,24 @@ setInterval(updateCountdown, 1000);
 
 // ── MUSIC ──
 var playing = false;
-var ytFrame = document.getElementById('yt-frame');
+var audio = document.getElementById('bg-audio');
 var musicBtn = document.getElementById('music-btn');
 
 function startMusic() {
-  document.getElementById('yt-iframe').style.display = 'block';
-  ytFrame.src = 'https://www.youtube.com/embed/UZWmtxLiiFE?autoplay=1&loop=1&playlist=UZWmtxLiiFE&enablejsapi=1';
-  musicBtn.innerHTML = '&#9646;&#9646;';
-  musicBtn.classList.remove('paused');
-  playing = true;
+  audio.play().then(function() {
+    musicBtn.innerHTML = '&#9646;&#9646;';
+    musicBtn.classList.remove('paused');
+    playing = true;
+  }).catch(function() {
+    // Autoplay blocked, will retry on interaction
+  });
 }
 
 function toggleMusic() {
   if (!playing) {
     startMusic();
   } else {
-    ytFrame.src = '';
+    audio.pause();
     musicBtn.innerHTML = '&#9654;';
     musicBtn.classList.add('paused');
     playing = false;
@@ -1043,12 +1044,7 @@ function toggleMusic() {
 }
 
 // Auto play — try immediately, fallback to first user interaction
-function tryAutoPlay() {
-  startMusic();
-}
-// Try after short delay (some browsers need DOM ready)
-setTimeout(tryAutoPlay, 800);
-// Also try on first interaction in case browser blocked autoplay
+setTimeout(function(){ startMusic(); }, 800);
 function onFirstInteraction() {
   if (!playing) { startMusic(); }
   document.removeEventListener('click', onFirstInteraction);
