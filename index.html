@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Pernikahan Nova & Togar</title>
+<!-- Preconnect: image CDN & Google Fonts (eliminates DNS+TLS latency) -->
+<link rel="preconnect" href="https://i.ibb.co.com" crossorigin>
+<link rel="dns-prefetch" href="https://i.ibb.co.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Preload LCP hero image (background-image via CSS needs this tag to be discovered early) -->
+<link rel="preload" as="image" href="https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg" fetchpriority="high">
+<!-- Preload above-the-fold couple photos -->
+<link rel="preload" as="image" href="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="https://i.ibb.co.com/twDbWThF/T1.jpg" fetchpriority="high">
+<!-- Fonts: slimmed to only weights actually used, font-display=swap prevents render-blocking -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;600&family=Great+Vibes&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet"></noscript>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── IMAGE SKELETON SHIMMER (shows while images load) ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.photo-upload-wrap,
+.gallery-photo-wrap,
+.quote-photo-wrap,
+#quote-togar-photo,
+#quote-nova-photo {
+  background: linear-gradient(90deg, #e8dece 25%, #f5ede0 50%, #e8dece 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+/* Stop shimmer once image is loaded */
+.img-loaded { animation: none !important; background: none !important; }
+
+/* ── LAZY SECTIONS: skip rendering off-screen content ── */
+.section, .gallery-bg, .countdown-section, .quote-nova-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+:root {
+  --cream: #faf6ee;
+  --ivory: #f5efe0;
+  --rose: #b07050;
+  --rose-light: #c9937a;
+  --rose-pale: #e8cfc0;
+  --blush: #f7f0e0;
+  --gold: #9a7a3a;
+  --gold-light: #c8a84a;
+  --gold-pale: #e8d898;
+  --brown-dark: #3c2a18;
+  --brown-mid: #7a5a38;
+  --brown-pale: #b09070;
+  --section-bg1: #f7f2e8;
+  --section-bg2: #f2ece0;
+  --section-bg3: #ede6d8;
+}
+
+body {
+  background: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--brown-dark);
+  overflow-x: hidden;
+}
+
+/* ── MUSIC PLAYER ── */
+#music-player {
+  position: fixed; top: 16px; right: 16px; z-index: 9999;
+}
+#music-btn {
+  width: 52px; height: 52px; border-radius: 50%; border: none;
+  background: linear-gradient(145deg, #d4a84b, #9a7a3a);
+  color: #fff; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow:
+    0 4px 16px rgba(154,122,58,0.45),
+    0 0 0 2px rgba(255,255,255,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+  position: relative;
+  overflow: visible;
+}
+/* Pulse ring animation */
+#music-btn::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(200,168,74,0.5);
+  animation: musicPulse 2s ease-out infinite;
+  pointer-events: none;
+}
+#music-btn.paused::before { animation: none; }
+@keyframes musicPulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  70%  { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+#music-btn:hover { transform: scale(1.14); box-shadow: 0 6px 24px rgba(154,122,58,0.55), 0 0 0 2px rgba(255,255,255,0.3), inset 0 1px 0 rgba(255,255,255,0.3); }
+#music-btn:active { transform: scale(0.96); }
+#yt-iframe { display:none; }
+
+/* ══════════════════════════════════
+   FLOWER PETALS ANIMATION (Hero Only)
+══════════════════════════════════ */
+.petal-canvas {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1;
+}
+.petal {
+  position: absolute;
+  top: -60px;
+  opacity: 0;
+  animation: petalFall linear infinite;
+  will-change: transform, opacity;
+}
+.petal svg { display: block; }
+
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+  5%   { opacity: 0.85; }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(110vh) rotate(540deg) translateX(35px); opacity: 0; }
+}
+
+/* ── SCROLL FADE ANIMATIONS ── */
+.fade-in-up    { opacity: 0; transform: translateY(36px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.fade-in-down  { opacity: 0; transform: translateY(-36px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.fade-in-left  { opacity: 0; transform: translateX(-40px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.fade-in-right { opacity: 0; transform: translateX(40px);  transition: opacity 0.75s ease, transform 0.75s ease; }
+.fade-in-up.visible, .fade-in-down.visible,
+.fade-in-left.visible, .fade-in-right.visible {
+  opacity: 1; transform: none;
+}
+.delay-1 { transition-delay: 0.12s; }
+.delay-2 { transition-delay: 0.26s; }
+.delay-3 { transition-delay: 0.40s; }
+.delay-4 { transition-delay: 0.54s; }
+.delay-5 { transition-delay: 0.68s; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 60px 24px 40px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(200,168,74,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(176,112,80,0.10) 0%, transparent 55%);
+  pointer-events:none;
+}
+.hero > * { position: relative; z-index: 2; }
+.floral-row { display:flex; justify-content:center; gap:4px; font-size:16px; color:var(--brown-dark); margin-bottom:8px; flex-wrap:wrap; }
+.gold-ornament { color:var(--gold-light); font-size:18px; letter-spacing: 4px; }
+.hero-tagline {
+  font-family:'Cormorant Garamond',serif; font-size:13px; color:var(--brown-mid);
+  letter-spacing:6px; text-transform:uppercase; margin-bottom:20px;
+}
+.hero-names { font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(46px,12vw,76px); color:var(--brown-dark); line-height:1.08; }
+.hero-amp { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(60px,17vw,104px); color:var(--gold); display:block; line-height:0.88; }
+.hero-date { font-family:'Playfair Display',serif; font-size:21px; color:var(--rose); font-style:italic; margin-top:16px; margin-bottom:6px; letter-spacing:1px; }
+.hero-quran {
+  max-width:460px; margin:20px auto 0; font-size:15px; color:var(--brown-mid);
+  font-style:italic; line-height:1.75;
+  background:rgba(255,255,255,0.52);
+  border: 1px solid rgba(154,122,58,0.18);
+  border-radius:2px; padding:20px 24px;
+  box-shadow: 0 2px 20px rgba(60,42,24,0.06);
+}
+.hero-quran .ref { color:var(--gold); font-size:13px; font-style:normal; display:block; margin-top:8px; letter-spacing:2px; }
+
+.classic-divider {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 14px 0; color: var(--gold); font-size: 14px; letter-spacing: 6px;
+}
+.classic-divider::before, .classic-divider::after {
+  content: ''; flex: 1; max-width: 70px; height: 1px; background: var(--gold-pale);
+}
+
+/* ── SECTIONS ── */
+.section { padding: 64px 24px; text-align:center; position: relative; overflow: hidden; }
+.section-title { font-family:'Playfair Display',serif; font-size:33px; font-style:italic; color:var(--brown-dark); margin-bottom:6px; }
+.section-sub { font-family:'Cormorant Garamond',serif; font-size:11px; color:var(--gold); letter-spacing:5px; text-transform:uppercase; margin-bottom:32px; }
+.ornament-row { text-align:center; padding:12px 0; font-size:16px; color:var(--gold-light); letter-spacing:8px; }
+
+/* ── PHOTO WRAP ── */
+.photo-upload-wrap {
+  position: relative; cursor: pointer; overflow: hidden;
+  border-radius: 4px; background: linear-gradient(135deg, var(--rose-pale), var(--blush));
+  display: flex; align-items:center; justify-content:center;
+  transition: box-shadow 0.2s; border: 1px solid rgba(154,122,58,0.15);
+}
+.photo-upload-wrap:hover { box-shadow: 0 6px 28px rgba(60,42,24,0.15); }
+.photo-upload-wrap img { width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0; border-radius:4px; }
+.photo-placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:20px; z-index:1; pointer-events:none; user-select:none; }
+.photo-placeholder .ph-icon { font-size:32px; opacity:0.4; }
+.photo-placeholder .ph-text { font-family:'Cormorant Garamond',serif; font-size:13px; color:var(--brown-mid); text-align:center; font-style:italic; line-height:1.4; }
+.photo-upload-wrap.has-photo .photo-placeholder { display:none; }
+.photo-edit-badge { display:none !important; }
+
+/* ── COUPLE GRID ── */
+.couple-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:500px; margin:0 auto 28px; }
+.couple-card {
+  background:var(--cream); border-radius:4px; overflow:hidden;
+  box-shadow: 0 4px 24px rgba(60,42,24,0.10); border: 1px solid rgba(154,122,58,0.12);
+}
+.couple-photo-wrap { width:100%; aspect-ratio:3/4; position:relative; overflow:hidden; }
+
+/* ── PARENTS ── */
+.parents-section {
+  background:rgba(255,255,255,0.65); border-radius:4px;
+  max-width:460px; margin:0 auto; padding:28px 24px;
+  border: 1px solid rgba(154,122,58,0.15);
+  box-shadow: 0 2px 16px rgba(60,42,24,0.06);
+}
+.parent-label { font-size:11px; color:var(--gold); letter-spacing:4px; text-transform:uppercase; margin-bottom:10px; }
+.parent-row { font-size:16px; color:var(--brown-dark); margin-bottom:6px; line-height:1.6; }
+.parent-row .name { font-weight:700; }
+.parent-row .mother { font-style:italic; color:var(--brown-mid); }
+
+/* ── COUNTDOWN ── */
+.countdown-section { background: linear-gradient(160deg, var(--section-bg3), var(--ivory)); padding:56px 24px; text-align:center; position:relative; overflow:hidden; }
+.countdown-boxes { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:24px; }
+.cbox {
+  background:rgba(255,255,255,0.65); border-radius:4px; padding:18px 22px 14px; min-width:76px;
+  border: 1px solid rgba(154,122,58,0.18); box-shadow: 0 2px 12px rgba(60,42,24,0.07);
+}
+.cbox .num { font-family:'Playfair Display',serif; font-size:44px; font-weight:700; color:var(--gold); display:block; line-height:1; }
+.cbox .lbl { font-family:'Cormorant Garamond',serif; font-size:11px; color:var(--brown-pale); letter-spacing:3px; text-transform:uppercase; }
+
+/* ── VENUE ── */
+.event-card {
+  display:flex; gap:16px; align-items:flex-start;
+  background:rgba(255,255,255,0.75); border-radius:4px; padding:20px;
+  margin:0 auto 14px; max-width:420px; text-align:left;
+  border: 1px solid rgba(154,122,58,0.15); box-shadow: 0 2px 10px rgba(60,42,24,0.06);
+}
+.event-icon { font-size:24px; flex-shrink:0; margin-top:2px; }
+.event-name { font-family:'Playfair Display',serif; font-size:16px; font-weight:600; color:var(--brown-dark); margin-bottom:2px; }
+.event-time { font-family:'Nunito',sans-serif; font-size:14px; color:var(--rose); font-weight:500; }
+.venue-name { font-family:'Playfair Display',serif; font-size:27px; font-weight:700; color:var(--brown-dark); margin-bottom:8px; }
+.venue-addr { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--brown-mid); line-height:1.8; margin-bottom:24px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display:inline-block; padding:12px 32px; border-radius:2px;
+  font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  cursor:pointer; text-decoration:none; border:none;
+  transition:opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn:hover { opacity:0.88; transform:translateY(-2px); box-shadow: 0 6px 20px rgba(60,42,24,0.18); }
+.btn-rose { background:linear-gradient(135deg, var(--rose-light), var(--rose)); color:#fff; }
+.btn-gold { background:linear-gradient(135deg, var(--gold-light), var(--gold)); color:#fff; }
+
+/* ── GALLERY ── */
+.gallery-bg { background: linear-gradient(160deg, var(--ivory), var(--section-bg2)); padding:64px 24px; text-align:center; position:relative; overflow:hidden; }
+.gallery-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:520px; margin:28px auto 0; }
+.gallery-item-wrap { border-radius:4px; overflow:hidden; box-shadow: 0 4px 20px rgba(60,42,24,0.10); border: 1px solid rgba(154,122,58,0.12); }
+.gallery-photo-wrap { width:100%; aspect-ratio:3/4; position:relative; overflow:hidden; }
+.gallery-caption { font-family:'Cormorant Garamond',serif; font-size:14px; color:var(--brown-mid); font-style:italic; margin-top:8px; text-align:center; }
+
+/* ── QUOTES ── */
+.quote-mark { font-family:'Playfair Display',serif; font-size:80px; color:rgba(154,122,58,0.3); line-height:0.6; display:block; margin-bottom:10px; }
+.quote-text { font-family:'Playfair Display',serif; font-size:19px; font-style:italic; color:var(--brown-dark); line-height:1.75; margin-bottom:14px; }
+.quote-by { font-family:'Cormorant Garamond',serif; font-size:11px; color:var(--gold); letter-spacing:5px; text-transform:uppercase; }
+.quote-note { font-family:'Cormorant Garamond',serif; font-size:14px; color:var(--brown-pale); font-style:italic; margin-top:12px; }
+
+/* ── QUOTE WITH SIDE PHOTO ── */
+.quote-with-photo { display: flex; align-items: center; gap: 28px; max-width: 680px; margin: 0 auto; padding: 0 8px; }
+.quote-with-photo.reverse { flex-direction: row-reverse; }
+.quote-side-photo { flex: 0 0 160px; width: 160px; }
+.quote-photo-wrap {
+  width: 160px; aspect-ratio: 3/4; border-radius: 4px; overflow: hidden;
+  position: relative; cursor: default; background: rgba(255,255,255,0.35);
+  box-shadow: 0 6px 28px rgba(60,42,24,0.18); border: 1px solid rgba(154,122,58,0.2);
+}
+.quote-photo-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.quote-photo-wrap.has-photo img { display: block; }
+.quote-photo-wrap.has-photo .photo-placeholder { display: none; }
+.quote-text-col { flex: 1; text-align: left; }
+@media (max-width: 500px) {
+  .quote-with-photo, .quote-with-photo.reverse { flex-direction: column; align-items: center; text-align: center; }
+  .quote-side-photo { width: 130px; }
+  .quote-photo-wrap { width: 130px; }
+  .quote-text-col { text-align: center; }
+}
+
+/* ── QUOTE NOVA SECTION (dark bg, bright text) ── */
+.quote-nova-section {
+  background: linear-gradient(145deg, #2c1e10 0%, #4a2e18 50%, #3a2414 100%);
+  padding: 64px 24px; text-align: center; position: relative; overflow: hidden;
+}
+.quote-nova-section .quote-mark { color: rgba(200,168,74,0.4); }
+.quote-nova-section .quote-text { color: #f5e8cc; }
+.quote-nova-section .quote-by { color: var(--gold-light); }
+.quote-nova-section .quote-note { color: rgba(245,232,204,0.62); }
+.quote-nova-section .ornament-row { color: var(--gold-light); }
+
+/* ── GIFT ── */
+.bank-card {
+  background:#fff; border-radius:4px; padding:28px 24px; max-width:360px; margin:0 auto 16px;
+  box-shadow: 0 4px 20px rgba(60,42,24,0.08); border: 1px solid rgba(154,122,58,0.15);
+  overflow: hidden;
+}
+.bank-name { font-family:'Playfair Display',serif; font-size:19px; font-weight:700; color:var(--brown-dark); margin-bottom:8px; }
+.bank-number { font-family:'Playfair Display',serif; font-size:clamp(20px,6vw,27px); font-weight:700; color:var(--gold); letter-spacing:3px; margin-bottom:6px; word-break:break-all; }
+.bank-owner { font-family:'Cormorant Garamond',serif; font-size:14px; color:var(--brown-mid); margin-bottom:16px; }
+.bank-card .btn { width:100%; text-align:center; }
+
+/* ── RSVP ── */
+.rsvp-form { max-width:420px; margin:0 auto; text-align:left; }
+.form-label { font-family:'Playfair Display',serif; font-size:14px; color:var(--brown-mid); display:block; margin-bottom:6px; }
+.form-input, .form-select, .form-textarea {
+  width:100%; background:var(--cream); border:1px solid rgba(154,122,58,0.25); border-radius:2px;
+  padding:12px 16px; font-family:'Cormorant Garamond',serif; font-size:16px;
+  color:var(--brown-dark); margin-bottom:18px; outline:none; transition:border-color 0.2s;
+  appearance: none; -webkit-appearance: none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); }
+.form-textarea { height:100px; resize:vertical; }
+
+/* ── COMMENTS ── */
+.comments-list { max-width:480px; margin:28px auto 0; }
+.comment-card {
+  background:var(--cream); border-radius:4px; padding:18px 20px; margin-bottom:12px; text-align:left;
+  border: 1px solid rgba(154,122,58,0.12); box-shadow: 0 2px 10px rgba(60,42,24,0.05);
+}
+.comment-name { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--brown-dark); margin-bottom:4px; }
+.comment-badge { display:inline-block; font-size:11px; padding:3px 12px; border-radius:2px; margin-bottom:8px; font-family:'Cormorant Garamond',serif; letter-spacing:1px; }
+.badge-hadir { background:var(--rose-pale); color:var(--rose); }
+.badge-tidak { background:#f0f0f0; color:#888; }
+.badge-maybe { background:var(--gold-pale); color:var(--gold); }
+.comment-text { font-family:'Cormorant Garamond',serif; font-size:15px; color:var(--brown-mid); font-style:italic; line-height:1.6; }
+
+/* ── COPY TOAST ── */
+.copy-toast {
+  position:fixed; bottom:32px; left:50%;
+  transform:translateX(-50%);
+  background:var(--brown-dark); color:#fff;
+  padding:10px 28px; border-radius:24px;
+  font-family:'Nunito',sans-serif; font-size:13px; letter-spacing:1px;
+  z-index:9998; white-space:nowrap;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity 0.3s ease, visibility 0.3s ease;
+}
+.copy-toast.show { opacity:1; visibility:visible; pointer-events:auto; }
+
+/* ── FOOTER ── */
+.footer {
+  background: linear-gradient(160deg, #2c1e10, #4a2e18);
+  color:rgba(245,232,204,0.7); text-align:center; padding:56px 24px 44px;
+  position: relative; overflow: hidden;
+}
+.footer-names { font-family:'Playfair Display',serif; font-size:30px; font-style:italic; color:#e8c87a; margin-bottom:6px; }
+.footer-date { font-size:15px; margin-bottom:4px; letter-spacing:2px; }
+.footer-couple { font-size:15px; font-style:italic; color:rgba(245,232,204,0.5); }
+.footer-divider { font-size:20px; margin:14px 0; color:var(--gold-light); letter-spacing:10px; }
+.footer-made { font-size:13px; color:rgba(245,232,204,0.35); letter-spacing:1px; }
+
+.photo-upload-wrap { pointer-events: none !important; cursor: default !important; }
+.photo-upload-wrap input[type=file] { display: none !important; }
+.quote-photo-wrap { pointer-events: none !important; cursor: default !important; }
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
+
+.bg-yellow-tag {
+  background: linear-gradient(135deg, var(--gold-pale), #f0e0a0);
+  border-radius:2px; padding:10px 22px; display:inline-block; margin-bottom:20px;
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
+  color:var(--brown-dark); border: 1px solid rgba(154,122,58,0.2); letter-spacing:1px;
+}
+
+/* SVG Floral background elements */
+.floral-bg-svg { position: absolute; pointer-events: none; z-index: 0; }
+.section-content { position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<div id="yt-iframe">
+  <iframe id="yt-frame" src="" allow="autoplay; encrypted-media" allowfullscreen
+    style="width:1px;height:1px;opacity:0;position:fixed;pointer-events:none;"></iframe>
+</div>
+
+<div id="music-player">
+  <button id="music-btn" onclick="toggleMusic()" title="Play / Pause musik">&#9654;</button>
+</div>
+
+<div class="copy-toast" id="copy-toast">&#10003; Nomor rekening disalin!</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" style="background:
+    linear-gradient(165deg, rgba(249,244,232,0.82) 0%, rgba(237,226,204,0.85) 55%, rgba(232,216,192,0.88) 100%),
+    url('https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg') center center / cover no-repeat;">
+  <div class="petal-canvas" id="petal-canvas"></div>
+
+  <!-- Credit badge pojok kanan atas -->
+  <div style="position:absolute;top:14px;left:14px;z-index:10;
+    background:rgba(255,255,255,0.45);
+    border:1px solid rgba(154,122,58,0.25);
+    border-radius:3px;padding:5px 10px;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:10px;color:var(--brown-mid);
+      letter-spacing:1px;line-height:1.5;text-align:center;margin:0;">
+      created &amp; designed with love<br>
+      <span style="font-weight:600;color:var(--brown-dark);letter-spacing:2px;">togarsp</span>
+    </p>
+  </div>
+
+  <div class="floral-row fade-in-down">
+    <span style="font-size:20px;opacity:0.5;color:var(--gold)">&#10047;</span>
+    <span style="font-size:14px;opacity:0.4;color:var(--gold)">&#10048;</span>
+    <span style="font-size:18px;opacity:0.6;color:var(--gold)">&#10046;</span>
+    <span style="font-size:14px;opacity:0.4;color:var(--gold)">&#10048;</span>
+    <span style="font-size:20px;opacity:0.5;color:var(--gold)">&#10047;</span>
+  </div>
+  <div class="ornament-row fade-in-down delay-1">&#10022; &#10023; &#10022;</div>
+
+  <p class="hero-tagline fade-in-up delay-1">We Are Getting Married</p>
+
+  <div class="hero-names fade-in-up delay-2" style="font-family:'Great Vibes',cursive;font-weight:400;font-size:clamp(52px,14vw,90px);line-height:1.15;color:var(--brown-dark);letter-spacing:1px;">
+    Nova &amp; Togar
+  </div>
+
+  <div class="hero-date fade-in-up delay-3">Sabtu, 8 Agustus 2026</div>
+
+  <div class="classic-divider fade-in-up delay-3">&#10022; &#10023; &#10022;</div>
+
+  <div class="hero-quran fade-in-up delay-4">
+    <em>"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya..."</em>
+    <span class="ref">&#8212; QS. Ar-Rum : 21</span>
+  </div>
+
+  <div class="ornament-row fade-in-up delay-5" style="margin-top:20px">&#10022; &#10023; &#10022;</div>
+</section>
+
+<!-- ===== COUPLE + FOTO MEMPELAI ===== -->
+<section class="section" style="background:linear-gradient(160deg,var(--section-bg1),var(--ivory));">
+  <!-- Floral corner SVGs -->
+  <svg class="floral-bg-svg" style="top:-30px;left:-30px;width:220px;opacity:0.08" viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="60" stroke="#9a7a3a" stroke-width="1"/>
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="57" cy="57" rx="16" ry="26" fill="#9a7a3a" opacity="0.3" transform="rotate(-45 57 57)"/>
+    <ellipse cx="143" cy="57" rx="16" ry="26" fill="#9a7a3a" opacity="0.3" transform="rotate(45 143 57)"/>
+    <ellipse cx="57" cy="143" rx="16" ry="26" fill="#9a7a3a" opacity="0.3" transform="rotate(45 57 143)"/>
+    <ellipse cx="143" cy="143" rx="16" ry="26" fill="#9a7a3a" opacity="0.3" transform="rotate(-45 143 143)"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a" opacity="0.5"/>
+  </svg>
+  <svg class="floral-bg-svg" style="bottom:-30px;right:-30px;width:220px;opacity:0.08;transform:rotate(45deg)" viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="60" stroke="#9a7a3a" stroke-width="1"/>
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a" opacity="0.5"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a" opacity="0.5"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a" opacity="0.5"/>
+  </svg>
+
+  <div class="section-content">
+    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
+    <div style="text-align:center;padding:8px 0;font-size:24px;letter-spacing:10px;color:var(--gold-light);" class="fade-in-down delay-1">&#10047; &#10086; &#10047;</div>
+    <h2 class="section-title fade-in-up delay-1">Mempelai</h2>
+
+    <!-- Couple photos side by side, enlarged, with names & parents below -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:560px;margin:0 auto 36px;">
+
+      <!-- Mempelai Wanita -->
+      <div class="fade-in-left delay-2" style="display:flex;flex-direction:column;align-items:center;">
+        <div style="width:100%;aspect-ratio:3/4;border-radius:6px;overflow:hidden;position:relative;
+             box-shadow:0 8px 32px rgba(60,42,24,0.18);border:1px solid rgba(154,122,58,0.2);">
+          <a href="https://ibb.co.com/zHxPSD43" style="display:block;position:absolute;inset:0;overflow:hidden;pointer-events:none;">
+            <img src="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" alt="Nova" border="0"
+              fetchpriority="high" decoding="async"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+          </a>
+        </div>
+        <div style="margin-top:16px;text-align:center;padding:0 4px;">
+          <p style="font-family:'Great Vibes',cursive;font-size:28px;color:var(--brown-dark);line-height:1.2;margin-bottom:6px;">Nova Yusniar</p>
+          <p style="font-size:11px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;">Mempelai Wanita</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--brown-dark);font-weight:600;line-height:1.6;">Bapak Jajang Endi Rohaendi</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--brown-mid);font-style:italic;line-height:1.6;">&amp; Ibu Susilawati</p>
+        </div>
+      </div>
+
+      <!-- Mempelai Pria -->
+      <div class="fade-in-right delay-2" style="display:flex;flex-direction:column;align-items:center;">
+        <div style="width:100%;aspect-ratio:3/4;border-radius:6px;overflow:hidden;position:relative;
+             box-shadow:0 8px 32px rgba(60,42,24,0.18);border:1px solid rgba(154,122,58,0.2);">
+          <a href="https://ibb.co.com/LD1C2XPH" style="display:block;position:absolute;inset:0;overflow:hidden;pointer-events:none;">
+            <img src="https://i.ibb.co.com/twDbWThF/T1.jpg" alt="Togar" border="0"
+              fetchpriority="high" decoding="async"
+              style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;">
+          </a>
+        </div>
+        <div style="margin-top:16px;text-align:center;padding:0 4px;">
+          <p style="font-family:'Great Vibes',cursive;font-size:28px;color:var(--brown-dark);line-height:1.2;margin-bottom:6px;">Muhammad Togar S.P.</p>
+          <p style="font-size:11px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;">Mempelai Pria</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--brown-dark);font-weight:600;line-height:1.6;">Bapak Alm. Ridwan</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--brown-mid);font-style:italic;line-height:1.6;">&amp; Ibu Nurdiana</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:28px">&#10022; &#10023; &#10022;</div>
+  </div>
+</section>
+
+<!-- ===== QUOTE MEMPELAI PRIA ===== -->
+<section style="background:linear-gradient(145deg,#2c1e10 0%,#4a2e18 55%,#3a2414 100%);padding:0;overflow:hidden;position:relative;">
+  <!-- Floral bg -->
+  <svg class="floral-bg-svg" style="top:-30px;left:-30px;width:220px;opacity:0.12" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#c8a84a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#c8a84a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#c8a84a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#c8a84a"/>
+    <ellipse cx="57" cy="57" rx="14" ry="24" fill="#c8a84a" transform="rotate(-45 57 57)"/>
+    <ellipse cx="143" cy="143" rx="14" ry="24" fill="#c8a84a" transform="rotate(-45 143 143)"/>
+    <circle cx="100" cy="100" r="12" fill="#c8a84a"/>
+    <circle cx="100" cy="100" r="60" stroke="#c8a84a" stroke-width="0.6"/>
+  </svg>
+
+  <div id="quote-togar-wrap" style="display:flex;align-items:stretch;min-height:480px;position:relative;z-index:1;">
+
+    <!-- Kiri: Quote -->
+    <div id="quote-togar-text" class="fade-in-left" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 36px 56px 40px;text-align:left;">
+
+      <span style="font-family:'Playfair Display',serif;font-size:72px;color:rgba(200,168,74,0.3);line-height:0.5;display:block;margin-bottom:18px;">"</span>
+      <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.5vw,20px);font-style:italic;color:#f5e8cc;line-height:1.85;margin-bottom:24px;">
+        Di antara semua keindahan dunia,<br>
+        yang paling aku syukuri<br>
+        adalah menemukan dirimu —<br>
+        dan setiap hari setelahnya.
+      </p>
+      <p style="font-family:'Great Vibes',cursive;font-size:28px;color:var(--gold-light);margin-bottom:6px;">Muhammad Togar S.P.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(245,232,204,0.5);font-style:italic;line-height:1.7;">Menikah bukan akhir dari pencarian,<br>melainkan awal dari petualangan yang sesungguhnya.</p>
+    </div>
+
+    <!-- Kanan: Foto besar -->
+    <div id="quote-togar-photo" class="fade-in-right" style="flex:0 0 42%;max-width:42%;position:relative;overflow:hidden;">
+      <img src="https://i.ibb.co.com/JjpNZcW4/R542026193834-picked5.jpg" alt="Togar"
+        loading="lazy" decoding="async"
+        style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;">
+      <!-- subtle dark overlay on left edge to blend with text column -->
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(44,30,16,0.45) 0%,transparent 40%);pointer-events:none;"></div>
+    </div>
+
+  </div>
+
+  <!-- Mobile: stack vertically -->
+  <style>
+    @media(max-width:600px){
+      #quote-togar-wrap { flex-direction:column !important; }
+      #quote-togar-photo { flex:0 0 300px !important; max-width:100% !important; width:100% !important; }
+      #quote-togar-text  { padding:40px 28px !important; }
+    }
+  </style>
+</section>
+<section class="countdown-section">
+  <svg class="floral-bg-svg" style="top:50%;left:50%;transform:translate(-50%,-50%);width:380px;opacity:0.05" viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="90" stroke="#9a7a3a" stroke-width="0.5"/>
+    <circle cx="100" cy="100" r="70" stroke="#9a7a3a" stroke-width="0.5"/>
+    <ellipse cx="100" cy="10" rx="20" ry="35" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="100" cy="190" rx="20" ry="35" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="10" cy="100" rx="35" ry="20" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="190" cy="100" rx="35" ry="20" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="29" cy="29" rx="18" ry="32" fill="#9a7a3a" opacity="0.4" transform="rotate(-45 29 29)"/>
+    <ellipse cx="171" cy="29" rx="18" ry="32" fill="#9a7a3a" opacity="0.4" transform="rotate(45 171 29)"/>
+    <ellipse cx="29" cy="171" rx="18" ry="32" fill="#9a7a3a" opacity="0.4" transform="rotate(45 29 171)"/>
+    <ellipse cx="171" cy="171" rx="18" ry="32" fill="#9a7a3a" opacity="0.4" transform="rotate(-45 171 171)"/>
+    <circle cx="100" cy="100" r="14" fill="#9a7a3a" opacity="0.6"/>
+  </svg>
+  <div class="section-content">
+    <h2 class="section-title fade-in-down">Menuju Hari Bahagia</h2>
+    <p class="section-sub fade-in-down delay-1">SABTU, 8 AGUSTUS 2026</p>
+    <div class="countdown-boxes">
+      <div class="cbox fade-in-up delay-1"><span class="num" id="cd-hari">--</span><span class="lbl">Hari</span></div>
+      <div class="cbox fade-in-up delay-2"><span class="num" id="cd-jam">--</span><span class="lbl">Jam</span></div>
+      <div class="cbox fade-in-up delay-3"><span class="num" id="cd-menit">--</span><span class="lbl">Menit</span></div>
+      <div class="cbox fade-in-up delay-4"><span class="num" id="cd-detik">--</span><span class="lbl">Detik</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUOTE MEMPELAI WANITA ===== -->
+<section style="background:linear-gradient(145deg,#f7f2e8 0%,#ede6d8 55%,#e8dece 100%);padding:0;overflow:hidden;position:relative;">
+  <!-- Floral bg -->
+  <svg class="floral-bg-svg" style="bottom:-30px;right:-30px;width:220px;opacity:0.09;transform:rotate(20deg)" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="57" cy="57" rx="14" ry="24" fill="#9a7a3a" transform="rotate(-45 57 57)"/>
+    <ellipse cx="143" cy="143" rx="14" ry="24" fill="#9a7a3a" transform="rotate(-45 143 143)"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="60" stroke="#9a7a3a" stroke-width="0.6"/>
+  </svg>
+
+  <div id="quote-nova-wrap" style="display:flex;align-items:stretch;min-height:480px;position:relative;z-index:1;">
+
+    <!-- Kiri: Foto besar -->
+    <div id="quote-nova-photo" class="fade-in-left" style="flex:0 0 42%;max-width:42%;position:relative;overflow:hidden;">
+      <img src="https://i.ibb.co.com/j9DMnpb0/R542026182157-picked4.jpg" alt="Nova"
+        loading="lazy" decoding="async"
+        style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;">
+      <!-- overlay kanan untuk blend ke kolom teks -->
+      <div style="position:absolute;inset:0;background:linear-gradient(to left,rgba(237,230,216,0.5) 0%,transparent 40%);pointer-events:none;"></div>
+    </div>
+
+    <!-- Kanan: Quote -->
+    <div id="quote-nova-text" class="fade-in-right" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 44px 56px 36px;text-align:left;">
+
+      <span style="font-family:'Playfair Display',serif;font-size:72px;color:rgba(176,112,80,0.22);line-height:0.5;display:block;margin-bottom:18px;">"</span>
+      <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.5vw,20px);font-style:italic;color:var(--brown-dark);line-height:1.85;margin-bottom:24px;">
+        Cinta bukan sekadar perasaan<br>
+        yang datang dan pergi,<br>
+        ia adalah keputusan yang kita pilih<br>
+        setiap harinya — untuk saling<br>
+        menguatkan, menjaga, dan tumbuh bersama.
+      </p>
+      <p style="font-family:'Great Vibes',cursive;font-size:28px;color:var(--rose);margin-bottom:6px;">Nova Yusniar</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--brown-pale);font-style:italic;line-height:1.7;">Perjalanan dua hati yang akhirnya<br>menemukan satu rumah.</p>
+    </div>
+
+  </div>
+
+  <style>
+    @media(max-width:600px){
+      #quote-nova-wrap  { flex-direction:column !important; }
+      #quote-nova-photo { flex:0 0 300px !important; max-width:100% !important; width:100% !important; }
+      #quote-nova-text  { padding:40px 28px !important; }
+    }
+  </style>
+</section>
+
+<!-- ===== VENUE ===== -->
+<section class="section" style="background:var(--cream);">
+  <svg class="floral-bg-svg" style="top:-20px;right:-20px;width:160px;opacity:0.07;transform:rotate(15deg)" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="14" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="50" stroke="#9a7a3a" stroke-width="0.8"/>
+  </svg>
+  <svg class="floral-bg-svg" style="bottom:-20px;left:-20px;width:160px;opacity:0.07;transform:rotate(-20deg)" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="14" fill="#9a7a3a"/>
+  </svg>
+
+  <div class="section-content">
+    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
+    <h2 class="section-title fade-in-up delay-1">Informasi Acara</h2>
+    <p class="section-sub fade-in-up delay-2">SIMPAN TANGGALNYA</p>
+
+    <div style="margin-bottom:24px" class="fade-in-up delay-2">
+      <span class="bg-yellow-tag">&#128197; Sabtu, 8 Agustus 2026</span>
+    </div>
+
+    <div class="event-card fade-in-left delay-2">
+      <div class="event-icon">&#128141;</div>
+      <div>
+        <p class="event-name">Akad Nikah</p>
+        <p class="event-time">08.00 &#8211; 10.00 WIB</p>
+      </div>
+    </div>
+    <div class="event-card fade-in-right delay-3">
+      <div class="event-icon">🥂</div>
+      <div>
+        <p class="event-name">Resepsi</p>
+        <p class="event-time">10.00 &#8211; 13.00 WIB</p>
+      </div>
+    </div>
+
+    <div style="margin:36px auto 0;max-width:420px;text-align:center" class="fade-in-up delay-4">
+      <div style="font-size:28px;margin-bottom:14px;color:var(--gold);letter-spacing:6px">&#10022; &#10023; &#10022;</div>
+      <p class="venue-name">Biang Coffee &amp; Casual Dining</p>
+      <p class="venue-addr">
+        Jl. Pasundan No.78, Kota Kulon<br>
+        (Sebrang Denpal III/2 Garut)<br>
+        Kec. Garut Kota, Kabupaten Garut<br>
+        Jawa Barat.
+      </p>
+      <a href="https://maps.google.com/?q=Biang+Coffee+Garut" target="_blank" class="btn btn-rose">
+        &#128506;&nbsp; Buka Google Maps
+      </a>
+    </div>
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:36px">&#10022; &#10023; &#10022;</div>
+  </div>
+</section>
+
+<!-- ===== GALERI FOTO ===== -->
+<section class="gallery-bg">
+  <svg class="floral-bg-svg" style="top:-30px;left:-30px;width:200px;opacity:0.07;transform:rotate(-10deg)" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="57" cy="57" rx="14" ry="24" fill="#9a7a3a" transform="rotate(-45 57 57)"/>
+    <ellipse cx="143" cy="143" rx="14" ry="24" fill="#9a7a3a" transform="rotate(-45 143 143)"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="60" stroke="#9a7a3a" stroke-width="0.7"/>
+  </svg>
+  <svg class="floral-bg-svg" style="bottom:-30px;right:-30px;width:200px;opacity:0.07;transform:rotate(10deg)" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a"/>
+  </svg>
+
+  <div class="section-content">
+    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
+    <h2 class="section-title fade-in-up delay-1">Galeri Momen Indah</h2>
+    <p class="section-sub fade-in-up delay-2">KENANG-KENANGAN TERINDAH</p>
+
+    <!-- Horizontal Swipeable Slider — 4 foto terlihat, klik untuk zoom -->
+
+    <div class="fade-in-up delay-2" style="position:relative;max-width:640px;margin:0 auto;padding:0 28px;">
+      <div id="gal-slider" style="overflow:hidden;border-radius:6px;touch-action:pan-y;">
+        <div id="gal-track" style="display:flex;gap:10px;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;padding:4px 2px;">
+
+          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(0)">
+            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
+              <img src="https://i.ibb.co.com/21H0FMZr/TNLR-2.jpg" alt="TNLR 2" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+          </div>
+          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(1)">
+            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
+              <img src="https://i.ibb.co.com/1JTz9Z7N/TNLR-3.jpg" alt="TNLR 3" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+          </div>
+          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(2)">
+            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
+              <img src="https://i.ibb.co.com/QFt0PptL/TNLR-4.jpg" alt="TNLR 4" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+          </div>
+          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(3)">
+            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
+              <img src="https://i.ibb.co.com/TBgN19xY/TNLR-5.jpg" alt="TNLR 5" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+          </div>
+          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(4)">
+            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
+              <img src="https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg" alt="TNLR 6" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Nav Buttons -->
+      <button id="gal-prev" onclick="galSlide(-1)" style="position:absolute;left:0;top:45%;transform:translateY(-50%);z-index:10;width:34px;height:34px;border-radius:50%;border:1px solid rgba(154,122,58,0.3);background:rgba(250,246,238,0.95);box-shadow:0 2px 12px rgba(60,42,24,0.15);cursor:pointer;font-size:18px;color:var(--brown-mid);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:opacity 0.2s;" aria-label="Sebelumnya">&#8249;</button>
+      <button id="gal-next" onclick="galSlide(1)"  style="position:absolute;right:0;top:45%;transform:translateY(-50%);z-index:10;width:34px;height:34px;border-radius:50%;border:1px solid rgba(154,122,58,0.3);background:rgba(250,246,238,0.95);box-shadow:0 2px 12px rgba(60,42,24,0.15);cursor:pointer;font-size:18px;color:var(--brown-mid);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:opacity 0.2s;" aria-label="Berikutnya">&#8250;</button>
+
+      <!-- Dot indicators -->
+      <div id="gal-dots" style="display:flex;justify-content:center;gap:7px;margin-top:16px;"></div>
+    </div>
+
+    <script>
+    (function(){
+      var galImgs = [
+        'https://i.ibb.co.com/21H0FMZr/TNLR-2.jpg',
+        'https://i.ibb.co.com/1JTz9Z7N/TNLR-3.jpg',
+        'https://i.ibb.co.com/QFt0PptL/TNLR-4.jpg',
+        'https://i.ibb.co.com/TBgN19xY/TNLR-5.jpg',
+        'https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg'
+      ];
+      var lbIdx = 0;
+
+      window.openLightbox = function(idx){
+        lbIdx = idx;
+        var lb = document.getElementById('gal-lightbox');
+        document.getElementById('gal-lb-img').src = galImgs[lbIdx];
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      };
+      window.closeLightbox = function(){
+        document.getElementById('gal-lightbox').style.display = 'none';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      };
+      window.lbNav = function(dir, e){
+        e.stopPropagation();
+        lbIdx = (lbIdx + dir + galImgs.length) % galImgs.length;
+        document.getElementById('gal-lb-img').src = galImgs[lbIdx];
+      };
+      document.addEventListener('keydown', function(e){
+        var lb = document.getElementById('gal-lightbox');
+        if(lb.style.display === 'flex'){
+          if(e.key==='ArrowRight') lbNav(1,{stopPropagation:function(){}});
+          if(e.key==='ArrowLeft')  lbNav(-1,{stopPropagation:function(){}});
+          if(e.key==='Escape')     closeLightbox();
+        }
+      });
+
+      // Slider
+      var track = document.getElementById('gal-track');
+      var slider = document.getElementById('gal-slider');
+      var dotsWrap = document.getElementById('gal-dots');
+      var items = track.children;
+      var total = items.length;
+      var perPage = 2;
+      var maxPage = total - perPage;
+      var current = 0;
+
+      for(var i = 0; i <= maxPage; i++){
+        var d = document.createElement('span');
+        d.style.cssText = 'display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold-pale);border:1px solid rgba(154,122,58,0.3);transition:background 0.3s,transform 0.3s;cursor:pointer;';
+        d.onclick = (function(idx){ return function(){ goTo(idx); }; })(i);
+        dotsWrap.appendChild(d);
+      }
+
+      function getItemW(){
+        return items[0] ? items[0].offsetWidth + 10 : 0;
+      }
+      function goTo(idx){
+        current = Math.max(0, Math.min(idx, maxPage));
+        track.style.transform = 'translateX(-' + (current * getItemW()) + 'px)';
+        var dots = dotsWrap.children;
+        for(var i=0; i<dots.length; i++){
+          dots[i].style.background = i===current ? 'var(--gold)' : 'var(--gold-pale)';
+          dots[i].style.transform  = i===current ? 'scale(1.3)' : 'scale(1)';
+        }
+        document.getElementById('gal-prev').style.opacity = current===0 ? '0.3' : '1';
+        document.getElementById('gal-next').style.opacity = current===maxPage ? '0.3' : '1';
+      }
+      window.galSlide = function(dir){ goTo(current + dir); };
+
+      var startX = 0;
+      slider.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+      slider.addEventListener('touchend',   function(e){
+        var dx = e.changedTouches[0].clientX - startX;
+        if(Math.abs(dx) > 40) galSlide(dx < 0 ? 1 : -1);
+      }, {passive:true});
+
+      goTo(0);
+    })();
+    </script>
+
+    <!-- Single quote centered below gallery -->
+    <div class="fade-in-up delay-5" style="max-width:480px;margin:44px auto 8px;text-align:center;padding:28px 28px;background:rgba(255,255,255,0.65);border-radius:4px;border:1px solid rgba(154,122,58,0.18);box-shadow:0 4px 24px rgba(60,42,24,0.08);">
+      <span style="font-family:'Playfair Display',serif;font-size:56px;color:rgba(154,122,58,0.28);line-height:0.5;display:block;margin-bottom:12px;">"</span>
+      <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--brown-dark);line-height:1.8;margin-bottom:14px;">
+        Biarkan gambar bercerita tentang dua hati<br>
+        yang akhirnya menemukan jalannya pulang.
+      </p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--gold);letter-spacing:5px;text-transform:uppercase;">&#8212; Nova &amp; Togar &#8212;</p>
+    </div>
+
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:20px">&#10022; &#10023; &#10022;</div>
+  </div>
+</section>
+
+<!-- ===== WEDDING GIFT ===== -->
+<section class="section" style="background:var(--cream);">
+  <svg class="floral-bg-svg" style="top:-20px;left:-20px;width:160px;opacity:0.07" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a"/>
+  </svg>
+  <svg class="floral-bg-svg" style="bottom:-20px;right:-20px;width:160px;opacity:0.07;transform:rotate(30deg)" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#9a7a3a"/>
+    <circle cx="100" cy="100" r="12" fill="#9a7a3a"/>
+  </svg>
+
+  <div class="section-content">
+    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
+    <h2 class="section-title fade-in-up delay-1">Wedding Gift</h2>
+    <p class="section-sub fade-in-up delay-2">HADIAH &amp; DOA TERBAIK</p>
+
+    <p style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--brown-mid);font-style:italic;max-width:380px;margin:0 auto 32px;line-height:1.8" class="fade-in-up delay-2">
+      Kehadiran dan doa kalian adalah hadiah terbaik bagi kami.<br><br>
+      Namun bagi yang ingin memberikan hadiah, dapat dikirimkan melalui:
+    </p>
+
+    <div class="bank-card fade-in-left delay-3">
+      <p class="bank-name">&#127974; Bank BCA</p>
+      <p class="bank-number">2310036318</p>
+      <p class="bank-owner">a.n. Muhammad Togar Singa Putera</p>
+      <button class="btn btn-gold" style="font-size:11px;padding:9px 22px;width:100%;text-align:center;" onclick="copyText('2310036318')">Salin Nomor Rekening</button>
+    </div>
+
+    <div class="bank-card fade-in-right delay-4">
+      <p class="bank-name">&#127974; Bank Mandiri</p>
+      <p class="bank-number">1770024339704</p>
+      <p class="bank-owner">a.n. Nova Yusniar</p>
+      <button class="btn btn-gold" style="font-size:11px;padding:9px 22px;width:100%;text-align:center;" onclick="copyText('1770024339704')">Salin Nomor Rekening</button>
+    </div>
+
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:20px">&#10022; &#10023; &#10022;</div>
+  </div>
+</section>
+
+<!-- ===== RSVP & UCAPAN ===== -->
+<section class="section" style="background:var(--section-bg1);">
+  <svg class="floral-bg-svg" style="top:50%;left:50%;transform:translate(-50%,-50%);width:340px;opacity:0.045" viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="90" stroke="#9a7a3a" stroke-width="0.5"/>
+    <ellipse cx="100" cy="10" rx="20" ry="35" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="100" cy="190" rx="20" ry="35" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="10" cy="100" rx="35" ry="20" fill="#9a7a3a" opacity="0.7"/>
+    <ellipse cx="190" cy="100" rx="35" ry="20" fill="#9a7a3a" opacity="0.7"/>
+    <circle cx="100" cy="100" r="14" fill="#9a7a3a" opacity="0.7"/>
+  </svg>
+
+  <div class="section-content">
+    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
+    <h2 class="section-title fade-in-up delay-1">Ucapan &amp; Doa</h2>
+    <p class="section-sub fade-in-up delay-2">SAMPAIKAN DOAMU</p>
+
+    <form class="rsvp-form fade-in-up delay-2" onsubmit="submitRSVP(event)">
+      <label class="form-label">&#9993; Nama Lengkap</label>
+      <input class="form-input" type="text" id="rsvp-name" placeholder="Nama kamu..." required>
+
+      <label class="form-label">&#129681; Kehadiran</label>
+      <select class="form-select" id="rsvp-hadir">
+        <option value="hadir">Pasti Hadir</option>
+        <option value="tidak">Mohon Maaf Tidak Hadir</option>
+        <option value="belum">Masih Belum Pasti</option>
+      </select>
+
+      <label class="form-label">&#128172; Ucapan &amp; Doa</label>
+      <textarea class="form-textarea" id="rsvp-msg" placeholder="Tulis ucapan dan doamu untuk Nova &amp; Togar..."></textarea>
+
+      <button type="submit" class="btn btn-rose" style="width:100%;font-size:16px;font-style:italic;padding:14px;letter-spacing:2px">
+        Kirim Ucapan &#10022;
+      </button>
+    </form>
+
+    <div class="comments-list" id="comments-list">
+      <div class="comment-card fade-in-up delay-3">
+        <p class="comment-name">Sarah Amalia</p>
+        <span class="comment-badge badge-hadir">Pasti Hadir</span>
+        <p class="comment-text">Selamat ya Nova &amp; Togar! Semoga menjadi keluarga yang sakinah mawaddah warahmah. Bahagia selalu!</p>
+      </div>
+      <div class="comment-card fade-in-up delay-4">
+        <p class="comment-name">Rizki Pratama</p>
+        <span class="comment-badge badge-maybe">Masih Belum Pasti</span>
+        <p class="comment-text">Congratulations! Semoga langgeng sampai kakek nenek ya. Doa terbaik dari kami sekeluarga.</p>
+      </div>
+    </div>
+
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:28px">&#10022; &#10023; &#10022;</div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <svg class="floral-bg-svg" style="top:50%;left:50%;transform:translate(-50%,-50%);width:360px;opacity:0.10" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="40" rx="18" ry="30" fill="#c8a84a"/>
+    <ellipse cx="100" cy="160" rx="18" ry="30" fill="#c8a84a"/>
+    <ellipse cx="40" cy="100" rx="30" ry="18" fill="#c8a84a"/>
+    <ellipse cx="160" cy="100" rx="30" ry="18" fill="#c8a84a"/>
+    <ellipse cx="57" cy="57" rx="14" ry="24" fill="#c8a84a" transform="rotate(-45 57 57)"/>
+    <ellipse cx="143" cy="57" rx="14" ry="24" fill="#c8a84a" transform="rotate(45 143 57)"/>
+    <ellipse cx="57" cy="143" rx="14" ry="24" fill="#c8a84a" transform="rotate(45 57 143)"/>
+    <ellipse cx="143" cy="143" rx="14" ry="24" fill="#c8a84a" transform="rotate(-45 143 143)"/>
+    <circle cx="100" cy="100" r="14" fill="#c8a84a"/>
+    <circle cx="100" cy="100" r="70" stroke="#c8a84a" stroke-width="0.5"/>
+  </svg>
+  <div class="section-content">
+    <p style="font-size:20px;margin-bottom:10px;letter-spacing:10px;color:var(--gold-light)">&#10047; &#10048; &#10047;</p>
+    <p class="footer-names">Nova &amp; Togar</p>
+    <p class="footer-date">8 Agustus 2026</p>
+    <p class="footer-couple">Muhammad Togar Singa Putera &amp; Nova</p>
+    <p class="footer-divider">&#10022; &#10023; &#10022;</p>
+    <p class="footer-made">Made with &#10084;&#65039; &#8212; With love, on this special day</p>
+  </div>
+</footer>
+
+<script>
+// ── COUNTDOWN ──
+function updateCountdown() {
+  var target = new Date('2026-08-08T08:00:00+07:00');
+  var diff = target - new Date();
+  if (diff <= 0) {
+    ['cd-hari','cd-jam','cd-menit','cd-detik'].forEach(function(id){ document.getElementById(id).textContent = '00'; });
+    return;
+  }
+  document.getElementById('cd-hari').textContent   = String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-jam').textContent    = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-menit').textContent  = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-detik').textContent  = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ── MUSIC ──
+var playing = false;
+var ytFrame = document.getElementById('yt-frame');
+var musicBtn = document.getElementById('music-btn');
+
+function startMusic() {
+  document.getElementById('yt-iframe').style.display = 'block';
+  ytFrame.src = 'https://www.youtube.com/embed/UZWmtxLiiFE?autoplay=1&loop=1&playlist=UZWmtxLiiFE&enablejsapi=1';
+  musicBtn.innerHTML = '&#9646;&#9646;';
+  musicBtn.classList.remove('paused');
+  playing = true;
+}
+
+function toggleMusic() {
+  if (!playing) {
+    startMusic();
+  } else {
+    ytFrame.src = '';
+    musicBtn.innerHTML = '&#9654;';
+    musicBtn.classList.add('paused');
+    playing = false;
+  }
+}
+
+// Auto play — try immediately, fallback to first user interaction
+function tryAutoPlay() {
+  startMusic();
+}
+// Try after short delay (some browsers need DOM ready)
+setTimeout(tryAutoPlay, 800);
+// Also try on first interaction in case browser blocked autoplay
+function onFirstInteraction() {
+  if (!playing) { startMusic(); }
+  document.removeEventListener('click', onFirstInteraction);
+  document.removeEventListener('touchstart', onFirstInteraction);
+}
+document.addEventListener('click', onFirstInteraction);
+document.addEventListener('touchstart', onFirstInteraction);
+
+// ── COPY ──
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(showToast).catch(function() {
+    var el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast();
+  });
+}
+function showToast() {
+  var toast = document.getElementById('copy-toast');
+  toast.classList.add('show');
+  setTimeout(function(){ toast.classList.remove('show'); }, 2200);
+}
+
+// ── RSVP ──
+function submitRSVP(e) {
+  e.preventDefault();
+  var name = document.getElementById('rsvp-name').value.trim();
+  var hadir = document.getElementById('rsvp-hadir').value;
+  var msg = document.getElementById('rsvp-msg').value.trim();
+  if (!name || !msg) return;
+  var badgeClass = hadir === 'hadir' ? 'badge-hadir' : hadir === 'tidak' ? 'badge-tidak' : 'badge-maybe';
+  var badgeLabel = hadir === 'hadir' ? 'Pasti Hadir' : hadir === 'tidak' ? 'Mohon Maaf Tidak Hadir' : 'Masih Belum Pasti';
+  var card = document.createElement('div');
+  card.className = 'comment-card'; card.style.animation = 'fadeIn 0.4s ease';
+  card.innerHTML = '<p class="comment-name">'+name+'</p><span class="comment-badge '+badgeClass+'">'+badgeLabel+'</span><p class="comment-text">'+msg+'</p>';
+  document.getElementById('comments-list').prepend(card);
+  document.getElementById('rsvp-name').value = '';
+  document.getElementById('rsvp-msg').value = '';
+  document.getElementById('rsvp-hadir').selectedIndex = 0;
+}
+
+// ══════════════════════════════════
+// FLOWER PETALS ANIMATION (Hero)
+// ══════════════════════════════════
+(function() {
+  var canvas = document.getElementById('petal-canvas');
+  var PETAL_COUNT = 24;
+
+  // Elegant classic petal shapes — warm golds and rose tones
+  function makePetal(type, opacity) {
+    var colors = [
+      'rgba(176,112,80,'+opacity+')',   // warm rose
+      'rgba(154,122,58,'+opacity+')',   // gold
+      'rgba(200,168,74,'+opacity+')',   // bright gold
+      'rgba(186,140,90,'+opacity+')',   // amber
+      'rgba(201,147,122,'+opacity+')'  // rose-light
+    ];
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    var svgs = [
+      '<svg width="16" height="22" viewBox="0 0 16 22"><path d="M8 0 C3 4 0 10 2 16 C4 20 8 22 8 22 C8 22 12 20 14 16 C16 10 13 4 8 0Z" fill="'+color+'"/></svg>',
+      '<svg width="12" height="20" viewBox="0 0 12 20"><ellipse cx="6" cy="10" rx="5" ry="9" fill="'+color+'"/></svg>',
+      '<svg width="18" height="18" viewBox="0 0 18 18"><path d="M9 0 C2 2 0 7 3 13 C5 17 9 18 9 18 C9 18 13 17 15 13 C18 7 16 2 9 0Z" fill="'+color+'"/></svg>',
+      '<svg width="10" height="16" viewBox="0 0 10 16"><path d="M5 0 C1 3 0 7 1 11 C2 14 5 16 5 16 C5 16 8 14 9 11 C10 7 9 3 5 0Z" fill="'+color+'"/></svg>',
+    ];
+    return svgs[type % svgs.length];
+  }
+
+  for (var i = 0; i < PETAL_COUNT; i++) {
+    var petal = document.createElement('div');
+    petal.className = 'petal';
+    var left = Math.random() * 100;
+    var duration = 7 + Math.random() * 11;
+    var delay = Math.random() * 14;
+    var scale = 0.55 + Math.random() * 0.9;
+    var opacity = (0.35 + Math.random() * 0.55).toFixed(2);
+    var type = Math.floor(Math.random() * 4);
+    petal.innerHTML = makePetal(type, opacity);
+    petal.style.cssText = 'left:'+left+'%;animation-duration:'+duration+'s;animation-delay:-'+delay+'s;transform:scale('+scale+')';
+    canvas.appendChild(petal);
+  }
+})();
+
+// ── HERO BACKGROUND: force early load via JS Image object ──
+(function(){
+  var heroUrl = 'https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg';
+  var img = new Image();
+  img.fetchPriority = 'high';
+  img.src = heroUrl;
+})();
+
+// ── REMOVE SHIMMER once each image finishes loading ──
+document.querySelectorAll('img').forEach(function(img) {
+  function onLoad() {
+    var parent = img.closest('#quote-togar-photo, #quote-nova-photo, .photo-upload-wrap, .gallery-photo-wrap, .quote-photo-wrap');
+    if (parent) parent.classList.add('img-loaded');
+  }
+  if (img.complete && img.naturalWidth) { onLoad(); }
+  else { img.addEventListener('load', onLoad); }
+});
+
+// ── SCROLL FADE-IN OBSERVER ──
+(function() {
+  var els = document.querySelectorAll('.fade-in-up,.fade-in-down,.fade-in-left,.fade-in-right');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -24px 0px' });
+
+  els.forEach(function(el) { observer.observe(el); });
+
+  // Trigger hero immediately with stagger
+  var heroEls = document.querySelectorAll('.hero .fade-in-up, .hero .fade-in-down');
+  heroEls.forEach(function(el, i) {
+    setTimeout(function(){ el.classList.add('visible'); }, 180 + i * 130);
+  });
+})();
+</script>
+<!-- ===== LIGHTBOX (di luar semua section agar position:fixed bekerja sempurna) ===== -->
+<div id="gal-lightbox" onclick="closeLightbox()" style="
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:99999; background:rgba(30,18,8,0.55);
+  align-items:center; justify-content:center;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  -webkit-overflow-scrolling:touch;
+">
+  <div onclick="event.stopPropagation()" style="
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%; padding:60px 16px 40px;
+  ">
+    <img id="gal-lb-img" src="" alt="" style="
+      max-width:100%; max-height:100%; width:auto; height:auto;
+      object-fit:contain; border-radius:8px;
+      box-shadow:0 12px 60px rgba(0,0,0,0.7); display:block;
+    ">
+    <!-- Tombol prev -->
+    <button onclick="lbNav(-1,event)" style="
+      position:fixed; left:12px; top:50%; transform:translateY(-50%);
+      background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25);
+      color:#fff; font-size:28px; width:46px; height:46px; border-radius:50%;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); z-index:2;
+    ">&#8249;</button>
+    <!-- Tombol next -->
+    <button onclick="lbNav(1,event)" style="
+      position:fixed; right:12px; top:50%; transform:translateY(-50%);
+      background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25);
+      color:#fff; font-size:28px; width:46px; height:46px; border-radius:50%;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); z-index:2;
+    ">&#8250;</button>
+    <!-- Tombol tutup -->
+    <button onclick="closeLightbox()" style="
+      position:fixed; top:16px; right:16px;
+      background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25);
+      color:#fff; font-size:18px; width:40px; height:40px; border-radius:50%;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); z-index:2;
+    ">&#10005;</button>
+  </div>
+</div>
+
+</body>
+</html>
