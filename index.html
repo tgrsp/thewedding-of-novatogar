@@ -344,37 +344,27 @@ body {
 /* ── COMMENTS SLIDER (peek 3-card vertical carousel) ── */
 .comments-slider-wrap {
   max-width: 480px; margin: 28px auto 0; position: relative;
-  padding-right: 18px; /* room for the scrollbar */
 }
 
 /* Outer mask: shows ~3 cards with top/bottom peek */
 .comments-slider {
   position: relative;
   height: calc(var(--card-h, 140px) * 3 + 24px); /* 3 cards + 2 gaps */
-  overflow: hidden;
+  overflow: visible; /* scrollbar needs to escape */
   cursor: grab;
   user-select: none;
-  /* Fade edges so peeking cards dissolve nicely */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0,0,0,0.35) 6%,
-    black 18%,
-    black 82%,
-    rgba(0,0,0,0.35) 94%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0,0,0,0.35) 6%,
-    black 18%,
-    black 82%,
-    rgba(0,0,0,0.35) 94%,
-    transparent 100%
-  );
 }
 .comments-slider:active { cursor: grabbing; }
+
+/* Clip only the cards, not the scrollbar */
+.comments-slider-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* Fade only bottom edge */
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 75%, rgba(0,0,0,0.4) 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 75%, rgba(0,0,0,0.4) 90%, transparent 100%);
+}
 
 /* Track that slides vertically */
 #comments-list {
@@ -459,7 +449,7 @@ body {
 /* ── COMMENTS SCROLLBAR ── */
 .cmnt-scrollbar {
   position: absolute;
-  right: -14px;
+  right: -10px;
   top: 0;
   bottom: 0;
   width: 4px;
@@ -1091,13 +1081,15 @@ body {
 
     <div class="comments-slider-wrap">
       <div class="comments-slider" id="comments-slider">
-        <div id="comments-list">
-          <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
+        <div class="comments-slider-clip">
+          <div id="comments-list">
+            <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
+          </div>
         </div>
-      </div>
-      <!-- Custom vertical scrollbar -->
-      <div class="cmnt-scrollbar" id="cmnt-scrollbar" style="display:none;">
-        <div class="cmnt-scrollbar-thumb" id="cmnt-scrollbar-thumb"></div>
+        <!-- Custom vertical scrollbar — inside slider, outside clip -->
+        <div class="cmnt-scrollbar" id="cmnt-scrollbar" style="display:none;">
+          <div class="cmnt-scrollbar-thumb" id="cmnt-scrollbar-thumb"></div>
+        </div>
       </div>
       <div class="comments-nav" id="comments-nav" style="display:none;" aria-label="navigasi komentar"></div>
       <div class="comments-counter" id="cmnt-counter" style="display:none;"></div>
@@ -1259,13 +1251,13 @@ function resizeSlider() {
   }
 }
 
-/* Translate the track so the center card is index cmntIndex */
+/* Translate the track so card at cmntIndex is at the TOP of the visible window */
 function applyTranslate(animated) {
   var list = document.getElementById('comments-list');
   if (!list) return;
   var h = getCardH();
-  // Offset: center card sits in slot 1 (0-indexed), so we shift by (cmntIndex - 1) cards up
-  var offset = -(cmntIndex - 1) * (h + CARD_GAP);
+  // Card at cmntIndex sits flush at the top — no centering offset
+  var offset = -(cmntIndex * (h + CARD_GAP));
   if (!animated) list.style.transition = 'none';
   else list.style.transition = 'transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
   list.style.transform = 'translateY(' + offset + 'px)';
