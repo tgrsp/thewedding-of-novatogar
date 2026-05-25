@@ -1400,7 +1400,7 @@ function buildSlider(comments) {
     return;
   }
 
-  comments.slice().reverse().forEach(function(c){
+  comments.forEach(function(c){
     var card = makeCard(c);
     list.appendChild(card);
     cmntCards.push(card);
