@@ -382,8 +382,8 @@ body {
 /* Outer mask: shows ~3 cards with top/bottom peek */
 .comments-slider {
   position: relative;
-  height: calc(var(--card-h, 140px) * 3 + 24px); /* 3 cards + 2 gaps */
-  overflow: visible; /* scrollbar needs to escape */
+  height: calc(var(--card-h, 140px) * 3 + 24px + 20px); /* 3 cards + 2 gaps + bottom breathing room */
+  overflow: visible;
   cursor: grab;
   user-select: none;
 }
@@ -394,9 +394,9 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* Fade only bottom edge */
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 75%, rgba(0,0,0,0.4) 90%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 75%, rgba(0,0,0,0.4) 90%, transparent 100%);
+  /* Only fade very bottom edge — subtle, won't cut cards */
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 96%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 96%, transparent 100%);
 }
 
 /* Track that slides vertically */
@@ -1324,7 +1324,7 @@ function resizeSlider() {
   var h = getCardH();
   var slider = document.getElementById('comments-slider');
   if (slider) {
-    slider.style.height = (h * 3 + CARD_GAP * 2) + 'px';
+    slider.style.height = (h * 3 + CARD_GAP * 2 + 20) + 'px';
     slider.style.setProperty('--card-h', h + 'px');
   }
 }
