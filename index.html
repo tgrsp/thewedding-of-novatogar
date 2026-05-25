@@ -892,15 +892,20 @@ body {
 .couple-section-wrap {
   background: linear-gradient(160deg, var(--section-bg1), var(--ivory));
   position: relative; overflow: hidden;
-  padding: 64px 24px 72px;
+  padding: 64px 24px 80px;
   text-align: center;
+}
+/* Beri ruang ekstra agar frame yang melebar ke atas tidak terpotong */
+.cp-photo-ring-outer {
+  padding-top: 12%;
+  padding-bottom: 8%;
 }
 
 /* ── Foto dengan frame polaroid besar ── */
 .cp-photo-ring {
   position: relative;
-  width: 320px;
-  height: 380px;
+  width: min(88vw, 380px);
+  height: min(104.5vw, 452px);
   margin: 0 auto 28px;
 }
 /* Hapus ring garis dekoratif */
@@ -917,30 +922,30 @@ body {
   position: relative;
   background: transparent;
 }
-.cp-photo-circle img.cp-photo-main {
-  /* Foto duduk di dalam slot frame PNG:
-     frame polaroid punya padding ~8% atas, ~8% kiri/kanan, ~20% bawah
-     disesuaikan agar foto pas dan tidak offside */
-  position: absolute;
-  top: 8%;
-  left: 8%;
-  width: 84%;
-  height: 70%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  border-radius: 0;
-}
-/* Frame overlay — menutupi seluruh area termasuk keluar sedikit */
+/* Frame PNG diperbesar keluar dari batas container agar terlihat lebih besar dari foto */
 .cp-photo-frame {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: -8%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
   object-fit: fill;
   pointer-events: none;
   z-index: 2;
   display: block;
+}
+/* Foto mempelai — duduk rapi di dalam area foto frame polaroid */
+.cp-photo-circle img.cp-photo-main {
+  position: absolute;
+  top: 6%;
+  left: 6%;
+  width: 88%;
+  height: 72%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  border-radius: 0;
+  z-index: 1;
 }
 
 /* Ornamen sudut kecil di sekitar foto */
@@ -957,7 +962,7 @@ body {
 .cp-orn-br { bottom: -4px; right: -4px; }
 
 @media (max-width: 400px) {
-  .cp-photo-ring { width: 260px !important; height: 310px !important; }
+  .cp-photo-ring { width: 90vw !important; height: 107vw !important; }
 }
 
 /* ── Info teks ── */
@@ -1028,11 +1033,13 @@ body {
 
     <!-- Mempelai Wanita -->
     <div class="fade-in-up delay-2" style="margin-top:48px;">
+      <div class="cp-photo-ring-outer">
       <div class="cp-photo-ring">
         <div class="cp-photo-circle">
           <img class="cp-photo-main" src="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" alt="Nova" fetchpriority="high" decoding="async">
           <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo.png" alt="" loading="lazy">
         </div>
+      </div>
       </div>
       <p class="cp-name">Nova Yusniar</p>
       <p class="cp-role">Mempelai Wanita</p>
@@ -1066,11 +1073,13 @@ body {
 
     <!-- Mempelai Pria -->
     <div class="fade-in-up delay-2" style="margin-top:48px;">
+      <div class="cp-photo-ring-outer">
       <div class="cp-photo-ring">
         <div class="cp-photo-circle">
           <img class="cp-photo-main" src="https://i.ibb.co.com/twDbWThF/T1.jpg" alt="Togar" fetchpriority="high" decoding="async">
           <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo%20pria.png" alt="" loading="lazy">
         </div>
+      </div>
       </div>
       <p class="cp-name">Muhammad Togar<br>Singa Putera</p>
       <p class="cp-role">Mempelai Pria</p>
@@ -1255,27 +1264,111 @@ body {
     <h2 class="section-title fade-in-up delay-1">Galeri Momen Indah</h2>
     <p class="section-sub fade-in-up delay-2">KENANG-KENANGAN TERINDAH</p>
 
-    <!-- Horizontal Swipeable Slider — 4 foto terlihat, klik untuk zoom -->
+    <!-- Gallery: Large main photo + thumbnail strip (Seno & Yoshinta style) -->
+    <style>
+    .gal-main-wrap {
+      position: relative;
+      max-width: 520px;
+      margin: 28px auto 0;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(60,42,24,0.18);
+      border: 1px solid rgba(154,122,58,0.18);
+      background: var(--brown-dark);
+      aspect-ratio: 4/5;
+      cursor: zoom-in;
+    }
+    .gal-main-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .gal-main-img.active { opacity: 1; }
 
-    <div class="fade-in-up delay-2" style="position:relative;max-width:760px;margin:0 auto;padding:0 36px;">
-      <div id="gal-slider" style="overflow:hidden;border-radius:6px;touch-action:pan-y;">
-        <div id="gal-track" style="display:flex;gap:8px;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;padding:4px 2px;">
-          <!-- items injected by JS after shuffle -->
-        </div>
+    /* Prev/Next nav on main photo */
+    .gal-main-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      z-index: 5; width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(30,18,8,0.42);
+      color: #fff; font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; backdrop-filter: blur(4px);
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .gal-main-nav:hover { background: rgba(154,122,58,0.65); }
+    .gal-main-nav.prev { left: 12px; }
+    .gal-main-nav.next { right: 12px; }
+
+    /* Counter badge */
+    .gal-counter {
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      background: rgba(30,18,8,0.52); color: #f5e8cc;
+      font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; padding: 4px 12px; border-radius: 20px;
+      backdrop-filter: blur(4px); pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Thumbnail strip */
+    .gal-thumb-strip {
+      max-width: 520px;
+      margin: 12px auto 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .gal-thumb-track {
+      display: flex;
+      gap: 8px;
+      transition: transform 0.38s cubic-bezier(0.25,0.46,0.45,0.94);
+      padding: 4px 2px;
+    }
+    .gal-thumb {
+      flex: 0 0 calc(20% - 7px);
+      aspect-ratio: 1/1;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 8px rgba(60,42,24,0.10);
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+    }
+    .gal-thumb:hover { transform: translateY(-2px); }
+    .gal-thumb.active { border-color: var(--gold); }
+    .gal-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      pointer-events: none; user-select: none;
+    }
+    @media (max-width: 540px) {
+      .gal-main-wrap { aspect-ratio: 3/4; }
+      .gal-thumb { flex: 0 0 calc(25% - 7px); }
+    }
+    </style>
+
+    <!-- Main photo display -->
+    <div class="gal-main-wrap fade-in-up delay-2" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
+      <!-- images injected by JS -->
+      <button class="gal-main-nav prev" onclick="event.stopPropagation();galNavMain(-1)" aria-label="Sebelumnya">&#8249;</button>
+      <button class="gal-main-nav next" onclick="event.stopPropagation();galNavMain(1)" aria-label="Berikutnya">&#8250;</button>
+      <div class="gal-counter" id="gal-counter">1 / 8</div>
+    </div>
+
+    <!-- Thumbnail strip -->
+    <div class="gal-thumb-strip fade-in-up delay-3">
+      <div class="gal-thumb-track" id="gal-thumb-track">
+        <!-- thumbs injected by JS -->
       </div>
-
-      <!-- Nav Buttons -->
-      <button id="gal-prev" onclick="galSlide(-1)" style="position:absolute;left:0;top:45%;transform:translateY(-50%);z-index:10;width:34px;height:34px;border-radius:50%;border:1px solid rgba(154,122,58,0.3);background:rgba(250,246,238,0.95);box-shadow:0 2px 12px rgba(60,42,24,0.15);cursor:pointer;font-size:18px;color:var(--brown-mid);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:opacity 0.2s;" aria-label="Sebelumnya">&#8249;</button>
-      <button id="gal-next" onclick="galSlide(1)"  style="position:absolute;right:0;top:45%;transform:translateY(-50%);z-index:10;width:34px;height:34px;border-radius:50%;border:1px solid rgba(154,122,58,0.3);background:rgba(250,246,238,0.95);box-shadow:0 2px 12px rgba(60,42,24,0.15);cursor:pointer;font-size:18px;color:var(--brown-mid);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:opacity 0.2s;" aria-label="Berikutnya">&#8250;</button>
-
-      <!-- Dot indicators -->
-      <div id="gal-dots" style="display:flex;justify-content:center;gap:7px;margin-top:16px;"></div>
     </div>
 
     <script>
     (function(){
-      // All photos — will be shuffled on load
-      var allImgs = [
+      var galImgs = [
         'https://i.ibb.co.com/21H0FMZr/TNLR-2.jpg',
         'https://i.ibb.co.com/1JTz9Z7N/TNLR-3.jpg',
         'https://i.ibb.co.com/QFt0PptL/TNLR-4.jpg',
@@ -1286,30 +1379,51 @@ body {
         'https://i.ibb.co.com/Rks3GbN6/R542026182158-picked2.jpg'
       ];
 
-      // Fisher-Yates shuffle
-      for (var i = allImgs.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = allImgs[i]; allImgs[i] = allImgs[j]; allImgs[j] = tmp;
-      }
-      var galImgs = allImgs;
+      window.galCurrent = 0;
+      var mainWrap = document.getElementById('gal-main-wrap');
+      var thumbTrack = document.getElementById('gal-thumb-track');
+      var counter = document.getElementById('gal-counter');
 
-      // Build track items
-      var track = document.getElementById('gal-track');
-      track.innerHTML = '';
+      // Build main images
       galImgs.forEach(function(src, idx) {
-        var itemEl = document.createElement('div');
-        // 4 visible on desktop (25%), 2 on mobile handled via responsive style
-        itemEl.className = 'gal-item';
-        itemEl.style.cssText = 'flex:0 0 calc(25% - 6px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;';
-        itemEl.onclick = (function(i){ return function(){ openLightbox(i); }; })(idx);
-        itemEl.innerHTML = '<div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">'
-          + '<img src="' + src + '" alt="Foto ' + (idx+1) + '" loading="lazy" decoding="async" '
-          + 'style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" '
-          + 'onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">'
-          + '</div>';
-        track.appendChild(itemEl);
+        var img = document.createElement('img');
+        img.src = src; img.alt = 'Foto ' + (idx+1);
+        img.className = 'gal-main-img' + (idx===0 ? ' active' : '');
+        img.loading = idx === 0 ? 'eager' : 'lazy';
+        img.decoding = 'async';
+        mainWrap.insertBefore(img, mainWrap.querySelector('.gal-main-nav'));
       });
 
+      // Build thumbnails
+      galImgs.forEach(function(src, idx) {
+        var th = document.createElement('div');
+        th.className = 'gal-thumb' + (idx===0 ? ' active' : '');
+        th.innerHTML = '<img src="' + src + '" alt="Thumb ' + (idx+1) + '" loading="lazy">';
+        th.onclick = (function(i){ return function(){ galGoTo(i); }; })(idx);
+        thumbTrack.appendChild(th);
+      });
+
+      function galGoTo(idx) {
+        var imgs = mainWrap.querySelectorAll('.gal-main-img');
+        var thumbs = thumbTrack.querySelectorAll('.gal-thumb');
+        imgs[window.galCurrent].classList.remove('active');
+        thumbs[window.galCurrent].classList.remove('active');
+        window.galCurrent = (idx + galImgs.length) % galImgs.length;
+        imgs[window.galCurrent].classList.add('active');
+        thumbs[window.galCurrent].classList.add('active');
+        counter.textContent = (window.galCurrent + 1) + ' / ' + galImgs.length;
+        // scroll thumb into view
+        var th = thumbs[window.galCurrent];
+        var stripW = thumbTrack.parentElement.offsetWidth;
+        var thLeft = th.offsetLeft;
+        var thW = th.offsetWidth;
+        var offset = Math.max(0, thLeft - (stripW / 2) + (thW / 2));
+        thumbTrack.style.transform = 'translateX(-' + offset + 'px)';
+      }
+
+      window.galNavMain = function(dir) { galGoTo(window.galCurrent + dir); };
+
+      // Lightbox
       var lbIdx = 0;
       window.openLightbox = function(idx){
         lbIdx = idx;
@@ -1338,87 +1452,17 @@ body {
         }
       });
 
-      // Slider — 4 per page desktop, 2 per page mobile
-      var slider = document.getElementById('gal-slider');
-      var dotsWrap = document.getElementById('gal-dots');
-      var total = galImgs.length;
-      var current = 0;
-
-      function getPerPage() {
-        return window.innerWidth <= 540 ? 2 : 4;
-      }
-      function getGap() {
-        return 8;
-      }
-      function getItemW() {
-        var items = track.children;
-        return items[0] ? items[0].offsetWidth + getGap() : 0;
-      }
-      function getMaxPage() {
-        return Math.max(0, total - getPerPage());
-      }
-
-      function buildDots() {
-        dotsWrap.innerHTML = '';
-        var mp = getMaxPage();
-        for(var i = 0; i <= mp; i++){
-          var d = document.createElement('span');
-          d.style.cssText = 'display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold-pale);border:1px solid rgba(154,122,58,0.3);transition:background 0.3s,transform 0.3s;cursor:pointer;';
-          d.onclick = (function(idx){ return function(){ goTo(idx); }; })(i);
-          dotsWrap.appendChild(d);
-        }
-        updateDots();
-      }
-
-      function updateDots() {
-        var dots = dotsWrap.children;
-        for(var i=0;i<dots.length;i++){
-          dots[i].style.background = i===current ? 'var(--gold)' : 'var(--gold-pale)';
-          dots[i].style.transform  = i===current ? 'scale(1.3)' : 'scale(1)';
-        }
-        document.getElementById('gal-prev').style.opacity = current===0 ? '0.3' : '1';
-        document.getElementById('gal-next').style.opacity = current>=getMaxPage() ? '0.3' : '1';
-      }
-
-      function goTo(idx) {
-        current = Math.max(0, Math.min(idx, getMaxPage()));
-        track.style.transform = 'translateX(-' + (current * getItemW()) + 'px)';
-        updateDots();
-      }
-
-      function updateItemSize() {
-        var pp = getPerPage();
-        var gap = getGap();
-        Array.prototype.forEach.call(track.children, function(el) {
-          el.style.flex = '0 0 calc(' + (100/pp) + '% - ' + (gap * (pp-1)/pp) + 'px)';
-        });
-        track.style.gap = gap + 'px';
-      }
-
-      window.galSlide = function(dir) { goTo(current + dir); };
-
-      buildDots();
-      updateItemSize();
-
-      // Touch swipe
+      // Touch swipe on main photo
       var tsX = 0;
-      slider.addEventListener('touchstart', function(e){ tsX = e.touches[0].clientX; }, {passive:true});
-      slider.addEventListener('touchend', function(e){
+      mainWrap.addEventListener('touchstart', function(e){ tsX = e.touches[0].clientX; }, {passive:true});
+      mainWrap.addEventListener('touchend', function(e){
         var dx = e.changedTouches[0].clientX - tsX;
-        if(Math.abs(dx) > 40) galSlide(dx < 0 ? 1 : -1);
+        if(Math.abs(dx) > 40) galNavMain(dx < 0 ? 1 : -1);
       }, {passive:true});
 
-      // Rebuild on resize
-      var resizeT;
-      window.addEventListener('resize', function(){
-        clearTimeout(resizeT);
-        resizeT = setTimeout(function(){
-          updateItemSize();
-          current = Math.min(current, getMaxPage());
-          buildDots();
-          goTo(current);
-        }, 120);
-      });
+      // Auto-advance every 4s
+      var autoT = setInterval(function(){ galNavMain(1); }, 4000);
+      mainWrap.addEventListener('touchstart', function(){ clearInterval(autoT); }, {passive:true, once:true});
     })();
     </script>
 
