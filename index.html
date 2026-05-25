@@ -1042,6 +1042,7 @@ body {
   max-width: 52%;
   position: relative;
   overflow: hidden;
+  min-height: 320px;
 }
 .cp-split-photo img {
   width: 100%;
@@ -1055,9 +1056,61 @@ body {
   filter: drop-shadow(6px 0 18px rgba(60,42,24,0.12));
 }
 @media (max-width: 600px) {
-  .cp-split-section { flex-direction: column !important; min-height: auto; }
-  .cp-split-photo { flex: 0 0 auto; max-width: 100%; width: 100%; min-height: 70vw; }
-  .cp-split-text { padding: 40px 28px; text-align: center !important; }
+  .cp-split-section {
+    flex-direction: row !important;
+    min-height: auto;
+    align-items: stretch;
+  }
+  /* Foto tetap di sisi kanan/kiri tapi lebih kecil */
+  .cp-split-photo {
+    flex: 0 0 42% !important;
+    max-width: 42% !important;
+    width: 42% !important;
+    min-height: 0;
+  }
+  /* Teks lebih compact */
+  .cp-split-text {
+    flex: 1;
+    padding: 28px 16px 28px 18px !important;
+    text-align: left !important;
+    justify-content: center;
+    gap: 0;
+  }
+  .cp-split-text.right-align {
+    padding: 28px 18px 28px 16px !important;
+    text-align: right !important;
+  }
+  /* Sembunyikan ornamen baris di mobile */
+  .cp-split-text .ornament-row { display: none; }
+  /* Sub label lebih kecil */
+  .cp-split-text > p[style*="letter-spacing"] {
+    font-size: 8px !important;
+    letter-spacing: 3px !important;
+    margin-bottom: 6px !important;
+  }
+  /* Judul section lebih kecil */
+  .cp-split-text .section-title {
+    font-size: 18px !important;
+    margin-bottom: 6px !important;
+  }
+  /* Nama mempelai */
+  .cp-name {
+    font-size: 26px !important;
+    margin-bottom: 8px !important;
+  }
+  /* Role label */
+  .cp-role {
+    font-size: 8px !important;
+    letter-spacing: 3px !important;
+    margin-bottom: 10px !important;
+  }
+  /* Box info ortu — compact */
+  .cp-parents {
+    font-size: 11px !important;
+    line-height: 1.6 !important;
+    padding: 8px 10px !important;
+  }
+  .cp-parents span { font-size: 10px !important; }
 }
 </style>
 
@@ -1277,7 +1330,18 @@ body {
 
 <!-- ===== GALERI FOTO ===== -->
 <section class="gallery-bg" style="position:relative;overflow:hidden;">
-  <!-- Bunga 7 background — repeat-x di bagian bawah -->
+  <!-- Bunga 7 background — atas (flip vertikal) -->
+  <div style="position:absolute;top:0;left:0;right:0;height:220px;
+    background-image:url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%207.png');
+    background-repeat:repeat-x;
+    background-position:top center;
+    background-size:auto 100%;
+    opacity:0.18;
+    pointer-events:none;
+    z-index:0;
+    mix-blend-mode:multiply;
+    transform:scaleY(-1);"></div>
+  <!-- Bunga 7 background — bawah -->
   <div style="position:absolute;bottom:0;left:0;right:0;height:220px;
     background-image:url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%207.png');
     background-repeat:repeat-x;
@@ -1288,11 +1352,28 @@ body {
     z-index:0;
     mix-blend-mode:multiply;"></div>
   <!-- Bunga background pojok kanan bawah — dihapus -->
-  <!-- Kupu-kupu di dekat slot foto -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:22%;left:4%;--r:-12deg;animation-duration:5.8s;animation-delay:-1.5s;z-index:1;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;opacity:1;top:22%;right:4%;--r:10deg;animation-duration:6.2s;animation-delay:-3.0s;z-index:1;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:40px;opacity:1;top:55%;left:5%;--r:-6deg;animation-duration:5.4s;animation-delay:-4.8s;z-index:1;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:34px;opacity:1;top:60%;right:5%;--r:8deg;animation-duration:6.6s;animation-delay:-2.2s;z-index:1;">
+  <!-- Kupu-kupu banyak tersebar di seluruh section galeri -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;top:8%;left:4%;--r:-12deg;animation-duration:5.8s;animation-delay:-1.5s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:28px;top:5%;left:12%;--r:8deg;animation-duration:7.2s;animation-delay:-0.8s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;top:12%;left:20%;--r:-5deg;animation-duration:6.4s;animation-delay:-3.2s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:22px;top:3%;left:35%;--r:15deg;animation-duration:8.0s;animation-delay:-5.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:32px;top:7%;left:55%;--r:-18deg;animation-duration:6.8s;animation-delay:-2.6s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:40px;top:10%;right:8%;--r:10deg;animation-duration:5.4s;animation-delay:-1.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:26px;top:4%;right:20%;--r:-8deg;animation-duration:7.6s;animation-delay:-4.2s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;top:22%;right:4%;--r:10deg;animation-duration:6.2s;animation-delay:-3.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:24px;top:30%;left:2%;--r:6deg;animation-duration:7.0s;animation-delay:-6.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:40px;top:38%;left:6%;--r:-14deg;animation-duration:5.6s;animation-delay:-2.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:30px;top:35%;right:3%;--r:12deg;animation-duration:6.6s;animation-delay:-0.5s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:20px;top:44%;right:10%;--r:-10deg;animation-duration:8.2s;animation-delay:-3.8s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:40px;top:55%;left:5%;--r:-6deg;animation-duration:5.4s;animation-delay:-4.8s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:26px;top:62%;left:14%;--r:16deg;animation-duration:7.4s;animation-delay:-1.2s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:34px;top:60%;right:5%;--r:8deg;animation-duration:6.6s;animation-delay:-2.2s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:22px;top:68%;right:14%;--r:-12deg;animation-duration:7.8s;animation-delay:-5.4s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:38px;top:75%;left:3%;--r:4deg;animation-duration:6.0s;animation-delay:-3.6s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:28px;top:80%;left:18%;--r:-20deg;animation-duration:7.2s;animation-delay:-0.4s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:32px;top:82%;right:6%;--r:14deg;animation-duration:5.8s;animation-delay:-4.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:24px;top:88%;right:18%;--r:-6deg;animation-duration:8.4s;animation-delay:-2.8s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:42px;top:90%;left:8%;--r:10deg;animation-duration:6.2s;animation-delay:-1.8s;z-index:1;">
 
   <div class="section-content" style="position:relative;z-index:1;">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
@@ -1303,15 +1384,12 @@ body {
     <style>
     .gal-main-wrap {
       position: relative;
-      max-width: 520px;
-      margin: 28px auto 0;
+      width: 100%;
       border-radius: 6px;
       overflow: hidden;
       box-shadow:
-        0 0 0 6px rgba(255,255,255,0.85),
-        0 0 0 10px rgba(154,122,58,0.35),
-        0 0 0 13px rgba(255,255,255,0.5),
-        0 12px 48px rgba(60,42,24,0.22);
+        0 0 0 1px rgba(154,122,58,0.25),
+        0 8px 32px rgba(60,42,24,0.18);
       border: none;
       background: var(--brown-dark);
       aspect-ratio: 1/1;
@@ -1354,40 +1432,103 @@ body {
       z-index: 5;
     }
 
-    /* Thumbnail strip */
-    .gal-thumb-strip {
+    /* Thumbnail strip — infinite loop */
+    .gal-thumb-strip-wrap {
+      position: relative;
       max-width: 520px;
-      margin: 32px auto 0;
+      margin: 0 auto 20px;
+    }
+    /* Ornamen bunga SVG kiri & kanan */
+    .gal-thumb-orn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px;
+      pointer-events: none; z-index: 5;
+      opacity: 0.82;
+    }
+    .gal-thumb-orn.left  { left: -18px; }
+    .gal-thumb-orn.right { right: -18px; transform: translateY(-50%) scaleX(-1); }
+
+    /* Border emas atas-bawah strip */
+    .gal-thumb-strip-inner {
+      position: relative;
+      padding: 10px 28px;
+      border-top: 1px solid rgba(154,122,58,0.3);
+      border-bottom: 1px solid rgba(154,122,58,0.3);
+    }
+    /* diamond ornamen di tengah garis atas & bawah */
+    .gal-thumb-strip-inner::before,
+    .gal-thumb-strip-inner::after {
+      content: '✦';
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-size: 8px; color: var(--gold,#9a7a3a);
+      background: var(--section-bg1,#f5efe6);
+      padding: 0 6px; line-height: 1;
+      pointer-events: none; z-index: 3;
+    }
+    .gal-thumb-strip-inner::before { top: -6px; }
+    .gal-thumb-strip-inner::after  { bottom: -6px; }
+
+    .gal-thumb-strip {
       overflow: hidden;
       position: relative;
       z-index: 20;
     }
+    /* fade edges kiri kanan */
+    .gal-thumb-strip::before,
+    .gal-thumb-strip::after {
+      content:''; position:absolute; top:0; bottom:0; width:40px; z-index:2; pointer-events:none;
+    }
+    .gal-thumb-strip::before { left:0;  background:linear-gradient(to right, var(--section-bg1,#f5efe6), transparent); }
+    .gal-thumb-strip::after  { right:0; background:linear-gradient(to left,  var(--section-bg1,#f5efe6), transparent); }
+
     .gal-thumb-track {
       display: flex;
-      gap: 8px;
-      transition: transform 0.38s cubic-bezier(0.25,0.46,0.45,0.94);
-      padding: 4px 2px 8px;
+      gap: 10px;
+      padding: 6px 4px;
+      animation: galThumbScroll 22s linear infinite;
+      width: max-content;
     }
+    .gal-thumb-track:hover { animation-play-state: paused; }
+
+    @keyframes galThumbScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-33.333%); }
+    }
+
     .gal-thumb {
-      flex: 0 0 calc(20% - 7px);
+      flex: 0 0 68px;
+      width: 68px;
       aspect-ratio: 1/1;
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
       cursor: pointer;
-      border: 2px solid transparent;
-      box-shadow: 0 2px 8px rgba(60,42,24,0.10);
-      transition: border-color 0.25s, transform 0.25s;
+      border: 1.5px solid rgba(154,122,58,0.2);
+      box-shadow: 0 2px 10px rgba(60,42,24,0.12);
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
       position: relative;
+      background: var(--brown-dark);
     }
-    .gal-thumb:hover { transform: translateY(-2px); }
-    .gal-thumb.active { border-color: var(--gold); }
+    .gal-thumb:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 18px rgba(60,42,24,0.2);
+      border-color: rgba(154,122,58,0.5);
+    }
+    .gal-thumb.active {
+      border-color: var(--gold,#9a7a3a);
+      box-shadow: 0 0 0 2px rgba(154,122,58,0.25), 0 4px 14px rgba(60,42,24,0.18);
+    }
     .gal-thumb img {
       width: 100%; height: 100%; object-fit: cover; display: block;
       pointer-events: none; user-select: none;
+      transition: transform 0.3s;
     }
+    .gal-thumb:hover img { transform: scale(1.08); }
     @media (max-width: 540px) {
-      .gal-main-wrap { aspect-ratio: 1/1; }
-      .gal-thumb { flex: 0 0 calc(25% - 7px); }
+      .gal-thumb { flex: 0 0 56px; width: 56px; }
+      .gal-thumb-orn { width: 28px; height: 28px; }
+      .gal-thumb-orn.left  { left: -14px; }
+      .gal-thumb-orn.right { right: -14px; }
     }
 
     /* Wrapper untuk main photo + thumb strip + bunga bawah */
@@ -1418,25 +1559,333 @@ body {
     }
     </style>
 
+    <style>
+    /* Frame container — lebih besar dari foto untuk ruang dekorasi sudut */
+    .gal-frame-outer {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px;
+      box-sizing: border-box;
+    }
+    /* SVG corner decorations — absolut di tiap sudut */
+    .gal-frame-outer .gal-corner {
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .gal-corner.tl { top: -4px;  left: -4px;  transform: rotate(0deg); }
+    .gal-corner.tr { top: -4px;  right: -4px; transform: rotate(90deg); }
+    .gal-corner.bl { bottom: -4px; left: -4px;  transform: rotate(-90deg); }
+    .gal-corner.br { bottom: -4px; right: -4px; transform: rotate(180deg); }
+    @media (max-width: 540px) {
+      .gal-frame-outer { padding: 22px; }
+      .gal-corner { width: 82px; height: 82px; }
+    }
+    /* Thin gold border inside padding area */
+    .gal-frame-inner-border {
+      position: absolute;
+      inset: 18px;
+      border: 1.5px solid rgba(154,122,58,0.35);
+      border-radius: 4px;
+      pointer-events: none;
+      z-index: 9;
+    }
+    </style>
+
     <!-- Main photo display + thumbnail strip (thumb di atas) -->
     <div class="gal-photo-outer fade-in-up delay-2">
 
-      <!-- Thumbnail strip — di atas foto utama -->
-      <div class="gal-thumb-strip fade-in-up delay-3" style="margin:0 auto 16px;max-width:520px;">
-        <div class="gal-thumb-track" id="gal-thumb-track">
-          <!-- thumbs injected by JS -->
+      <!-- Thumbnail strip — dekorasi dengan ornamen bunga SVG kiri kanan -->
+      <div class="gal-thumb-strip-wrap fade-in-up delay-3">
+
+        <!-- Ornamen bunga kiri -->
+        <svg class="gal-thumb-orn left" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M34 18 Q24 14 18 18 Q12 22 4 18" stroke="#9a7a3a" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+          <path d="M18 18 Q16 10 18 4" stroke="#9a7a3a" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <path d="M18 18 Q16 26 18 32" stroke="#9a7a3a" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <!-- bunga atas -->
+          <circle cx="18" cy="5" r="3.5" fill="#e8a4b8" opacity="0.85"/>
+          <circle cx="14" cy="3" r="2" fill="#f2c4d0" opacity="0.75"/>
+          <circle cx="22" cy="3" r="2" fill="#f2c4d0" opacity="0.75"/>
+          <circle cx="18" cy="1" r="2" fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="18" cy="5" r="1.3" fill="#c8607a" opacity="0.6"/>
+          <!-- bunga bawah -->
+          <circle cx="18" cy="31" r="3" fill="#f0d090" opacity="0.82"/>
+          <circle cx="14" cy="29" r="1.8" fill="#f7e0b0" opacity="0.72"/>
+          <circle cx="22" cy="29" r="1.8" fill="#f7e0b0" opacity="0.72"/>
+          <circle cx="18" cy="27" r="1.8" fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="18" cy="31" r="1.1" fill="#c8900a" opacity="0.55"/>
+          <!-- bunga tengah kiri -->
+          <circle cx="5" cy="18" r="3" fill="#c4a8d8" opacity="0.8"/>
+          <circle cx="2" cy="15" r="1.8" fill="#dac0e8" opacity="0.7"/>
+          <circle cx="2" cy="21" r="1.8" fill="#dac0e8" opacity="0.7"/>
+          <circle cx="5" cy="18" r="1.1" fill="#8060a0" opacity="0.55"/>
+          <!-- daun -->
+          <ellipse cx="13" cy="12" rx="3.5" ry="1.5" fill="#7aaa6a" opacity="0.5" transform="rotate(-40 13 12)"/>
+          <ellipse cx="13" cy="24" rx="3.5" ry="1.5" fill="#5a9a4a" opacity="0.48" transform="rotate(40 13 24)"/>
+          <!-- kupu kecil -->
+          <g transform="translate(28,18) rotate(0)" opacity="0.78">
+            <ellipse cx="-3" cy="-2" rx="4" ry="2.5" fill="#8ec8e8" opacity="0.75" transform="rotate(-20 -3 -2)"/>
+            <ellipse cx="-3" cy="2"  rx="3" ry="1.8" fill="#b8e0f4" opacity="0.6"  transform="rotate(20 -3 2)"/>
+            <line x1="-1" y1="-3" x2="-1" y2="3" stroke="#4a6a80" stroke-width="0.7"/>
+          </g>
+        </svg>
+
+        <!-- Ornamen bunga kanan (mirror) -->
+        <svg class="gal-thumb-orn right" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M34 18 Q24 14 18 18 Q12 22 4 18" stroke="#9a7a3a" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+          <path d="M18 18 Q16 10 18 4" stroke="#9a7a3a" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <path d="M18 18 Q16 26 18 32" stroke="#9a7a3a" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="18" cy="5" r="3.5" fill="#f0d090" opacity="0.85"/>
+          <circle cx="14" cy="3" r="2"   fill="#f7e0b0" opacity="0.75"/>
+          <circle cx="22" cy="3" r="2"   fill="#f7e0b0" opacity="0.75"/>
+          <circle cx="18" cy="1" r="2"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="18" cy="5" r="1.3" fill="#c8900a" opacity="0.6"/>
+          <circle cx="18" cy="31" r="3"  fill="#c4a8d8" opacity="0.82"/>
+          <circle cx="14" cy="29" r="1.8" fill="#dac0e8" opacity="0.72"/>
+          <circle cx="22" cy="29" r="1.8" fill="#dac0e8" opacity="0.72"/>
+          <circle cx="18" cy="27" r="1.8" fill="#dac0e8" opacity="0.7"/>
+          <circle cx="18" cy="31" r="1.1" fill="#8060a0" opacity="0.55"/>
+          <circle cx="5"  cy="18" r="3"  fill="#e8a4b8" opacity="0.8"/>
+          <circle cx="2"  cy="15" r="1.8" fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="2"  cy="21" r="1.8" fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="5"  cy="18" r="1.1" fill="#c8607a" opacity="0.55"/>
+          <ellipse cx="13" cy="12" rx="3.5" ry="1.5" fill="#7aaa6a" opacity="0.5" transform="rotate(-40 13 12)"/>
+          <ellipse cx="13" cy="24" rx="3.5" ry="1.5" fill="#5a9a4a" opacity="0.48" transform="rotate(40 13 24)"/>
+          <g transform="translate(28,18) rotate(0)" opacity="0.78">
+            <ellipse cx="-3" cy="-2" rx="4" ry="2.5" fill="#f4c0d0" opacity="0.75" transform="rotate(-20 -3 -2)"/>
+            <ellipse cx="-3" cy="2"  rx="3" ry="1.8" fill="#fce0e8" opacity="0.6"  transform="rotate(20 -3 2)"/>
+            <line x1="-1" y1="-3" x2="-1" y2="3" stroke="#805060" stroke-width="0.7"/>
+          </g>
+        </svg>
+
+        <div class="gal-thumb-strip-inner">
+          <div class="gal-thumb-strip">
+            <div class="gal-thumb-track" id="gal-thumb-track">
+              <!-- thumbs injected by JS -->
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Main photo -->
-      <div class="gal-main-wrap" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
+      <!-- Frame dekorasi bunga + kupu-kupu di sudut -->
+      <div class="gal-frame-outer">
+
+        <!-- Corner SVG — bunga & kupu-kupu, diulang di 4 sudut via CSS rotate -->
+        <!-- SVG corner: ranting bunga watercolor + kupu-kupu kecil -->
+        <svg class="gal-corner tl" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <!-- Ranting utama -->
+          <path d="M8 102 Q18 70 38 50 Q55 32 95 12" stroke="#8B6914" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+          <!-- Ranting samping kiri -->
+          <path d="M38 50 Q28 42 18 46" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <path d="M55 32 Q48 22 52 14" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <!-- Bunga 1 — merah muda -->
+          <circle cx="20" cy="45" r="5.5" fill="#e8a4b8" opacity="0.82"/>
+          <circle cx="14" cy="40" r="3.5" fill="#f2c4d0" opacity="0.75"/>
+          <circle cx="26" cy="40" r="3" fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="20" cy="34" r="3" fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="20" cy="45" r="2" fill="#c8607a" opacity="0.6"/>
+          <!-- Bunga 2 — krem -->
+          <circle cx="54" cy="13" r="5" fill="#f0d090" opacity="0.8"/>
+          <circle cx="48" cy="9"  r="3.5" fill="#f7e0b0" opacity="0.72"/>
+          <circle cx="60" cy="9"  r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="54" cy="5"  r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="54" cy="13" r="2"   fill="#c8900a" opacity="0.55"/>
+          <!-- Bunga 3 — lavender -->
+          <circle cx="78" cy="24" r="4.5" fill="#c4a8d8" opacity="0.78"/>
+          <circle cx="72" cy="20" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="84" cy="20" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="78" cy="16" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="78" cy="24" r="1.8" fill="#8060a0" opacity="0.55"/>
+          <!-- Daun-daun -->
+          <ellipse cx="32" cy="56" rx="5" ry="2.5" fill="#7aaa6a" opacity="0.55" transform="rotate(-30 32 56)"/>
+          <ellipse cx="44" cy="42" rx="5" ry="2.5" fill="#5a9a4a" opacity="0.5"  transform="rotate(-60 44 42)"/>
+          <ellipse cx="65" cy="28" rx="4" ry="2"   fill="#7aaa6a" opacity="0.5"  transform="rotate(-45 65 28)"/>
+          <ellipse cx="88" cy="18" rx="4" ry="2"   fill="#5a9a4a" opacity="0.48" transform="rotate(-20 88 18)"/>
+          <!-- Bunga kecil sepanjang ranting -->
+          <circle cx="70" cy="38" r="3"   fill="#f4a0b0" opacity="0.7"/>
+          <circle cx="68" cy="35" r="1.5" fill="#e07090" opacity="0.6"/>
+          <circle cx="48" cy="58" r="2.5" fill="#f0d090" opacity="0.65"/>
+          <circle cx="46" cy="55" r="1.2" fill="#c08010" opacity="0.55"/>
+          <!-- Kupu-kupu kecil -->
+          <g transform="translate(90,42) rotate(-25)" opacity="0.82">
+            <ellipse cx="-5" cy="0" rx="6" ry="4" fill="#8ec8e8" opacity="0.75" transform="rotate(-20 -5 0)"/>
+            <ellipse cx="5"  cy="0" rx="6" ry="4" fill="#8ec8e8" opacity="0.75" transform="rotate(20 5 0)"/>
+            <ellipse cx="-3" cy="1" rx="3.5" ry="2.2" fill="#b8e0f4" opacity="0.55" transform="rotate(-20 -3 1)"/>
+            <ellipse cx="3"  cy="1" rx="3.5" ry="2.2" fill="#b8e0f4" opacity="0.55" transform="rotate(20 3 1)"/>
+            <line x1="-1" y1="-5" x2="1" y2="5" stroke="#4a6a80" stroke-width="0.8"/>
+            <path d="M0,-5 Q-2,-8 -1,-10" stroke="#4a6a80" stroke-width="0.7" fill="none"/>
+            <path d="M0,-5 Q2,-8 1,-10" stroke="#4a6a80" stroke-width="0.7" fill="none"/>
+          </g>
+          <!-- Kupu-kupu kedua, lebih kecil -->
+          <g transform="translate(30,78) rotate(10)" opacity="0.72">
+            <ellipse cx="-4" cy="0" rx="4.5" ry="3" fill="#f4c0d0" opacity="0.75" transform="rotate(-15 -4 0)"/>
+            <ellipse cx="4"  cy="0" rx="4.5" ry="3" fill="#f4c0d0" opacity="0.75" transform="rotate(15 4 0)"/>
+            <ellipse cx="-2" cy="1" rx="2.5" ry="1.6" fill="#fce0e8" opacity="0.55" transform="rotate(-15 -2 1)"/>
+            <ellipse cx="2"  cy="1" rx="2.5" ry="1.6" fill="#fce0e8" opacity="0.55" transform="rotate(15 2 1)"/>
+            <line x1="0" y1="-4" x2="0" y2="4" stroke="#805060" stroke-width="0.7"/>
+            <path d="M0,-4 Q-1.5,-6 -0.8,-8" stroke="#805060" stroke-width="0.6" fill="none"/>
+            <path d="M0,-4 Q1.5,-6 0.8,-8" stroke="#805060" stroke-width="0.6" fill="none"/>
+          </g>
+          <!-- Titik serbuk bunga kecil -->
+          <circle cx="36" cy="62" r="1" fill="#c8900a" opacity="0.4"/>
+          <circle cx="60" cy="46" r="1" fill="#e8a4b8" opacity="0.45"/>
+          <circle cx="82" cy="30" r="1" fill="#c4a8d8" opacity="0.4"/>
+        </svg>
+        <svg class="gal-corner tr" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M8 102 Q18 70 38 50 Q55 32 95 12" stroke="#8B6914" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+          <path d="M38 50 Q28 42 18 46" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <path d="M55 32 Q48 22 52 14" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <circle cx="20" cy="45" r="5.5" fill="#f0d090" opacity="0.82"/>
+          <circle cx="14" cy="40" r="3.5" fill="#f7e0b0" opacity="0.75"/>
+          <circle cx="26" cy="40" r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="20" cy="34" r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="20" cy="45" r="2"   fill="#c8900a" opacity="0.6"/>
+          <circle cx="54" cy="13" r="5"   fill="#e8a4b8" opacity="0.8"/>
+          <circle cx="48" cy="9"  r="3.5" fill="#f2c4d0" opacity="0.72"/>
+          <circle cx="60" cy="9"  r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="54" cy="5"  r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="54" cy="13" r="2"   fill="#c8607a" opacity="0.55"/>
+          <circle cx="78" cy="24" r="4.5" fill="#c4a8d8" opacity="0.78"/>
+          <circle cx="72" cy="20" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="84" cy="20" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="78" cy="16" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="78" cy="24" r="1.8" fill="#8060a0" opacity="0.55"/>
+          <ellipse cx="32" cy="56" rx="5" ry="2.5" fill="#7aaa6a" opacity="0.55" transform="rotate(-30 32 56)"/>
+          <ellipse cx="44" cy="42" rx="5" ry="2.5" fill="#5a9a4a" opacity="0.5"  transform="rotate(-60 44 42)"/>
+          <ellipse cx="65" cy="28" rx="4" ry="2"   fill="#7aaa6a" opacity="0.5"  transform="rotate(-45 65 28)"/>
+          <ellipse cx="88" cy="18" rx="4" ry="2"   fill="#5a9a4a" opacity="0.48" transform="rotate(-20 88 18)"/>
+          <circle cx="70" cy="38" r="3"   fill="#f4a0b0" opacity="0.7"/>
+          <circle cx="68" cy="35" r="1.5" fill="#e07090" opacity="0.6"/>
+          <circle cx="48" cy="58" r="2.5" fill="#f0d090" opacity="0.65"/>
+          <circle cx="46" cy="55" r="1.2" fill="#c08010" opacity="0.55"/>
+          <g transform="translate(90,42) rotate(-25)" opacity="0.82">
+            <ellipse cx="-5" cy="0" rx="6" ry="4" fill="#f4c0d0" opacity="0.75" transform="rotate(-20 -5 0)"/>
+            <ellipse cx="5"  cy="0" rx="6" ry="4" fill="#f4c0d0" opacity="0.75" transform="rotate(20 5 0)"/>
+            <ellipse cx="-3" cy="1" rx="3.5" ry="2.2" fill="#fce0e8" opacity="0.55" transform="rotate(-20 -3 1)"/>
+            <ellipse cx="3"  cy="1" rx="3.5" ry="2.2" fill="#fce0e8" opacity="0.55" transform="rotate(20 3 1)"/>
+            <line x1="-1" y1="-5" x2="1" y2="5" stroke="#805060" stroke-width="0.8"/>
+            <path d="M0,-5 Q-2,-8 -1,-10" stroke="#805060" stroke-width="0.7" fill="none"/>
+            <path d="M0,-5 Q2,-8 1,-10" stroke="#805060" stroke-width="0.7" fill="none"/>
+          </g>
+          <g transform="translate(30,78) rotate(10)" opacity="0.72">
+            <ellipse cx="-4" cy="0" rx="4.5" ry="3" fill="#8ec8e8" opacity="0.75" transform="rotate(-15 -4 0)"/>
+            <ellipse cx="4"  cy="0" rx="4.5" ry="3" fill="#8ec8e8" opacity="0.75" transform="rotate(15 4 0)"/>
+            <ellipse cx="-2" cy="1" rx="2.5" ry="1.6" fill="#b8e0f4" opacity="0.55" transform="rotate(-15 -2 1)"/>
+            <ellipse cx="2"  cy="1" rx="2.5" ry="1.6" fill="#b8e0f4" opacity="0.55" transform="rotate(15 2 1)"/>
+            <line x1="0" y1="-4" x2="0" y2="4" stroke="#4a6a80" stroke-width="0.7"/>
+            <path d="M0,-4 Q-1.5,-6 -0.8,-8" stroke="#4a6a80" stroke-width="0.6" fill="none"/>
+            <path d="M0,-4 Q1.5,-6 0.8,-8" stroke="#4a6a80" stroke-width="0.6" fill="none"/>
+          </g>
+        </svg>
+        <svg class="gal-corner bl" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M8 102 Q18 70 38 50 Q55 32 95 12" stroke="#8B6914" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+          <path d="M38 50 Q28 42 18 46" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <path d="M55 32 Q48 22 52 14" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <circle cx="20" cy="45" r="5.5" fill="#c4a8d8" opacity="0.82"/>
+          <circle cx="14" cy="40" r="3.5" fill="#dac0e8" opacity="0.75"/>
+          <circle cx="26" cy="40" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="20" cy="34" r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="20" cy="45" r="2"   fill="#8060a0" opacity="0.6"/>
+          <circle cx="54" cy="13" r="5"   fill="#f0d090" opacity="0.8"/>
+          <circle cx="48" cy="9"  r="3.5" fill="#f7e0b0" opacity="0.72"/>
+          <circle cx="60" cy="9"  r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="54" cy="5"  r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="54" cy="13" r="2"   fill="#c8900a" opacity="0.55"/>
+          <circle cx="78" cy="24" r="4.5" fill="#e8a4b8" opacity="0.78"/>
+          <circle cx="72" cy="20" r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="84" cy="20" r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="78" cy="16" r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="78" cy="24" r="1.8" fill="#c8607a" opacity="0.55"/>
+          <ellipse cx="32" cy="56" rx="5" ry="2.5" fill="#7aaa6a" opacity="0.55" transform="rotate(-30 32 56)"/>
+          <ellipse cx="44" cy="42" rx="5" ry="2.5" fill="#5a9a4a" opacity="0.5"  transform="rotate(-60 44 42)"/>
+          <ellipse cx="65" cy="28" rx="4" ry="2"   fill="#7aaa6a" opacity="0.5"  transform="rotate(-45 65 28)"/>
+          <ellipse cx="88" cy="18" rx="4" ry="2"   fill="#5a9a4a" opacity="0.48" transform="rotate(-20 88 18)"/>
+          <circle cx="70" cy="38" r="3"   fill="#f4a0b0" opacity="0.7"/>
+          <circle cx="68" cy="35" r="1.5" fill="#e07090" opacity="0.6"/>
+          <circle cx="48" cy="58" r="2.5" fill="#c4a8d8" opacity="0.65"/>
+          <circle cx="46" cy="55" r="1.2" fill="#8060a0" opacity="0.55"/>
+          <g transform="translate(90,42) rotate(-25)" opacity="0.82">
+            <ellipse cx="-5" cy="0" rx="6" ry="4" fill="#8ec8e8" opacity="0.75" transform="rotate(-20 -5 0)"/>
+            <ellipse cx="5"  cy="0" rx="6" ry="4" fill="#8ec8e8" opacity="0.75" transform="rotate(20 5 0)"/>
+            <ellipse cx="-3" cy="1" rx="3.5" ry="2.2" fill="#b8e0f4" opacity="0.55" transform="rotate(-20 -3 1)"/>
+            <ellipse cx="3"  cy="1" rx="3.5" ry="2.2" fill="#b8e0f4" opacity="0.55" transform="rotate(20 3 1)"/>
+            <line x1="-1" y1="-5" x2="1" y2="5" stroke="#4a6a80" stroke-width="0.8"/>
+            <path d="M0,-5 Q-2,-8 -1,-10" stroke="#4a6a80" stroke-width="0.7" fill="none"/>
+            <path d="M0,-5 Q2,-8 1,-10" stroke="#4a6a80" stroke-width="0.7" fill="none"/>
+          </g>
+          <g transform="translate(30,78) rotate(10)" opacity="0.72">
+            <ellipse cx="-4" cy="0" rx="4.5" ry="3" fill="#f4c0d0" opacity="0.75" transform="rotate(-15 -4 0)"/>
+            <ellipse cx="4"  cy="0" rx="4.5" ry="3" fill="#f4c0d0" opacity="0.75" transform="rotate(15 4 0)"/>
+            <ellipse cx="-2" cy="1" rx="2.5" ry="1.6" fill="#fce0e8" opacity="0.55" transform="rotate(-15 -2 1)"/>
+            <ellipse cx="2"  cy="1" rx="2.5" ry="1.6" fill="#fce0e8" opacity="0.55" transform="rotate(15 2 1)"/>
+            <line x1="0" y1="-4" x2="0" y2="4" stroke="#805060" stroke-width="0.7"/>
+            <path d="M0,-4 Q-1.5,-6 -0.8,-8" stroke="#805060" stroke-width="0.6" fill="none"/>
+            <path d="M0,-4 Q1.5,-6 0.8,-8" stroke="#805060" stroke-width="0.6" fill="none"/>
+          </g>
+        </svg>
+        <svg class="gal-corner br" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M8 102 Q18 70 38 50 Q55 32 95 12" stroke="#8B6914" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+          <path d="M38 50 Q28 42 18 46" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <path d="M55 32 Q48 22 52 14" stroke="#8B6914" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <circle cx="20" cy="45" r="5.5" fill="#e8a4b8" opacity="0.82"/>
+          <circle cx="14" cy="40" r="3.5" fill="#f2c4d0" opacity="0.75"/>
+          <circle cx="26" cy="40" r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="20" cy="34" r="3"   fill="#f2c4d0" opacity="0.7"/>
+          <circle cx="20" cy="45" r="2"   fill="#c8607a" opacity="0.6"/>
+          <circle cx="54" cy="13" r="5"   fill="#c4a8d8" opacity="0.8"/>
+          <circle cx="48" cy="9"  r="3.5" fill="#dac0e8" opacity="0.72"/>
+          <circle cx="60" cy="9"  r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="54" cy="5"  r="3"   fill="#dac0e8" opacity="0.7"/>
+          <circle cx="54" cy="13" r="2"   fill="#8060a0" opacity="0.55"/>
+          <circle cx="78" cy="24" r="4.5" fill="#f0d090" opacity="0.78"/>
+          <circle cx="72" cy="20" r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="84" cy="20" r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="78" cy="16" r="3"   fill="#f7e0b0" opacity="0.7"/>
+          <circle cx="78" cy="24" r="1.8" fill="#c8900a" opacity="0.55"/>
+          <ellipse cx="32" cy="56" rx="5" ry="2.5" fill="#7aaa6a" opacity="0.55" transform="rotate(-30 32 56)"/>
+          <ellipse cx="44" cy="42" rx="5" ry="2.5" fill="#5a9a4a" opacity="0.5"  transform="rotate(-60 44 42)"/>
+          <ellipse cx="65" cy="28" rx="4" ry="2"   fill="#7aaa6a" opacity="0.5"  transform="rotate(-45 65 28)"/>
+          <ellipse cx="88" cy="18" rx="4" ry="2"   fill="#5a9a4a" opacity="0.48" transform="rotate(-20 88 18)"/>
+          <circle cx="70" cy="38" r="3"   fill="#f4a0b0" opacity="0.7"/>
+          <circle cx="68" cy="35" r="1.5" fill="#e07090" opacity="0.6"/>
+          <circle cx="48" cy="58" r="2.5" fill="#f0d090" opacity="0.65"/>
+          <circle cx="46" cy="55" r="1.2" fill="#c08010" opacity="0.55"/>
+          <g transform="translate(90,42) rotate(-25)" opacity="0.82">
+            <ellipse cx="-5" cy="0" rx="6" ry="4" fill="#f4c0d0" opacity="0.75" transform="rotate(-20 -5 0)"/>
+            <ellipse cx="5"  cy="0" rx="6" ry="4" fill="#f4c0d0" opacity="0.75" transform="rotate(20 5 0)"/>
+            <ellipse cx="-3" cy="1" rx="3.5" ry="2.2" fill="#fce0e8" opacity="0.55" transform="rotate(-20 -3 1)"/>
+            <ellipse cx="3"  cy="1" rx="3.5" ry="2.2" fill="#fce0e8" opacity="0.55" transform="rotate(20 3 1)"/>
+            <line x1="-1" y1="-5" x2="1" y2="5" stroke="#805060" stroke-width="0.8"/>
+            <path d="M0,-5 Q-2,-8 -1,-10" stroke="#805060" stroke-width="0.7" fill="none"/>
+            <path d="M0,-5 Q2,-8 1,-10" stroke="#805060" stroke-width="0.7" fill="none"/>
+          </g>
+          <g transform="translate(30,78) rotate(10)" opacity="0.72">
+            <ellipse cx="-4" cy="0" rx="4.5" ry="3" fill="#8ec8e8" opacity="0.75" transform="rotate(-15 -4 0)"/>
+            <ellipse cx="4"  cy="0" rx="4.5" ry="3" fill="#8ec8e8" opacity="0.75" transform="rotate(15 4 0)"/>
+            <ellipse cx="-2" cy="1" rx="2.5" ry="1.6" fill="#b8e0f4" opacity="0.55" transform="rotate(-15 -2 1)"/>
+            <ellipse cx="2"  cy="1" rx="2.5" ry="1.6" fill="#b8e0f4" opacity="0.55" transform="rotate(15 2 1)"/>
+            <line x1="0" y1="-4" x2="0" y2="4" stroke="#4a6a80" stroke-width="0.7"/>
+            <path d="M0,-4 Q-1.5,-6 -0.8,-8" stroke="#4a6a80" stroke-width="0.6" fill="none"/>
+            <path d="M0,-4 Q1.5,-6 0.8,-8" stroke="#4a6a80" stroke-width="0.6" fill="none"/>
+          </g>
+        </svg>
+
+        <!-- Gold border tipis -->
+        <div class="gal-frame-inner-border"></div>
+
+        <!-- Main photo -->
+        <div class="gal-main-wrap" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
         <!-- images injected by JS -->
         <button class="gal-main-nav prev" onclick="event.stopPropagation();galNavMain(-1)" aria-label="Sebelumnya">&#8249;</button>
         <button class="gal-main-nav next" onclick="event.stopPropagation();galNavMain(1)" aria-label="Berikutnya">&#8250;</button>
         <div class="gal-counter" id="gal-counter">1 / 8</div>
-      </div>
-
-    </div>
+      </div><!-- /gal-main-wrap -->
+      </div><!-- /gal-frame-outer -->
+    </div><!-- /gal-photo-outer -->
 
     <script>
     (function(){
@@ -1466,31 +1915,37 @@ body {
         mainWrap.insertBefore(img, mainWrap.querySelector('.gal-main-nav'));
       });
 
-      // Build thumbnails
-      galImgs.forEach(function(src, idx) {
-        var th = document.createElement('div');
-        th.className = 'gal-thumb' + (idx===0 ? ' active' : '');
-        th.innerHTML = '<img src="' + src + '" alt="Thumb ' + (idx+1) + '" loading="lazy">';
-        th.onclick = (function(i){ return function(){ galGoTo(i); }; })(idx);
-        thumbTrack.appendChild(th);
-      });
+      // Build thumbnails — render 3x untuk infinite loop seamless
+      function buildThumbs() {
+        thumbTrack.innerHTML = '';
+        // Render original + 2 klon
+        for (var rep = 0; rep < 3; rep++) {
+          galImgs.forEach(function(src, idx) {
+            var th = document.createElement('div');
+            var isReal = (rep === 0);
+            th.className = 'gal-thumb' + (isReal && idx === 0 ? ' active' : '');
+            th.dataset.realIdx = idx;
+            th.dataset.rep = rep;
+            th.innerHTML = '<img src="' + src + '" alt="Thumb ' + (idx+1) + '" loading="lazy">';
+            th.onclick = (function(i){ return function(){ galGoTo(i); }; })(idx);
+            thumbTrack.appendChild(th);
+          });
+        }
+        // Animasi berjalan 1/3 track width (1 set = original)
+        // Sudah diatur via @keyframes translateX(-33.333%)
+      }
+      buildThumbs();
 
       function galGoTo(idx) {
         var imgs = mainWrap.querySelectorAll('.gal-main-img');
-        var thumbs = thumbTrack.querySelectorAll('.gal-thumb');
         imgs[window.galCurrent].classList.remove('active');
-        thumbs[window.galCurrent].classList.remove('active');
         window.galCurrent = (idx + galImgs.length) % galImgs.length;
         imgs[window.galCurrent].classList.add('active');
-        thumbs[window.galCurrent].classList.add('active');
         counter.textContent = (window.galCurrent + 1) + ' / ' + galImgs.length;
-        // scroll thumb into view
-        var th = thumbs[window.galCurrent];
-        var stripW = thumbTrack.parentElement.offsetWidth;
-        var thLeft = th.offsetLeft;
-        var thW = th.offsetWidth;
-        var offset = Math.max(0, thLeft - (stripW / 2) + (thW / 2));
-        thumbTrack.style.transform = 'translateX(-' + offset + 'px)';
+        // Sync active highlight ke semua thumb (termasuk klon)
+        thumbTrack.querySelectorAll('.gal-thumb').forEach(function(th) {
+          th.classList.toggle('active', parseInt(th.dataset.realIdx) === window.galCurrent);
+        });
       }
 
       window.galNavMain = function(dir) { galGoTo(window.galCurrent + dir); };
