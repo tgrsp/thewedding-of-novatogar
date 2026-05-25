@@ -841,9 +841,8 @@ body {
 
 <script>
 (function() {
-  var hero = document.querySelector('.hero');
   var hint = document.getElementById('swipe-hint');
-  if (!hero || !hint) return;
+  if (!hint) return;
 
   function hideHint() {
     hint.classList.add('hidden');
@@ -854,18 +853,34 @@ body {
     if (window.scrollY > 30) {
       hideHint();
       window.removeEventListener('scroll', onScroll);
-      document.removeEventListener('touchstart', onTouch);
     }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* Mobile: langsung hilang begitu ada touch pertama (swipe gesture) */
-  function onTouch() {
-    hideHint();
-    observer.disconnect();
-    document.removeEventListener('touchstart', onTouch);
+  /* Mobile: pasang touchstart listener SETELAH overlay ditutup,
+     supaya sentuhan "Buka Undangan" tidak langsung menyembunyikan hint */
+  function attachTouchHide() {
+    document.addEventListener('touchstart', function onTouch() {
+      hideHint();
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('touchstart', onTouch);
+    }, { passive: true });
   }
-  document.addEventListener('touchstart', onTouch, { passive: true, once: true });
+
+  var overlay = document.getElementById('tap-overlay');
+  if (overlay) {
+    /* Pantau overlay hilang, baru pasang listener touch */
+    var mo = new MutationObserver(function() {
+      if (overlay.classList.contains('hidden')) {
+        mo.disconnect();
+        /* Tunda sedikit agar sentuhan "Buka Undangan" tidak terhitung */
+        setTimeout(attachTouchHide, 600);
+      }
+    });
+    mo.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  } else {
+    attachTouchHide();
+  }
 })();
 </script>
 
