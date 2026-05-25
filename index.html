@@ -902,67 +902,103 @@ body {
 }
 
 /* ── Foto dengan frame polaroid besar ── */
+
+/* Outer wrapper: memberi ruang ekstra agar frame yang di-scale tidak terpotong */
+.cp-photo-ring-outer {
+  padding: 14% 14% 10%;
+  /* override padding dari rule sebelumnya */
+  display: flex;
+  justify-content: center;
+}
+
+/* Ring = area foto aktual (tanpa frame dekoratif) */
 .cp-photo-ring {
   position: relative;
-  width: min(88vw, 380px);
-  height: min(104.5vw, 452px);
-  margin: 0 auto 28px;
+  width: min(72vw, 300px);
+  /* Tinggi = lebar * 4/3 (proporsi foto portrait 3:4) */
+  height: min(96vw, 400px);
+  margin: 0 auto;
+  overflow: visible; /* frame boleh keluar */
 }
-/* Hapus ring garis dekoratif */
 .cp-photo-ring::before,
-.cp-photo-ring::after {
-  content: none;
-}
+.cp-photo-ring::after { content: none; }
+
 .cp-photo-circle {
   width: 100%; height: 100%;
-  border-radius: 0;
-  overflow: visible;
-  box-shadow: none;
-  border: none;
   position: relative;
   background: transparent;
 }
-/* Frame PNG diperbesar keluar dari batas container agar terlihat lebih besar dari foto */
+
+/* Foto mempelai — mengisi penuh area ring, tidak keluar */
+.cp-photo-circle img.cp-photo-main {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  z-index: 1;
+}
+
+/* Frame PNG: di-scale lebih besar dari ring, menonjol keluar semua sisi
+   Pakai transform agar tidak ganggu layout */
 .cp-photo-frame {
   position: absolute;
-  top: -8%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
+  top: 50%;
+  left: 50%;
+  width: 140%;
+  height: 140%;
+  transform: translate(-50%, -50%);
   object-fit: fill;
   pointer-events: none;
   z-index: 2;
   display: block;
-}
-/* Foto mempelai — duduk rapi di dalam area foto frame polaroid */
-.cp-photo-circle img.cp-photo-main {
-  position: absolute;
-  top: 6%;
-  left: 6%;
-  width: 88%;
-  height: 72%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  border-radius: 0;
-  z-index: 1;
+  /* Frame boleh keluar karena ring sudah overflow:hidden untuk foto,
+     tapi frame harus tetap terlihat → gunakan clip pada foto saja */
 }
 
-/* Ornamen sudut kecil di sekitar foto */
-.cp-orn {
+/* Trick: foto dikontain oleh ::before pseudo, frame menonjol dengan z-index */
+/* Karena overflow:hidden pada .cp-photo-ring akan memotong frame juga,
+   kita pindahkan frame ke luar ring */
+.cp-photo-frame {
+  /* Reset — akan diposisikan ulang via JS-free trick di bawah */
   position: absolute;
-  pointer-events: none;
-  color: var(--gold-light);
-  font-size: 20px;
-  line-height: 1;
+  display: block;
 }
-.cp-orn-tl { top: -4px; left: -4px; }
-.cp-orn-tr { top: -4px; right: -4px; }
-.cp-orn-bl { bottom: -4px; left: -4px; }
-.cp-orn-br { bottom: -4px; right: -4px; }
+
+/* Solusi bersih: gunakan dua layer container:
+   - .cp-frame-wrap (overflow:visible) → menampung frame yang membesar
+   - .cp-photo-ring (overflow:hidden) → mengontain foto
+   Karena keduanya sudah ada, kita restructure via CSS saja */
+
+/* Foto: overflow hidden dikontrol di level .cp-photo-ring */
+/* Frame: dikeluarkan dari stacking context overflow:hidden */
+
+/* Override final — buat ring TIDAK overflow:hidden, dan foto dikontain lewat clip-path */
+.cp-photo-ring {
+  overflow: visible; /* frame boleh keluar */
+}
+.cp-photo-circle img.cp-photo-main {
+  /* Gunakan clip-path untuk mengontain foto tanpa overflow:hidden di parent */
+  clip-path: inset(0);
+}
+/* Frame tetap di luar clip, jadi terlihat lebih besar */
+.cp-photo-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 145%;
+  height: 145%;
+  transform: translate(-50%, -50%);
+  object-fit: fill;
+  pointer-events: none;
+  z-index: 2;
+}
 
 @media (max-width: 400px) {
-  .cp-photo-ring { width: 90vw !important; height: 107vw !important; }
+  .cp-photo-ring { width: 76vw !important; height: 101vw !important; }
+  .cp-photo-ring-outer { padding: 16% 10% 12% !important; }
 }
 
 /* ── Info teks ── */
