@@ -1347,9 +1347,10 @@ body {
     /* Thumbnail strip */
     .gal-thumb-strip {
       max-width: 520px;
-      margin: 18px auto 0;
+      margin: 32px auto 0;
       overflow: hidden;
       position: relative;
+      z-index: 5;
     }
     .gal-thumb-track {
       display: flex;
@@ -1393,17 +1394,17 @@ body {
     /* Bunga6 frame bawah — flip vertikal, nutupin bagian bawah thumbnail strip */
     .gal-bunga6 {
       position: absolute;
-      bottom: -60px;
+      bottom: -80px;
       left: 50%;
       transform: translateX(-50%) scaleY(-1);
-      width: 140%;
-      max-width: 740px;
+      width: 180%;
+      max-width: 960px;
       pointer-events: none;
       z-index: 10;
       display: block;
     }
     @media (max-width: 540px) {
-      .gal-bunga6 { width: 150%; bottom: -40px; }
+      .gal-bunga6 { width: 200%; bottom: -55px; }
     }
     </style>
 
