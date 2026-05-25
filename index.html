@@ -1277,8 +1277,7 @@ body {
 
 <!-- ===== GALERI FOTO ===== -->
 <section class="gallery-bg" style="position:relative;overflow:hidden;">
-  <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:1;" loading="lazy">
+  <!-- Bunga background pojok kanan bawah — dihapus -->
   <!-- Kupu-kupu di dekat slot foto -->
   <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:22%;left:4%;--r:-12deg;animation-duration:5.8s;animation-delay:-1.5s;">
   <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;opacity:1;top:22%;right:4%;--r:10deg;animation-duration:6.2s;animation-delay:-3.0s;">
@@ -1298,8 +1297,12 @@ body {
       margin: 28px auto 0;
       border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 8px 40px rgba(60,42,24,0.18);
-      border: 1px solid rgba(154,122,58,0.18);
+      box-shadow:
+        0 0 0 6px rgba(255,255,255,0.85),
+        0 0 0 10px rgba(154,122,58,0.35),
+        0 0 0 13px rgba(255,255,255,0.5),
+        0 12px 48px rgba(60,42,24,0.22);
+      border: none;
       background: var(--brown-dark);
       aspect-ratio: 4/5;
       cursor: zoom-in;
@@ -1375,14 +1378,44 @@ body {
       .gal-main-wrap { aspect-ratio: 3/4; }
       .gal-thumb { flex: 0 0 calc(25% - 7px); }
     }
+
+    /* Wrapper untuk main photo + bunga6 overlay */
+    .gal-photo-outer {
+      position: relative;
+      max-width: 520px;
+      margin: 28px auto 0;
+    }
+    .gal-photo-outer .gal-main-wrap {
+      max-width: 100%;
+      margin: 0;
+    }
+    /* Bunga6 frame bawah */
+    .gal-bunga6 {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110%;
+      max-width: 580px;
+      pointer-events: none;
+      z-index: 10;
+      display: block;
+    }
+    @media (max-width: 540px) {
+      .gal-bunga6 { width: 120%; bottom: -20px; }
+    }
     </style>
 
-    <!-- Main photo display -->
-    <div class="gal-main-wrap fade-in-up delay-2" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
-      <!-- images injected by JS -->
-      <button class="gal-main-nav prev" onclick="event.stopPropagation();galNavMain(-1)" aria-label="Sebelumnya">&#8249;</button>
-      <button class="gal-main-nav next" onclick="event.stopPropagation();galNavMain(1)" aria-label="Berikutnya">&#8250;</button>
-      <div class="gal-counter" id="gal-counter">1 / 8</div>
+    <!-- Main photo display + bunga6 overlay -->
+    <div class="gal-photo-outer fade-in-up delay-2">
+      <div class="gal-main-wrap" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
+        <!-- images injected by JS -->
+        <button class="gal-main-nav prev" onclick="event.stopPropagation();galNavMain(-1)" aria-label="Sebelumnya">&#8249;</button>
+        <button class="gal-main-nav next" onclick="event.stopPropagation();galNavMain(1)" aria-label="Berikutnya">&#8250;</button>
+        <div class="gal-counter" id="gal-counter">1 / 8</div>
+      </div>
+      <!-- Bunga6 sebagai frame bawah, tumpang tindih dengan foto -->
+      <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%206.png" alt="" class="gal-bunga6" loading="lazy">
     </div>
 
     <!-- Thumbnail strip -->
