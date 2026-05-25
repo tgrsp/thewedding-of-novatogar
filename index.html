@@ -382,7 +382,7 @@ body {
 /* Outer mask: shows ~3 cards with top/bottom peek */
 .comments-slider {
   position: relative;
-  height: calc(var(--card-h, 140px) * 3 + 24px + 20px); /* 3 cards + 2 gaps + bottom breathing room */
+  height: calc(var(--card-h, 140px) * 3 + 24px + 20px);
   overflow: visible;
   cursor: grab;
   user-select: none;
@@ -394,9 +394,9 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* Only fade very bottom edge — subtle, won't cut cards */
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 96%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 96%, transparent 100%);
+  /* No bottom fade — let last card show fully */
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 /* Track that slides vertically */
@@ -1334,15 +1334,7 @@ function applyTranslate(animated) {
   var list = document.getElementById('comments-list');
   if (!list) return;
   var h = getCardH();
-  var sliderH = h * 3 + CARD_GAP * 2 + 20;
-  var trackH  = cmntCards.length * h + (cmntCards.length - 1) * CARD_GAP;
-
   var offset = -(cmntIndex * (h + CARD_GAP));
-
-  // Clamp: never scroll so far that bottom of track goes above bottom of slider
-  var minOffset = Math.min(0, sliderH - trackH);
-  offset = Math.max(offset, minOffset);
-
   if (!animated) list.style.transition = 'none';
   else list.style.transition = 'transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
   list.style.transform = 'translateY(' + offset + 'px)';
@@ -1418,17 +1410,9 @@ function buildSlider(comments) {
 }
 
 function cmntNav(dir) {
-  var h = getCardH();
-  var sliderH = h * 3 + CARD_GAP * 2 + 20;
-  var trackH  = cmntCards.length * h + (cmntCards.length - 1) * CARD_GAP;
-  // Max index where last card is fully visible
-  var maxScrollable = trackH > sliderH
-    ? Math.ceil((trackH - sliderH) / (h + CARD_GAP))
-    : 0;
-
   var target = cmntIndex + dir;
   if (target < 0) target = 0;
-  if (target > maxScrollable) target = maxScrollable;
+  if (target > cmntCards.length - 1) target = cmntCards.length - 1;
   if (target === cmntIndex) return;
   cmntIndex = target;
   markActive();
