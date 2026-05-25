@@ -619,6 +619,46 @@ body {
 /* SVG Floral background elements */
 .floral-bg-svg { position: absolute; pointer-events: none; z-index: 0; }
 .section-content { position: relative; z-index: 1; }
+
+/* ── SECTION FLOWERS ── */
+.section-flower {
+  position: absolute;
+  bottom: -60px;
+  width: 420px;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+}
+.section-flower--left  { left: -80px; }
+.section-flower--right { right: -80px; transform: scaleX(-1); }
+.section-flower--dark  { filter: brightness(2) saturate(0.3); }
+
+#tap-overlay .ov-title,
+#tap-overlay .ov-sub,
+#tap-overlay .ov-btn,
+#tap-overlay .ov-note { position: relative; z-index: 1; }
+
+/* Overlay flowers — stay inside fixed overlay */
+#tap-overlay { overflow: hidden; }
+#tap-overlay .section-flower { z-index: 0; }
+
+/* ── MOBILE: bunga lebih kecil & tidak tumpang tindih ── */
+@media (max-width: 600px) {
+  .section-flower {
+    width: 180px;
+    bottom: -24px;
+  }
+  .section-flower--left  { left: -30px; }
+  .section-flower--right { right: -30px; }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .section-flower {
+    width: 280px;
+    bottom: -40px;
+  }
+  .section-flower--left  { left: -50px; }
+  .section-flower--right { right: -50px; }
+}
 </style>
 </head>
 <body>
@@ -635,31 +675,34 @@ body {
 <div class="copy-toast" id="copy-toast">&#10003; Nomor rekening disalin!</div>
 
 <!-- ===== TAP TO OPEN OVERLAY ===== -->
-<div id="tap-overlay" style="position:relative;overflow:hidden;">
+<div id="tap-overlay">
   <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.18;" loading="lazy">
 
   <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.15;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.15;" loading="lazy">
 
+  <!-- Copyright pojok kanan atas -->
+  <div style="position:absolute;top:18px;right:20px;z-index:2;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(245,232,204,0.45);letter-spacing:1px;">&#169; togarsp</div>
+
+  <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(245,232,204,0.55);letter-spacing:3px;position:relative;z-index:1;">Dari Togar dan Nova</div>
   <div class="ov-sub">Undangan Pernikahan</div>
   <div class="ov-title">Nova &amp; Togar</div>
   <div class="ov-sub">8 · 8 · 2026</div>
   <button class="ov-btn" onclick="openInvitation()">Buka Undangan</button>
-  <div class="ov-note">♪ Lengkap dengan musik pengiring</div>
+  <div class="ov-note">♪ Ketuk "BUKA UNDANGAN" sambil enjoy musik pilihan kita~</div>
 </div>
 
 <!-- ===== HERO ===== -->
 
-  <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.22;pointer-events:none;z-index:0;" loading="lazy">
-
-  <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
 <section class="hero" style="background:
     linear-gradient(165deg, rgba(249,244,232,0.82) 0%, rgba(237,226,204,0.85) 55%, rgba(232,216,192,0.88) 100%),
     url('https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg') center center / cover no-repeat;">
   <div class="petal-canvas" id="petal-canvas"></div>
+  <!-- Bunga background pojok kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.22;" loading="lazy">
+  <!-- Bunga background pojok kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.18;" loading="lazy">
 
   <!-- Credit badge pojok kanan atas -->
   <div style="position:absolute;top:14px;left:14px;z-index:10;
@@ -704,7 +747,7 @@ body {
 <!-- ===== COUPLE + FOTO MEMPELAI ===== -->
 <section class="section" style="background:linear-gradient(160deg,var(--section-bg1),var(--ivory));position:relative;overflow:hidden;">
   <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.18;" loading="lazy">
 
   <!-- Floral corner SVGs -->
   <svg class="floral-bg-svg" style="top:-30px;left:-30px;width:220px;opacity:0.08" viewBox="0 0 200 200" fill="none">
@@ -781,7 +824,7 @@ body {
 <!-- ===== QUOTE MEMPELAI PRIA ===== -->
 <section style="background:linear-gradient(145deg,#2c1e10 0%,#4a2e18 55%,#3a2414 100%);padding:0;overflow:hidden;position:relative;">
   <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.12;pointer-events:none;z-index:0;transform:scaleX(-1);filter:brightness(2) saturate(0.3);" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right section-flower--dark" style="opacity:0.12;" loading="lazy">
 
   <!-- Floral bg -->
   <svg class="floral-bg-svg" style="top:-30px;left:-30px;width:220px;opacity:0.12" viewBox="0 0 200 200" fill="none">
@@ -833,7 +876,7 @@ body {
 </section>
 <section class="countdown-section" style="position:relative;overflow:hidden;">
   <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.18;" loading="lazy">
 
   <svg class="floral-bg-svg" style="top:50%;left:50%;transform:translate(-50%,-50%);width:380px;opacity:0.05" viewBox="0 0 200 200" fill="none">
     <circle cx="100" cy="100" r="90" stroke="#9a7a3a" stroke-width="0.5"/>
@@ -863,7 +906,7 @@ body {
 <!-- ===== QUOTE MEMPELAI WANITA ===== -->
 <section style="background:linear-gradient(145deg,#f7f2e8 0%,#ede6d8 55%,#e8dece 100%);padding:0;overflow:hidden;position:relative;">
   <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.18;" loading="lazy">
 
   <!-- Floral bg -->
   <svg class="floral-bg-svg" style="bottom:-30px;right:-30px;width:220px;opacity:0.09;transform:rotate(20deg)" viewBox="0 0 200 200" fill="none">
@@ -917,7 +960,7 @@ body {
 <!-- ===== VENUE ===== -->
 <section class="section" style="background:var(--cream);position:relative;overflow:hidden;">
   <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.18;" loading="lazy">
 
   <svg class="floral-bg-svg" style="top:-20px;right:-20px;width:160px;opacity:0.07;transform:rotate(15deg)" viewBox="0 0 200 200" fill="none">
     <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
@@ -979,7 +1022,7 @@ body {
 <!-- ===== GALERI FOTO ===== -->
 <section class="gallery-bg" style="position:relative;overflow:hidden;">
   <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.18;" loading="lazy">
 
   <svg class="floral-bg-svg" style="top:-30px;left:-30px;width:200px;opacity:0.07;transform:rotate(-10deg)" viewBox="0 0 200 200" fill="none">
     <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
@@ -1187,7 +1230,7 @@ body {
 <!-- ===== WEDDING GIFT ===== -->
 <section class="section" style="background:var(--cream);position:relative;overflow:hidden;">
   <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.18;" loading="lazy">
   <svg class="floral-bg-svg" style="top:-20px;left:-20px;width:160px;opacity:0.07" viewBox="0 0 200 200" fill="none">
     <ellipse cx="100" cy="40" rx="18" ry="30" fill="#9a7a3a"/>
     <ellipse cx="100" cy="160" rx="18" ry="30" fill="#9a7a3a"/>
@@ -1234,7 +1277,7 @@ body {
 <!-- ===== RSVP & UCAPAN ===== -->
 <section class="section" style="background:var(--section-bg1);position:relative;overflow:hidden;">
   <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.18;" loading="lazy">
 
   <svg class="floral-bg-svg" style="top:50%;left:50%;transform:translate(-50%,-50%);width:340px;opacity:0.045" viewBox="0 0 200 200" fill="none">
     <circle cx="100" cy="100" r="90" stroke="#9a7a3a" stroke-width="0.5"/>
@@ -1292,7 +1335,7 @@ body {
 <!-- ===== FOOTER ===== -->
 <footer class="footer" style="position:relative;overflow:hidden;">
   <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.12;pointer-events:none;z-index:0;filter:brightness(2) saturate(0.3);" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left section-flower--dark" style="opacity:0.12;" loading="lazy">
 
   <svg class="floral-bg-svg" style="top:50%;left:50%;transform:translate(-50%,-50%);width:360px;opacity:0.10" viewBox="0 0 200 200" fill="none">
     <ellipse cx="100" cy="40" rx="18" ry="30" fill="#c8a84a"/>
