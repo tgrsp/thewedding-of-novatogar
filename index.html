@@ -895,110 +895,75 @@ body {
   padding: 64px 24px 80px;
   text-align: center;
 }
-/* Beri ruang ekstra agar frame yang melebar ke atas tidak terpotong */
-.cp-photo-ring-outer {
-  padding-top: 12%;
-  padding-bottom: 8%;
-}
 
-/* ── Foto dengan frame polaroid besar ── */
+/*
+  STRUKTUR LAYER:
+  .cp-photo-ring-outer   → posisi tengah, beri ruang agar frame tidak terpotong
+    .cp-frame-shell      → posisi relatif, ukuran FRAME (besar)
+      img.cp-photo-frame → frame PNG, mengisi penuh shell (z-index: 2)
+      .cp-photo-slot     → area FOTO, di-posisikan tepat di dalam lubang frame
+        img.cp-photo-main→ foto, mengisi slot, overflow:hidden di slot
+*/
 
-/* Outer wrapper: memberi ruang ekstra agar frame yang di-scale tidak terpotong */
+/* Wrapper tengah — hanya berfungsi untuk centering */
 .cp-photo-ring-outer {
-  padding: 14% 14% 10%;
-  /* override padding dari rule sebelumnya */
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 60px 0 20px;
 }
 
-/* Ring = area foto aktual (tanpa frame dekoratif) */
-.cp-photo-ring {
+/* Shell = ukuran total FRAME polaroid (besar) */
+.cp-frame-shell {
   position: relative;
-  width: min(72vw, 300px);
-  /* Tinggi = lebar * 4/3 (proporsi foto portrait 3:4) */
-  height: min(96vw, 400px);
-  margin: 0 auto;
-  overflow: visible; /* frame boleh keluar */
-}
-.cp-photo-ring::before,
-.cp-photo-ring::after { content: none; }
-
-.cp-photo-circle {
-  width: 100%; height: 100%;
-  position: relative;
-  background: transparent;
+  width: min(80vw, 340px);
+  height: min(107vw, 454px);   /* rasio ~4:5.35 sesuai frame polaroid */
+  flex-shrink: 0;
 }
 
-/* Foto mempelai — mengisi penuh area ring, tidak keluar */
-.cp-photo-circle img.cp-photo-main {
+/* Frame PNG mengisi penuh shell */
+.cp-frame-shell img.cp-photo-frame {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 2;
+  pointer-events: none;
+  display: block;
+}
+
+/* Slot foto = lubang di dalam frame polaroid
+   Frame polaroid memiliki: border atas ~9%, kiri/kanan ~9%, bawah ~28%
+   Sisa area foto = top:9% left:9% width:82% height:63% */
+.cp-photo-slot {
+  position: absolute;
+  top: 9%;
+  left: 9%;
+  width: 82%;
+  height: 63%;
+  overflow: hidden;   /* foto di-crop ketat di sini */
+  z-index: 1;
+}
+
+/* Foto mengisi slot sepenuhnya */
+.cp-photo-slot img.cp-photo-main {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
   display: block;
-  z-index: 1;
 }
 
-/* Frame PNG: di-scale lebih besar dari ring, menonjol keluar semua sisi
-   Pakai transform agar tidak ganggu layout */
-.cp-photo-frame {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 140%;
-  height: 140%;
-  transform: translate(-50%, -50%);
-  object-fit: fill;
-  pointer-events: none;
-  z-index: 2;
-  display: block;
-  /* Frame boleh keluar karena ring sudah overflow:hidden untuk foto,
-     tapi frame harus tetap terlihat → gunakan clip pada foto saja */
-}
+/* Ornamen sudut */
+.cp-orn { display: none; }
 
-/* Trick: foto dikontain oleh ::before pseudo, frame menonjol dengan z-index */
-/* Karena overflow:hidden pada .cp-photo-ring akan memotong frame juga,
-   kita pindahkan frame ke luar ring */
-.cp-photo-frame {
-  /* Reset — akan diposisikan ulang via JS-free trick di bawah */
-  position: absolute;
-  display: block;
-}
-
-/* Solusi bersih: gunakan dua layer container:
-   - .cp-frame-wrap (overflow:visible) → menampung frame yang membesar
-   - .cp-photo-ring (overflow:hidden) → mengontain foto
-   Karena keduanya sudah ada, kita restructure via CSS saja */
-
-/* Foto: overflow hidden dikontrol di level .cp-photo-ring */
-/* Frame: dikeluarkan dari stacking context overflow:hidden */
-
-/* Override final — buat ring TIDAK overflow:hidden, dan foto dikontain lewat clip-path */
-.cp-photo-ring {
-  overflow: visible; /* frame boleh keluar */
-}
-.cp-photo-circle img.cp-photo-main {
-  /* Gunakan clip-path untuk mengontain foto tanpa overflow:hidden di parent */
-  clip-path: inset(0);
-}
-/* Frame tetap di luar clip, jadi terlihat lebih besar */
-.cp-photo-frame {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 145%;
-  height: 145%;
-  transform: translate(-50%, -50%);
-  object-fit: fill;
-  pointer-events: none;
-  z-index: 2;
-}
+/* Teks di bawah frame */
+.cp-photo-ring { display: contents; }  /* hapus ring lama, pakai shell */
+.cp-photo-circle { display: contents; }
 
 @media (max-width: 400px) {
-  .cp-photo-ring { width: 76vw !important; height: 101vw !important; }
-  .cp-photo-ring-outer { padding: 16% 10% 12% !important; }
+  .cp-frame-shell { width: 82vw; height: 110vw; }
 }
 
 /* ── Info teks ── */
@@ -1070,12 +1035,12 @@ body {
     <!-- Mempelai Wanita -->
     <div class="fade-in-up delay-2" style="margin-top:48px;">
       <div class="cp-photo-ring-outer">
-      <div class="cp-photo-ring">
-        <div class="cp-photo-circle">
-          <img class="cp-photo-main" src="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" alt="Nova" fetchpriority="high" decoding="async">
+        <div class="cp-frame-shell">
           <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo.png" alt="" loading="lazy">
+          <div class="cp-photo-slot">
+            <img class="cp-photo-main" src="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" alt="Nova" fetchpriority="high" decoding="async">
+          </div>
         </div>
-      </div>
       </div>
       <p class="cp-name">Nova Yusniar</p>
       <p class="cp-role">Mempelai Wanita</p>
@@ -1110,12 +1075,12 @@ body {
     <!-- Mempelai Pria -->
     <div class="fade-in-up delay-2" style="margin-top:48px;">
       <div class="cp-photo-ring-outer">
-      <div class="cp-photo-ring">
-        <div class="cp-photo-circle">
-          <img class="cp-photo-main" src="https://i.ibb.co.com/twDbWThF/T1.jpg" alt="Togar" fetchpriority="high" decoding="async">
+        <div class="cp-frame-shell">
           <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo%20pria.png" alt="" loading="lazy">
+          <div class="cp-photo-slot">
+            <img class="cp-photo-main" src="https://i.ibb.co.com/twDbWThF/T1.jpg" alt="Togar" fetchpriority="high" decoding="async">
+          </div>
         </div>
-      </div>
       </div>
       <p class="cp-name">Muhammad Togar<br>Singa Putera</p>
       <p class="cp-role">Mempelai Pria</p>
