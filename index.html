@@ -1265,10 +1265,14 @@ function showToast() {
   setTimeout(function(){ toast.classList.remove('show'); }, 2200);
 }
 
-// ── RSVP + JSONBIN ──
-var JSONBIN_ID  = '6a138ff46877513b27c8dcc7';
-var JSONBIN_KEY = '$2a$10$XLdskAVFSGsiVTqCR2X09OdwXkJmlQrdmArInIBbdKVHXAg3MgFM2';
-var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_ID;
+// ── RSVP + SUPABASE ──
+var SUPA_URL = 'https://uwohezxsiuovgiqnjtre.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3b2hlenhzaXVvdmdpcW5qdHJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2ODgxNzAsImV4cCI6MjA5NTI2NDE3MH0.3CzE2tO14bR1Wz3dm4i9v8KTcq6mhYiKFrV6LOP5eBo';
+var SUPA_HEADERS = {
+  'apikey': SUPA_KEY,
+  'Authorization': 'Bearer ' + SUPA_KEY,
+  'Content-Type': 'application/json'
+};
 
 // ── COMMENTS PEEK-3 VERTICAL CAROUSEL ──
 var cmntIndex = 0;      // index of the card shown in center (position 1 of 3)
@@ -1537,12 +1541,16 @@ function updateScrollbar() {
 })();
 
 function loadComments() {
-  fetch(JSONBIN_URL + '/latest', {
-    headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
+  fetch(SUPA_URL + '/rest/v1/comments?select=*&order=created_at.asc', {
+    headers: SUPA_HEADERS
   })
   .then(function(r){ return r.json(); })
-  .then(function(data){ buildSlider((data && data.comments) ? data.comments : []); })
-  .catch(function(){ document.getElementById('comments-list').innerHTML = ''; });
+  .then(function(data){
+    buildSlider(Array.isArray(data) ? data : []);
+  })
+  .catch(function(){
+    document.getElementById('comments-list').innerHTML = '<p style="text-align:center;font-size:14px;color:var(--brown-mid);padding:20px 0;">Gagal memuat ucapan.</p>';
+  });
 }
 
 function submitRSVP(e) {
@@ -1555,22 +1563,22 @@ function submitRSVP(e) {
   var btn = e.target.querySelector('button[type=submit]');
   btn.disabled = true; btn.textContent = 'Mengirim...';
 
-  fetch(JSONBIN_URL + '/latest', { headers:{'X-Master-Key':JSONBIN_KEY,'X-Bin-Meta':'false'} })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    var comments = (data && data.comments) ? data.comments : [];
-    var newComment = { name:name, hadir:hadir, msg:msg, time:Date.now() };
-    comments.push(newComment);
-    return fetch(JSONBIN_URL, {
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
-      body:JSON.stringify({ comments:comments })
-    }).then(function(){ return comments; }); // return full list
+  fetch(SUPA_URL + '/rest/v1/comments', {
+    method: 'POST',
+    headers: Object.assign({}, SUPA_HEADERS, { 'Prefer': 'return=minimal' }),
+    body: JSON.stringify({ name: name, hadir: hadir, msg: msg })
   })
+  .then(function(r){
+    if (!r.ok) throw new Error('Gagal');
+    // Reload all comments from Supabase after insert
+    return fetch(SUPA_URL + '/rest/v1/comments?select=*&order=created_at.asc', {
+      headers: SUPA_HEADERS
+    });
+  })
+  .then(function(r){ return r.json(); })
   .then(function(allComments){
-    // Rebuild slider with ALL comments so nothing gets lost
-    buildSlider(allComments);
-    cmntIndex = 0;
+    buildSlider(Array.isArray(allComments) ? allComments : []);
+    cmntIndex = Math.max(0, cmntCards.length - 1); // jump to newest
     markActive();
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
