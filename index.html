@@ -341,21 +341,33 @@ body {
 .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); }
 .form-textarea { height:100px; resize:vertical; }
 
-/* ── COMMENTS SLIDER ── */
+/* ── COMMENTS SLIDER (crossfade) ── */
 .comments-slider-wrap { max-width:480px; margin:28px auto 0; position:relative; }
-.comments-slider { overflow:hidden; position:relative; }
-.comments-track { display:flex; flex-direction:column; transition:transform 0.45s cubic-bezier(0.4,0,0.2,1); }
+.comments-slider { position:relative; min-height:120px; }
 .comment-card {
-  background:var(--cream); border-radius:4px; padding:20px 22px; flex-shrink:0;
+  background:var(--cream); border-radius:4px; padding:20px 22px;
   width:100%; box-sizing:border-box; text-align:left;
   border:1px solid rgba(154,122,58,0.12); box-shadow:0 2px 10px rgba(60,42,24,0.05);
+  position:absolute; top:0; left:0;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.5s ease, transform 0.5s ease;
+  transform:translateY(12px);
 }
+.comment-card.active {
+  opacity:1; pointer-events:auto;
+  transform:translateY(0);
+  position:relative;
+}
+.comment-card.exit-up   { opacity:0; transform:translateY(-12px); }
+.comment-card.exit-down { opacity:0; transform:translateY(12px); }
 .comment-name { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--brown-dark); margin-bottom:4px; }
 .comment-badge { display:inline-block; font-size:11px; padding:3px 12px; border-radius:2px; margin-bottom:8px; font-family:'Cormorant Garamond',serif; letter-spacing:1px; }
 .badge-hadir { background:var(--rose-pale); color:var(--rose); }
 .badge-tidak { background:#f0f0f0; color:#888; }
 .badge-maybe { background:var(--gold-pale); color:var(--gold); }
 .comment-text { font-family:'Cormorant Garamond',serif; font-size:15px; color:var(--brown-mid); font-style:italic; line-height:1.6; }
+
+/* nav */
 .comments-nav { display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px; }
 .comments-nav button {
   width:36px; height:36px; border-radius:50%;
@@ -366,7 +378,10 @@ body {
 }
 .comments-nav button:hover { background:var(--gold); color:#fff; }
 .comments-nav button:disabled { opacity:0.3; cursor:default; }
-.comments-counter { font-family:'Cormorant Garamond',serif; font-size:13px; color:var(--brown-mid); letter-spacing:2px; min-width:60px; text-align:center; }
+.comments-counter {
+  font-family:'Cormorant Garamond',serif; font-size:15px;
+  color:var(--brown-mid); letter-spacing:3px; min-width:70px; text-align:center;
+}
 
 /* ── COPY TOAST ── */
 .copy-toast {
@@ -975,14 +990,12 @@ body {
 
     <div class="comments-slider-wrap">
       <div class="comments-slider" id="comments-slider">
-        <div class="comments-track" id="comments-list">
+        <div id="comments-list">
           <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
         </div>
       </div>
       <div class="comments-nav" id="comments-nav" style="display:none;">
-        <button id="cmnt-prev" onclick="cmntNav(-1)" disabled>&#8593;</button>
-        <span class="comments-counter" id="cmnt-counter">1 / 1</span>
-        <button id="cmnt-next" onclick="cmntNav(1)">&#8595;</button>
+        <span class="comments-counter" id="cmnt-counter">1/1</span>
       </div>
     </div>
 
@@ -1008,7 +1021,6 @@ body {
     <p style="font-size:20px;margin-bottom:10px;letter-spacing:10px;color:var(--gold-light)">&#10047; &#10048; &#10047;</p>
     <p class="footer-names">Nova &amp; Togar</p>
     <p class="footer-date">8 Agustus 2026</p>
-    <p class="footer-couple">Muhammad Togar Singa Putera &amp; Nova</p>
     <p class="footer-divider">&#10022; &#10023; &#10022;</p>
     <p class="footer-made">Made with &#10084;&#65039; &#8212; With love, on this special day</p>
   </div>
@@ -1090,11 +1102,57 @@ var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_ID;
 
 var cmntIndex = 0;
 var cmntCards = [];
+var cmntAnimating = false;
 
 function getBadge(hadir) {
-  if (hadir === 'hadir') return { cls: 'badge-hadir', label: 'Pasti Hadir' };
-  if (hadir === 'tidak') return { cls: 'badge-tidak', label: 'Mohon Maaf Tidak Hadir' };
-  return { cls: 'badge-maybe', label: 'Masih Belum Pasti' };
+  if (hadir === 'hadir') return { cls:'badge-hadir', label:'Pasti Hadir' };
+  if (hadir === 'tidak') return { cls:'badge-tidak', label:'Mohon Maaf Tidak Hadir' };
+  return { cls:'badge-maybe', label:'Masih Belum Pasti' };
+}
+
+function makeCard(c) {
+  var b = getBadge(c.hadir);
+  var card = document.createElement('div');
+  card.className = 'comment-card';
+  card.innerHTML = '<p class="comment-name">'+c.name+'</p>'
+    +'<span class="comment-badge '+b.cls+'">'+b.label+'</span>'
+    +'<p class="comment-text">'+c.msg+'</p>';
+  return card;
+}
+
+function updateCounter() {
+  var el = document.getElementById('cmnt-counter');
+  if (cmntCards.length > 0) el.textContent = (cmntIndex+1)+'/'+cmntCards.length;
+}
+
+function showCard(idx, dir) {
+  // dir: -1 = going up (prev), 1 = going down (next)
+  var old = cmntCards[cmntIndex];
+  var next = cmntCards[idx];
+  if (!next || cmntAnimating) return;
+  cmntAnimating = true;
+
+  // Exit current card
+  if (old) {
+    old.classList.remove('active');
+    old.classList.add(dir === 1 ? 'exit-up' : 'exit-down');
+    setTimeout(function(){ old.classList.remove('exit-up','exit-down'); }, 500);
+  }
+
+  // Enter next card from opposite direction
+  next.style.transform = dir === 1 ? 'translateY(12px)' : 'translateY(-12px)';
+  next.style.opacity = '0';
+  next.classList.add('active');
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      next.style.transform = '';
+      next.style.opacity = '';
+      setTimeout(function(){ cmntAnimating = false; }, 520);
+    });
+  });
+
+  cmntIndex = idx;
+  updateCounter();
 }
 
 function buildSlider(comments) {
@@ -1103,6 +1161,7 @@ function buildSlider(comments) {
   list.innerHTML = '';
   cmntCards = [];
   cmntIndex = 0;
+  cmntAnimating = false;
 
   if (!comments || comments.length === 0) {
     list.innerHTML = '<p style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Jadilah yang pertama memberikan ucapan ✨</p>';
@@ -1110,51 +1169,37 @@ function buildSlider(comments) {
     return;
   }
 
-  // Terbaru di atas
-  var reversed = comments.slice().reverse();
-  reversed.forEach(function(c) {
-    var b = getBadge(c.hadir);
-    var card = document.createElement('div');
-    card.className = 'comment-card';
-    card.innerHTML = '<p class="comment-name">'+c.name+'</p><span class="comment-badge '+b.cls+'">'+b.label+'</span><p class="comment-text">'+c.msg+'</p>';
+  comments.slice().reverse().forEach(function(c){
+    var card = makeCard(c);
     list.appendChild(card);
     cmntCards.push(card);
   });
 
-  // Set slider height = tinggi 1 kartu
-  updateSlider();
+  cmntCards[0].classList.add('active');
+  updateCounter();
   nav.style.display = comments.length > 1 ? 'flex' : 'none';
 }
 
-function updateSlider() {
-  if (!cmntCards.length) return;
-  var h = cmntCards[0].offsetHeight;
-  document.getElementById('comments-slider').style.height = h + 'px';
-  document.getElementById('comments-list').style.transform = 'translateY(-' + (cmntIndex * (h + 0)) + 'px)';
-  document.getElementById('cmnt-counter').textContent = (cmntIndex + 1) + ' / ' + cmntCards.length;
-  document.getElementById('cmnt-prev').disabled = cmntIndex === 0;
-  document.getElementById('cmnt-next').disabled = cmntIndex === cmntCards.length - 1;
-}
-
 function cmntNav(dir) {
-  cmntIndex = Math.max(0, Math.min(cmntCards.length - 1, cmntIndex + dir));
-  updateSlider();
+  var target = cmntIndex + dir;
+  if (target < 0 || target >= cmntCards.length) return;
+  showCard(target, dir);
 }
 
 function prependToSlider(c) {
-  var b = getBadge(c.hadir);
-  var card = document.createElement('div');
-  card.className = 'comment-card';
-  card.style.animation = 'fadeIn 0.4s ease';
-  card.innerHTML = '<p class="comment-name">'+c.name+'</p><span class="comment-badge '+b.cls+'">'+b.label+'</span><p class="comment-text">'+c.msg+'</p>';
   var list = document.getElementById('comments-list');
-  // Kalau masih ada placeholder kosong, hapus dulu
   var placeholder = list.querySelector('p');
-  if (placeholder) list.innerHTML = '';
+  if (placeholder) { list.innerHTML = ''; cmntCards = []; }
+
+  var card = makeCard(c);
   list.insertBefore(card, list.firstChild);
   cmntCards.unshift(card);
+
+  // Deactivate old active
+  cmntCards.forEach(function(cd){ cd.classList.remove('active','exit-up','exit-down'); });
   cmntIndex = 0;
-  updateSlider();
+  cmntCards[0].classList.add('active');
+  updateCounter();
   document.getElementById('comments-nav').style.display = cmntCards.length > 1 ? 'flex' : 'none';
 }
 
@@ -1163,12 +1208,8 @@ function loadComments() {
     headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
   })
   .then(function(r){ return r.json(); })
-  .then(function(data){
-    buildSlider((data && data.comments) ? data.comments : []);
-  })
-  .catch(function(){
-    document.getElementById('comments-list').innerHTML = '';
-  });
+  .then(function(data){ buildSlider((data && data.comments) ? data.comments : []); })
+  .catch(function(){ document.getElementById('comments-list').innerHTML = ''; });
 }
 
 function submitRSVP(e) {
@@ -1179,42 +1220,59 @@ function submitRSVP(e) {
   if (!name || !msg) return;
 
   var btn = e.target.querySelector('button[type=submit]');
-  btn.disabled = true;
-  btn.textContent = 'Mengirim...';
+  btn.disabled = true; btn.textContent = 'Mengirim...';
 
-  fetch(JSONBIN_URL + '/latest', {
-    headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
-  })
+  fetch(JSONBIN_URL + '/latest', { headers:{'X-Master-Key':JSONBIN_KEY,'X-Bin-Meta':'false'} })
   .then(function(r){ return r.json(); })
   .then(function(data){
     var comments = (data && data.comments) ? data.comments : [];
-    var newComment = { name: name, hadir: hadir, msg: msg, time: Date.now() };
+    var newComment = { name:name, hadir:hadir, msg:msg, time:Date.now() };
     comments.push(newComment);
     return fetch(JSONBIN_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
-      body: JSON.stringify({ comments: comments })
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
+      body:JSON.stringify({ comments:comments })
     }).then(function(){ return newComment; });
   })
-  .then(function(newComment){
-    prependToSlider(newComment);
+  .then(function(nc){
+    prependToSlider(nc);
     document.getElementById('rsvp-name').value = '';
     document.getElementById('rsvp-msg').value = '';
     document.getElementById('rsvp-hadir').selectedIndex = 0;
-    btn.disabled = false;
-    btn.textContent = 'Kirim Ucapan';
+    btn.disabled = false; btn.textContent = 'Kirim Ucapan';
   })
   .catch(function(){
-    btn.disabled = false;
-    btn.textContent = 'Kirim Ucapan';
+    btn.disabled = false; btn.textContent = 'Kirim Ucapan';
     alert('Gagal mengirim, coba lagi.');
   });
 }
 
-// Recalculate slider height on resize
-window.addEventListener('resize', function(){ updateSlider(); });
-
 loadComments();
+
+// ── SWIPE COMMENTS ──
+(function(){
+  var el = document.getElementById('comments-slider');
+  var startY = 0, startX = 0, isDragging = false;
+  var THRESHOLD = 40;
+
+  function onStart(y, x) { startY = y; startX = x; isDragging = true; }
+  function onEnd(y, x) {
+    if (!isDragging) return;
+    isDragging = false;
+    var dy = y - startY;
+    var dx = x - startX;
+    if (Math.abs(dy) < THRESHOLD || Math.abs(dx) > Math.abs(dy)) return;
+    cmntNav(dy < 0 ? 1 : -1); // swipe up = next, swipe down = prev
+  }
+
+  // Touch
+  el.addEventListener('touchstart', function(e){ var t=e.touches[0]; onStart(t.clientY, t.clientX); }, {passive:true});
+  el.addEventListener('touchend',   function(e){ var t=e.changedTouches[0]; onEnd(t.clientY, t.clientX); }, {passive:true});
+
+  // Mouse drag (desktop)
+  el.addEventListener('mousedown', function(e){ onStart(e.clientY, e.clientX); });
+  window.addEventListener('mouseup', function(e){ onEnd(e.clientY, e.clientX); });
+})();
 
 // ══════════════════════════════════
 // FLOWER PETALS ANIMATION (Hero)
