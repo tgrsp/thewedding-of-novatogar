@@ -341,26 +341,72 @@ body {
 .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); }
 .form-textarea { height:100px; resize:vertical; }
 
-/* ── COMMENTS SLIDER (sosmed style) ── */
-.comments-slider-wrap { max-width:480px; margin:28px auto 0; position:relative; }
-.comments-slider { position:relative; min-height:100px; cursor:grab; user-select:none; }
-.comments-slider:active { cursor:grabbing; }
+/* ── COMMENTS SLIDER (peek 3-card vertical carousel) ── */
+.comments-slider-wrap {
+  max-width: 480px; margin: 28px auto 0; position: relative;
+}
+
+/* Outer mask: shows ~3 cards with top/bottom peek */
+.comments-slider {
+  position: relative;
+  height: calc(var(--card-h, 140px) * 3 + 24px); /* 3 cards + 2 gaps */
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  /* Fade edges so peeking cards dissolve nicely */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.35) 6%,
+    black 18%,
+    black 82%,
+    rgba(0,0,0,0.35) 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.35) 6%,
+    black 18%,
+    black 82%,
+    rgba(0,0,0,0.35) 94%,
+    transparent 100%
+  );
+}
+.comments-slider:active { cursor: grabbing; }
+
+/* Track that slides vertically */
+#comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
 
 .comment-card {
-  background:#fff; border-radius:16px; padding:16px 16px 14px;
-  width:100%; box-sizing:border-box; text-align:left;
-  border:none; box-shadow:0 2px 16px rgba(60,42,24,0.10);
-  position:absolute; top:0; left:0;
-  opacity:0; pointer-events:none;
-  transition:opacity 0.45s ease, transform 0.45s ease;
-  transform:translateY(14px);
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  border: none;
+  box-shadow: 0 2px 16px rgba(60,42,24,0.10);
+  flex-shrink: 0;
+  /* Reset old absolute positioning */
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition: box-shadow 0.3s, opacity 0.3s;
 }
+/* Highlight the "active" (center) card */
 .comment-card.active {
-  opacity:1; pointer-events:auto;
-  transform:translateY(0); position:relative;
+  box-shadow: 0 4px 24px rgba(154,122,58,0.18);
 }
-.comment-card.exit-up   { opacity:0; transform:translateY(-14px); }
-.comment-card.exit-down { opacity:0; transform:translateY(14px); }
+/* Remove old animation classes — not needed anymore */
+.comment-card.exit-up, .comment-card.exit-down { opacity: 1; transform: none; }
 
 /* Row: avatar + name/badge */
 .comment-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
@@ -1125,9 +1171,10 @@ var JSONBIN_ID  = '6a138ff46877513b27c8dcc7';
 var JSONBIN_KEY = '$2a$10$XLdskAVFSGsiVTqCR2X09OdwXkJmlQrdmArInIBbdKVHXAg3MgFM2';
 var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_ID;
 
-var cmntIndex = 0;
+// ── COMMENTS PEEK-3 VERTICAL CAROUSEL ──
+var cmntIndex = 0;      // index of the card shown in center (position 1 of 3)
 var cmntCards = [];
-var cmntAnimating = false;
+var CARD_GAP = 8;       // px, matches CSS gap
 
 var AVATAR_COLORS = ['#9a7a3a','#b07050','#6b8e7a','#7a6ba8','#b07a8a','#5a8a9a'];
 
@@ -1163,6 +1210,41 @@ function makeCard(c) {
   return card;
 }
 
+/* Measure one card height (after it's in DOM) */
+function getCardH() {
+  if (!cmntCards.length) return 140;
+  return cmntCards[0].offsetHeight;
+}
+
+/* Recalculate slider window height = 3 cards + 2 gaps */
+function resizeSlider() {
+  var h = getCardH();
+  var slider = document.getElementById('comments-slider');
+  if (slider) {
+    slider.style.height = (h * 3 + CARD_GAP * 2) + 'px';
+    slider.style.setProperty('--card-h', h + 'px');
+  }
+}
+
+/* Translate the track so the center card is index cmntIndex */
+function applyTranslate(animated) {
+  var list = document.getElementById('comments-list');
+  if (!list) return;
+  var h = getCardH();
+  // Offset: center card sits in slot 1 (0-indexed), so we shift by (cmntIndex - 1) cards up
+  var offset = -(cmntIndex - 1) * (h + CARD_GAP);
+  if (!animated) list.style.transition = 'none';
+  else list.style.transition = 'transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+  list.style.transform = 'translateY(' + offset + 'px)';
+}
+
+/* Mark active card */
+function markActive() {
+  cmntCards.forEach(function(cd, i) {
+    cd.classList.toggle('active', i === cmntIndex);
+  });
+}
+
 function buildDots() {
   var nav = document.getElementById('comments-nav');
   var counter = document.getElementById('cmnt-counter');
@@ -1172,56 +1254,25 @@ function buildDots() {
     counter.style.display = 'none';
     return;
   }
-  // Max 7 dots shown
   var showDots = Math.min(cmntCards.length, 7);
-  for (var i=0; i<showDots; i++) {
+  for (var i = 0; i < showDots; i++) {
     var dot = document.createElement('div');
-    dot.className = 'cmnt-dot' + (i===cmntIndex ? ' active' : '');
+    dot.className = 'cmnt-dot' + (i === cmntIndex ? ' active' : '');
     dot.setAttribute('data-i', i);
-    dot.onclick = (function(idx){ return function(){ showCard(idx, idx > cmntIndex ? 1 : -1); }; })(i);
+    dot.onclick = (function(idx){ return function(){ cmntNav(idx - cmntIndex); }; })(i);
     nav.appendChild(dot);
   }
   nav.style.display = 'flex';
   counter.style.display = 'block';
-  counter.textContent = (cmntIndex+1)+'/'+cmntCards.length;
+  counter.textContent = (cmntIndex + 1) + '/' + cmntCards.length;
 }
 
 function updateCounter() {
   var dots = document.querySelectorAll('.cmnt-dot');
-  var showIdx = Math.min(cmntIndex, dots.length-1);
-  dots.forEach(function(d,i){ d.classList.toggle('active', i===showIdx); });
+  var showIdx = Math.min(cmntIndex, dots.length - 1);
+  dots.forEach(function(d, i){ d.classList.toggle('active', i === showIdx); });
   var counter = document.getElementById('cmnt-counter');
-  if (counter) counter.textContent = (cmntIndex+1)+'/'+cmntCards.length;
-}
-
-function showCard(idx, dir) {
-  // dir: -1 = going up (prev), 1 = going down (next)
-  var old = cmntCards[cmntIndex];
-  var next = cmntCards[idx];
-  if (!next || cmntAnimating) return;
-  cmntAnimating = true;
-
-  // Exit current card
-  if (old) {
-    old.classList.remove('active');
-    old.classList.add(dir === 1 ? 'exit-up' : 'exit-down');
-    setTimeout(function(){ old.classList.remove('exit-up','exit-down'); }, 500);
-  }
-
-  // Enter next card from opposite direction
-  next.style.transform = dir === 1 ? 'translateY(12px)' : 'translateY(-12px)';
-  next.style.opacity = '0';
-  next.classList.add('active');
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      next.style.transform = '';
-      next.style.opacity = '';
-      setTimeout(function(){ cmntAnimating = false; }, 520);
-    });
-  });
-
-  cmntIndex = idx;
-  updateCounter();
+  if (counter) counter.textContent = (cmntIndex + 1) + '/' + cmntCards.length;
 }
 
 function buildSlider(comments) {
@@ -1229,7 +1280,6 @@ function buildSlider(comments) {
   list.innerHTML = '';
   cmntCards = [];
   cmntIndex = 0;
-  cmntAnimating = false;
 
   if (!comments || comments.length === 0) {
     list.innerHTML = '<p style="text-align:center;font-family:\'Nunito\',sans-serif;font-size:14px;color:var(--brown-mid);padding:24px 0;">Jadilah yang pertama memberikan ucapan ✨</p>';
@@ -1243,14 +1293,31 @@ function buildSlider(comments) {
     cmntCards.push(card);
   });
 
-  cmntCards[0].classList.add('active');
+  markActive();
+  // Wait for layout, then size + position
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      resizeSlider();
+      applyTranslate(false);
+    });
+  });
   buildDots();
 }
 
 function cmntNav(dir) {
   var target = cmntIndex + dir;
-  if (target < 0 || target >= cmntCards.length) return;
-  showCard(target, dir);
+  if (target < 0) target = 0;
+  if (target >= cmntCards.length) target = cmntCards.length - 1;
+  if (target === cmntIndex) return;
+  cmntIndex = target;
+  markActive();
+  applyTranslate(true);
+  updateCounter();
+}
+
+// Alias for swipe handler compatibility
+function showCard(idx) {
+  cmntNav(idx - cmntIndex);
 }
 
 function prependToSlider(c) {
@@ -1262,11 +1329,22 @@ function prependToSlider(c) {
   list.insertBefore(card, list.firstChild);
   cmntCards.unshift(card);
 
-  cmntCards.forEach(function(cd){ cd.classList.remove('active','exit-up','exit-down'); });
   cmntIndex = 0;
-  cmntCards[0].classList.add('active');
+  markActive();
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      resizeSlider();
+      applyTranslate(false);
+    });
+  });
   buildDots();
 }
+
+// Re-size on window resize (card heights may change)
+window.addEventListener('resize', function(){
+  resizeSlider();
+  applyTranslate(false);
+});
 
 function loadComments() {
   fetch(JSONBIN_URL + '/latest', {
@@ -1318,7 +1396,7 @@ loadComments();
 (function(){
   var el = document.getElementById('comments-slider');
   var startY = 0, startX = 0, isDragging = false;
-  var THRESHOLD = 40;
+  var THRESHOLD = 30;
 
   function onStart(y, x) { startY = y; startX = x; isDragging = true; }
   function onEnd(y, x) {
