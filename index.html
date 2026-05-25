@@ -1334,14 +1334,13 @@ function applyTranslate(animated) {
   var list = document.getElementById('comments-list');
   if (!list) return;
   var h = getCardH();
-  var sliderH = h * 3 + CARD_GAP * 2;
+  var sliderH = h * 3 + CARD_GAP * 2 + 20;
   var trackH  = cmntCards.length * h + (cmntCards.length - 1) * CARD_GAP;
 
-  // Normal offset: scroll so cmntIndex card is at top
   var offset = -(cmntIndex * (h + CARD_GAP));
 
-  // Clamp: don't scroll past the point where bottom of track aligns with bottom of slider
-  var minOffset = Math.min(0, sliderH - trackH); // negative or 0
+  // Clamp: never scroll so far that bottom of track goes above bottom of slider
+  var minOffset = Math.min(0, sliderH - trackH);
   offset = Math.max(offset, minOffset);
 
   if (!animated) list.style.transition = 'none';
@@ -1420,9 +1419,9 @@ function buildSlider(comments) {
 
 function cmntNav(dir) {
   var h = getCardH();
-  var sliderH = h * 3 + CARD_GAP * 2;
+  var sliderH = h * 3 + CARD_GAP * 2 + 20;
   var trackH  = cmntCards.length * h + (cmntCards.length - 1) * CARD_GAP;
-  // Max index where scrolling still fills the window (no empty bottom)
+  // Max index where last card is fully visible
   var maxScrollable = trackH > sliderH
     ? Math.ceil((trackH - sliderH) / (h + CARD_GAP))
     : 0;
