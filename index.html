@@ -896,11 +896,11 @@ body {
   text-align: center;
 }
 
-/* ── Foto bulat dengan ring ornamen ── */
+/* ── Foto dengan frame polaroid besar ── */
 .cp-photo-ring {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 320px;
+  height: 380px;
   margin: 0 auto 28px;
 }
 /* Hapus ring garis dekoratif */
@@ -919,13 +919,13 @@ body {
 }
 .cp-photo-circle img.cp-photo-main {
   /* Foto duduk di dalam slot frame PNG:
-     frame polaroid punya padding ~10% atas, ~10% kiri/kanan, ~22% bawah
-     jadi foto diperkecil dan diposisikan agar pas di slot */
+     frame polaroid punya padding ~8% atas, ~8% kiri/kanan, ~20% bawah
+     disesuaikan agar foto pas dan tidak offside */
   position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  height: 68%;
+  top: 8%;
+  left: 8%;
+  width: 84%;
+  height: 70%;
   object-fit: cover;
   object-position: center top;
   display: block;
@@ -955,6 +955,10 @@ body {
 .cp-orn-tr { top: -4px; right: -4px; }
 .cp-orn-bl { bottom: -4px; left: -4px; }
 .cp-orn-br { bottom: -4px; right: -4px; }
+
+@media (max-width: 400px) {
+  .cp-photo-ring { width: 260px !important; height: 310px !important; }
+}
 
 /* ── Info teks ── */
 .cp-name {
@@ -1007,9 +1011,7 @@ body {
   text-shadow: 0 2px 24px rgba(154,122,58,0.18);
 }
 
-@media (max-width: 400px) {
-  .cp-photo-ring { width: 180px; height: 180px; }
-}
+
 </style>
 
 <section class="couple-section-wrap">
@@ -1021,7 +1023,7 @@ body {
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
     <div style="text-align:center;padding:8px 0;font-size:24px;letter-spacing:10px;color:var(--gold-light);" class="fade-in-down delay-1">&#10047; &#10086; &#10047;</div>
-    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Wanita &amp; Pria</h2>
+    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Wanita</h2>
     <p class="section-sub fade-in-up delay-2">DUA HATI, SATU PERJALANAN</p>
 
     <!-- Mempelai Wanita -->
@@ -1041,19 +1043,33 @@ body {
       </div>
     </div>
 
-    <!-- Separator -->
-    <div class="cp-separator fade-in-up delay-3">
-      <div class="cp-separator-line"></div>
-      <div class="cp-separator-amp">&amp;</div>
-      <div class="cp-separator-line"></div>
-    </div>
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:48px">&#10022; &#10023; &#10022;</div>
+  </div>
+</section>
+
+<!-- ===== COUPLE MEMPELAI PRIA ===== -->
+<section class="couple-section-wrap" style="background: linear-gradient(160deg, var(--ivory), var(--section-bg2));">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:10%;right:6%;--r:14deg;animation-duration:6.2s;animation-delay:-1.5s;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:38px;opacity:1;top:70%;left:5%;--r:-8deg;animation-duration:5.6s;animation-delay:-3.0s;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:1;" loading="lazy">
+
+  <!-- Separator & di antara kedua section -->
+  <div class="cp-separator fade-in-up" style="margin-top:0;margin-bottom:32px;">
+    <div class="cp-separator-line"></div>
+    <div class="cp-separator-amp">&amp;</div>
+    <div class="cp-separator-line"></div>
+  </div>
+
+  <div class="section-content">
+    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Pria</h2>
+    <p class="section-sub fade-in-up delay-2">BERSATU DALAM IKATAN SUCI</p>
 
     <!-- Mempelai Pria -->
-    <div class="fade-in-up delay-2">
+    <div class="fade-in-up delay-2" style="margin-top:48px;">
       <div class="cp-photo-ring">
         <div class="cp-photo-circle">
           <img class="cp-photo-main" src="https://i.ibb.co.com/twDbWThF/T1.jpg" alt="Togar" fetchpriority="high" decoding="async">
-          <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo.png" alt="" loading="lazy">
+          <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo%20pria.png" alt="" loading="lazy">
         </div>
       </div>
       <p class="cp-name">Muhammad Togar<br>Singa Putera</p>
