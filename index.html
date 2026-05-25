@@ -593,12 +593,12 @@ body {
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 #tap-overlay .ov-flowers-tl {
-  position: absolute; top: -10px; left: -10px; width: 240px; opacity: 0.35;
+  position: absolute; bottom: -60px; left: -80px; width: 420px; opacity: 0.18;
   pointer-events: none; filter: brightness(1.3) saturate(0.7);
 }
 #tap-overlay .ov-flowers-br {
-  position: absolute; bottom: -10px; right: -10px; width: 220px; opacity: 0.30;
-  pointer-events: none; transform: scale(-1); filter: brightness(1.3) saturate(0.7);
+  position: absolute; bottom: -60px; right: -80px; width: 420px; opacity: 0.15;
+  pointer-events: none; transform: scaleX(-1); filter: brightness(1.3) saturate(0.7);
 }
 #tap-overlay.hidden {
   opacity: 0; visibility: hidden; pointer-events: none;
@@ -671,11 +671,9 @@ body {
     linear-gradient(165deg, rgba(253,248,245,0.88) 0%, rgba(251,243,245,0.90) 50%, rgba(248,239,242,0.92) 100%),
     url('https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg') center center / cover no-repeat;">
   <div class="petal-canvas" id="petal-canvas"></div>
-  <!-- Bunga sudut hero — bunga kiri atas di-flip menghadap kanan, besar offside -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-40px;left:-60px;width:480px;opacity:0.92;pointer-events:none;z-index:1;transform:scaleX(-1);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%202.png" alt="" style="position:absolute;top:-10px;right:-10px;width:260px;opacity:0.85;pointer-events:none;z-index:1;transform:scaleX(-1);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%203.png" alt="" style="position:absolute;bottom:-10px;left:-10px;width:220px;opacity:0.75;pointer-events:none;z-index:1;transform:scaleY(-1);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%205.png" alt="" style="position:absolute;bottom:-10px;right:-10px;width:200px;opacity:0.70;pointer-events:none;z-index:1;transform:scale(-1);" loading="lazy">
+  <!-- Bunga background hero — pojok kiri bawah & kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:480px;opacity:0.22;pointer-events:none;z-index:1;" loading="lazy">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:480px;opacity:0.18;pointer-events:none;z-index:1;transform:scaleX(-1);" loading="lazy">
 
   <!-- Credit badge pojok kanan atas -->
   <div style="position:absolute;top:14px;left:14px;z-index:10;
@@ -719,9 +717,8 @@ body {
 
 <!-- ===== COUPLE + FOTO MEMPELAI ===== -->
 <section class="section" style="background:linear-gradient(160deg,var(--section-bg1),var(--ivory));position:relative;overflow:hidden;">
-  <!-- Bunga sudut -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;left:-30px;width:240px;opacity:0.85;pointer-events:none;z-index:0;" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;right:-30px;width:240px;opacity:0.80;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
+  <!-- Bunga background pojok kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
 
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
@@ -775,9 +772,8 @@ body {
 
 <!-- ===== QUOTE MEMPELAI PRIA ===== -->
 <section style="background:linear-gradient(145deg,#2a1a2e 0%,#3d2240 55%,#2d1a32 100%);padding:0;overflow:hidden;position:relative;">
-  <!-- Bunga sudut -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%203.png" alt="" style="position:absolute;top:-10px;left:-10px;width:200px;opacity:0.30;pointer-events:none;z-index:0;filter:brightness(1.5) saturate(0.6);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-10px;right:-10px;width:180px;opacity:0.25;pointer-events:none;z-index:0;transform:scale(-1);filter:brightness(1.5) saturate(0.6);" loading="lazy">
+  <!-- Bunga background pojok kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.12;pointer-events:none;z-index:0;transform:scaleX(-1);filter:brightness(2) saturate(0.3);" loading="lazy">
 
   <div id="quote-togar-wrap" style="display:flex;align-items:stretch;min-height:480px;position:relative;z-index:1;">
 
@@ -816,7 +812,8 @@ body {
   </style>
 </section>
 <section class="countdown-section" style="background:linear-gradient(160deg,var(--section-bg2),var(--blush));position:relative;overflow:hidden;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%205.png" alt="" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;opacity:0.08;pointer-events:none;z-index:0;" loading="lazy">
+  <!-- Bunga background pojok kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
   <div class="section-content">
     <h2 class="section-title fade-in-down">Menuju Hari Bahagia</h2>
     <p class="section-sub fade-in-down delay-1">SABTU, 8 AGUSTUS 2026</p>
@@ -831,9 +828,8 @@ body {
 
 <!-- ===== QUOTE MEMPELAI WANITA ===== -->
 <section style="background:linear-gradient(145deg,#fdf8f5 0%,#faf0f3 55%,#f8ecf0 100%);padding:0;overflow:hidden;position:relative;">
-  <!-- Bunga sudut -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;left:-30px;width:240px;opacity:0.85;pointer-events:none;z-index:0;" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-20px;right:-30px;width:240px;opacity:0.80;pointer-events:none;z-index:0;transform:scale(-1);" loading="lazy">
+  <!-- Bunga background pojok kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
 
   <div id="quote-nova-wrap" style="display:flex;align-items:stretch;min-height:480px;position:relative;z-index:1;">
 
@@ -874,8 +870,8 @@ body {
 
 <!-- ===== VENUE ===== -->
 <section class="section" style="background:var(--cream);position:relative;overflow:hidden;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;right:-30px;width:240px;opacity:0.80;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-20px;left:-30px;width:240px;opacity:0.85;pointer-events:none;z-index:0;transform:scaleY(-1);" loading="lazy">
+  <!-- Bunga background pojok kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
 
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
@@ -920,8 +916,8 @@ body {
 
 <!-- ===== GALERI FOTO ===== -->
 <section class="gallery-bg" style="background:linear-gradient(160deg,var(--ivory),var(--section-bg2));position:relative;overflow:hidden;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;left:-30px;width:240px;opacity:0.85;pointer-events:none;z-index:0;" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-20px;right:-30px;width:240px;opacity:0.80;pointer-events:none;z-index:0;transform:scale(-1);" loading="lazy">
+  <!-- Bunga background pojok kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
 
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
@@ -1110,8 +1106,8 @@ body {
 
 <!-- ===== WEDDING GIFT ===== -->
 <section class="section" style="background:var(--cream);position:relative;overflow:hidden;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;right:-30px;width:240px;opacity:0.80;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-20px;left:-30px;width:240px;opacity:0.85;pointer-events:none;z-index:0;transform:scaleY(-1);" loading="lazy">
+  <!-- Bunga background pojok kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;" loading="lazy">
 
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
@@ -1143,8 +1139,8 @@ body {
 
 <!-- ===== RSVP & UCAPAN ===== -->
 <section class="section" style="background:var(--section-bg2);position:relative;overflow:hidden;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-20px;left:-30px;width:240px;opacity:0.85;pointer-events:none;z-index:0;" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-20px;right:-30px;width:240px;opacity:0.80;pointer-events:none;z-index:0;transform:scale(-1);" loading="lazy">
+  <!-- Bunga background pojok kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;right:-80px;width:420px;opacity:0.18;pointer-events:none;z-index:0;transform:scaleX(-1);" loading="lazy">
 
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
@@ -1192,8 +1188,8 @@ body {
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer" style="background:linear-gradient(160deg,#2a1a2e,#3d2240);">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;top:-10px;left:-10px;width:200px;opacity:0.18;pointer-events:none;z-index:0;filter:brightness(2) saturate(0.3);" loading="lazy">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%202.png" alt="" style="position:absolute;bottom:-10px;right:-10px;width:200px;opacity:0.15;pointer-events:none;z-index:0;transform:scale(-1);filter:brightness(2) saturate(0.3);" loading="lazy">
+  <!-- Bunga background pojok kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" style="position:absolute;bottom:-60px;left:-80px;width:420px;opacity:0.12;pointer-events:none;z-index:0;filter:brightness(2) saturate(0.3);" loading="lazy">
     <ellipse cx="100" cy="160" rx="18" ry="30" fill="#c8a84a"/>
     <ellipse cx="40" cy="100" rx="30" ry="18" fill="#c8a84a"/>
     <ellipse cx="160" cy="100" rx="30" ry="18" fill="#c8a84a"/>
