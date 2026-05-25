@@ -341,46 +341,72 @@ body {
 .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); }
 .form-textarea { height:100px; resize:vertical; }
 
-/* ── COMMENTS SLIDER (crossfade) ── */
+/* ── COMMENTS SLIDER (sosmed style) ── */
 .comments-slider-wrap { max-width:480px; margin:28px auto 0; position:relative; }
-.comments-slider { position:relative; min-height:120px; }
+.comments-slider { position:relative; min-height:100px; cursor:grab; user-select:none; }
+.comments-slider:active { cursor:grabbing; }
+
 .comment-card {
-  background:var(--cream); border-radius:4px; padding:20px 22px;
+  background:#fff; border-radius:16px; padding:16px 16px 14px;
   width:100%; box-sizing:border-box; text-align:left;
-  border:1px solid rgba(154,122,58,0.12); box-shadow:0 2px 10px rgba(60,42,24,0.05);
+  border:none; box-shadow:0 2px 16px rgba(60,42,24,0.10);
   position:absolute; top:0; left:0;
   opacity:0; pointer-events:none;
-  transition:opacity 0.5s ease, transform 0.5s ease;
-  transform:translateY(12px);
+  transition:opacity 0.45s ease, transform 0.45s ease;
+  transform:translateY(14px);
 }
 .comment-card.active {
   opacity:1; pointer-events:auto;
-  transform:translateY(0);
-  position:relative;
+  transform:translateY(0); position:relative;
 }
-.comment-card.exit-up   { opacity:0; transform:translateY(-12px); }
-.comment-card.exit-down { opacity:0; transform:translateY(12px); }
-.comment-name { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--brown-dark); margin-bottom:4px; }
-.comment-badge { display:inline-block; font-size:11px; padding:3px 12px; border-radius:2px; margin-bottom:8px; font-family:'Cormorant Garamond',serif; letter-spacing:1px; }
-.badge-hadir { background:var(--rose-pale); color:var(--rose); }
-.badge-tidak { background:#f0f0f0; color:#888; }
-.badge-maybe { background:var(--gold-pale); color:var(--gold); }
-.comment-text { font-family:'Cormorant Garamond',serif; font-size:15px; color:var(--brown-mid); font-style:italic; line-height:1.6; }
+.comment-card.exit-up   { opacity:0; transform:translateY(-14px); }
+.comment-card.exit-down { opacity:0; transform:translateY(14px); }
 
-/* nav */
-.comments-nav { display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px; }
-.comments-nav button {
-  width:36px; height:36px; border-radius:50%;
-  border:1px solid rgba(154,122,58,0.3); background:var(--cream);
-  color:var(--gold); font-size:16px; cursor:pointer;
+/* Row: avatar + name/badge */
+.comment-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.comment-avatar {
+  width:38px; height:38px; border-radius:50%; flex-shrink:0;
   display:flex; align-items:center; justify-content:center;
-  transition:background 0.2s, color 0.2s;
+  font-family:'Playfair Display',serif; font-size:16px; font-weight:700;
+  color:#fff; text-transform:uppercase;
 }
-.comments-nav button:hover { background:var(--gold); color:#fff; }
-.comments-nav button:disabled { opacity:0.3; cursor:default; }
+.comment-meta { flex:1; min-width:0; }
+.comment-name {
+  font-family:'Nunito',sans-serif; font-size:14px; font-weight:700;
+  color:#1a1a1a; margin-bottom:2px; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.comment-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:10px; padding:2px 8px; border-radius:20px;
+  font-family:'Nunito',sans-serif; font-weight:600; letter-spacing:0.5px;
+}
+.badge-hadir { background:#e8f5e9; color:#2e7d32; }
+.badge-tidak { background:#fce4ec; color:#c62828; }
+.badge-maybe { background:#fff8e1; color:#f57f17; }
+
+/* Message bubble */
+.comment-bubble {
+  background:#f5f5f5; border-radius:0 12px 12px 12px;
+  padding:10px 14px; display:inline-block; width:100%; box-sizing:border-box;
+}
+.comment-text {
+  font-family:'Nunito',sans-serif; font-size:14px;
+  color:#333; line-height:1.6; margin:0;
+}
+
+/* Dots pagination */
+.comments-nav { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; }
+.cmnt-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(154,122,58,0.25); transition:all 0.3s;
+  cursor:pointer;
+}
+.cmnt-dot.active { width:18px; border-radius:4px; background:var(--gold); }
 .comments-counter {
-  font-family:'Cormorant Garamond',serif; font-size:15px;
-  color:var(--brown-mid); letter-spacing:3px; min-width:70px; text-align:center;
+  font-family:'Nunito',sans-serif; font-size:11px; font-weight:600;
+  color:var(--brown-mid); letter-spacing:1px; text-align:center;
+  margin-top:6px;
 }
 
 /* ── COPY TOAST ── */
@@ -994,9 +1020,8 @@ body {
           <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
         </div>
       </div>
-      <div class="comments-nav" id="comments-nav" style="display:none;">
-        <span class="comments-counter" id="cmnt-counter">1/1</span>
-      </div>
+      <div class="comments-nav" id="comments-nav" style="display:none;" aria-label="navigasi komentar"></div>
+      <div class="comments-counter" id="cmnt-counter" style="display:none;"></div>
     </div>
 
     <div class="ornament-row fade-in-up delay-5" style="margin-top:28px">&#10022; &#10023; &#10022;</div>
@@ -1104,25 +1129,69 @@ var cmntIndex = 0;
 var cmntCards = [];
 var cmntAnimating = false;
 
+var AVATAR_COLORS = ['#9a7a3a','#b07050','#6b8e7a','#7a6ba8','#b07a8a','#5a8a9a'];
+
+function getInitial(name) { return name ? name.trim().charAt(0).toUpperCase() : '?'; }
+function getAvatarColor(name) {
+  var sum = 0;
+  for (var i=0; i<name.length; i++) sum += name.charCodeAt(i);
+  return AVATAR_COLORS[sum % AVATAR_COLORS.length];
+}
+
 function getBadge(hadir) {
-  if (hadir === 'hadir') return { cls:'badge-hadir', label:'Pasti Hadir' };
-  if (hadir === 'tidak') return { cls:'badge-tidak', label:'Mohon Maaf Tidak Hadir' };
-  return { cls:'badge-maybe', label:'Masih Belum Pasti' };
+  if (hadir === 'hadir') return { cls:'badge-hadir', label:'✓ Pasti Hadir' };
+  if (hadir === 'tidak') return { cls:'badge-tidak', label:'✕ Tidak Hadir' };
+  return { cls:'badge-maybe', label:'~ Belum Pasti' };
 }
 
 function makeCard(c) {
   var b = getBadge(c.hadir);
+  var color = getAvatarColor(c.name);
   var card = document.createElement('div');
   card.className = 'comment-card';
-  card.innerHTML = '<p class="comment-name">'+c.name+'</p>'
-    +'<span class="comment-badge '+b.cls+'">'+b.label+'</span>'
-    +'<p class="comment-text">'+c.msg+'</p>';
+  card.innerHTML =
+    '<div class="comment-header">'
+    +'  <div class="comment-avatar" style="background:'+color+'">'+getInitial(c.name)+'</div>'
+    +'  <div class="comment-meta">'
+    +'    <div class="comment-name">'+c.name+'</div>'
+    +'    <span class="comment-badge '+b.cls+'">'+b.label+'</span>'
+    +'  </div>'
+    +'</div>'
+    +'<div class="comment-bubble">'
+    +'  <p class="comment-text">'+c.msg+'</p>'
+    +'</div>';
   return card;
 }
 
+function buildDots() {
+  var nav = document.getElementById('comments-nav');
+  var counter = document.getElementById('cmnt-counter');
+  nav.innerHTML = '';
+  if (cmntCards.length <= 1) {
+    nav.style.display = 'none';
+    counter.style.display = 'none';
+    return;
+  }
+  // Max 7 dots shown
+  var showDots = Math.min(cmntCards.length, 7);
+  for (var i=0; i<showDots; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'cmnt-dot' + (i===cmntIndex ? ' active' : '');
+    dot.setAttribute('data-i', i);
+    dot.onclick = (function(idx){ return function(){ showCard(idx, idx > cmntIndex ? 1 : -1); }; })(i);
+    nav.appendChild(dot);
+  }
+  nav.style.display = 'flex';
+  counter.style.display = 'block';
+  counter.textContent = (cmntIndex+1)+'/'+cmntCards.length;
+}
+
 function updateCounter() {
-  var el = document.getElementById('cmnt-counter');
-  if (cmntCards.length > 0) el.textContent = (cmntIndex+1)+'/'+cmntCards.length;
+  var dots = document.querySelectorAll('.cmnt-dot');
+  var showIdx = Math.min(cmntIndex, dots.length-1);
+  dots.forEach(function(d,i){ d.classList.toggle('active', i===showIdx); });
+  var counter = document.getElementById('cmnt-counter');
+  if (counter) counter.textContent = (cmntIndex+1)+'/'+cmntCards.length;
 }
 
 function showCard(idx, dir) {
@@ -1157,15 +1226,14 @@ function showCard(idx, dir) {
 
 function buildSlider(comments) {
   var list = document.getElementById('comments-list');
-  var nav  = document.getElementById('comments-nav');
   list.innerHTML = '';
   cmntCards = [];
   cmntIndex = 0;
   cmntAnimating = false;
 
   if (!comments || comments.length === 0) {
-    list.innerHTML = '<p style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Jadilah yang pertama memberikan ucapan ✨</p>';
-    nav.style.display = 'none';
+    list.innerHTML = '<p style="text-align:center;font-family:\'Nunito\',sans-serif;font-size:14px;color:var(--brown-mid);padding:24px 0;">Jadilah yang pertama memberikan ucapan ✨</p>';
+    buildDots();
     return;
   }
 
@@ -1176,8 +1244,7 @@ function buildSlider(comments) {
   });
 
   cmntCards[0].classList.add('active');
-  updateCounter();
-  nav.style.display = comments.length > 1 ? 'flex' : 'none';
+  buildDots();
 }
 
 function cmntNav(dir) {
@@ -1195,12 +1262,10 @@ function prependToSlider(c) {
   list.insertBefore(card, list.firstChild);
   cmntCards.unshift(card);
 
-  // Deactivate old active
   cmntCards.forEach(function(cd){ cd.classList.remove('active','exit-up','exit-down'); });
   cmntIndex = 0;
   cmntCards[0].classList.add('active');
-  updateCounter();
-  document.getElementById('comments-nav').style.display = cmntCards.length > 1 ? 'flex' : 'none';
+  buildDots();
 }
 
 function loadComments() {
