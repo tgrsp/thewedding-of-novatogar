@@ -570,6 +570,45 @@ body {
 
 @keyframes fadeIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
 
+/* ── TAP TO OPEN OVERLAY ── */
+#tap-overlay {
+  position: fixed; inset: 0; z-index: 99998;
+  background: linear-gradient(160deg, rgba(44,30,16,0.93) 0%, rgba(74,46,24,0.96) 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 20px; text-align: center; padding: 32px;
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#tap-overlay.hidden {
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+#tap-overlay .ov-title {
+  font-family: 'Great Vibes', cursive; font-size: clamp(38px, 10vw, 58px);
+  color: #e8c87a; line-height: 1.2;
+}
+#tap-overlay .ov-sub {
+  font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  color: rgba(245,232,204,0.65); letter-spacing: 5px; text-transform: uppercase;
+}
+#tap-overlay .ov-btn {
+  margin-top: 8px;
+  background: linear-gradient(135deg, #d4a84b, #9a7a3a);
+  color: #fff; border: none; border-radius: 2px;
+  font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 14px 40px; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(154,122,58,0.45);
+  animation: ovPulse 1.8s ease-in-out infinite;
+}
+@keyframes ovPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(154,122,58,0.45); transform: scale(1); }
+  50%       { box-shadow: 0 6px 32px rgba(154,122,58,0.7);  transform: scale(1.04); }
+}
+#tap-overlay .ov-note {
+  font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  color: rgba(245,232,204,0.4); font-style: italic;
+}
+
 .bg-yellow-tag {
   background: linear-gradient(135deg, var(--gold-pale), #f0e0a0);
   border-radius:2px; padding:10px 22px; display:inline-block; margin-bottom:20px;
@@ -594,6 +633,15 @@ body {
 </div>
 
 <div class="copy-toast" id="copy-toast">&#10003; Nomor rekening disalin!</div>
+
+<!-- ===== TAP TO OPEN OVERLAY ===== -->
+<div id="tap-overlay">
+  <div class="ov-sub">Undangan Pernikahan</div>
+  <div class="ov-title">Nova &amp; Togar</div>
+  <div class="ov-sub">8 · 8 · 2026</div>
+  <button class="ov-btn" onclick="openInvitation()">Buka Undangan</button>
+  <div class="ov-note">♪ Lengkap dengan musik pengiring</div>
+</div>
 
 <!-- ===== HERO ===== -->
 <section class="hero" style="background:
@@ -1287,15 +1335,14 @@ function toggleMusic() {
   }
 }
 
-// Auto play — try immediately, fallback to first user interaction
+// Auto play — try immediately (desktop), fallback overlay (mobile)
 setTimeout(function(){ startMusic(); }, 800);
-function onFirstInteraction() {
+
+function openInvitation() {
+  var overlay = document.getElementById('tap-overlay');
+  if (overlay) overlay.classList.add('hidden');
   if (!playing) { startMusic(); }
-  document.removeEventListener('click', onFirstInteraction);
-  document.removeEventListener('touchstart', onFirstInteraction);
 }
-document.addEventListener('click', onFirstInteraction);
-document.addEventListener('touchstart', onFirstInteraction);
 
 // ── COPY ──
 function copyText(text) {
