@@ -394,7 +394,13 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* Fade only top edge — bottom stays sharp so last card is fully visible */
+  /* Default: no fade at top (posisi awal) */
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 100%);
+  transition: -webkit-mask-image 0.3s, mask-image 0.3s;
+}
+/* Fade atas muncul hanya saat sudah scroll ke bawah */
+.comments-slider-clip.scrolled {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 6%, black 18%, black 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 6%, black 18%, black 100%);
 }
@@ -1418,6 +1424,9 @@ function cmntNav(dir) {
   markActive();
   applyTranslate(true);
   updateCounter();
+  // Aktifkan fade atas hanya saat sudah scroll ke bawah (bukan di posisi teratas)
+  var clip = document.querySelector('.comments-slider-clip');
+  if (clip) clip.classList.toggle('scrolled', cmntIndex > 0);
 }
 
 // Alias for swipe handler compatibility
@@ -1563,6 +1572,8 @@ function submitRSVP(e) {
     buildSlider(Array.isArray(allComments) ? allComments : []);
     cmntIndex = 0; // newest is first (desc order)
     markActive();
+    var clip = document.querySelector('.comments-slider-clip');
+    if (clip) clip.classList.remove('scrolled');
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         resizeSlider();
