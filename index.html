@@ -758,7 +758,118 @@ body {
   </div>
 
   <div class="ornament-row fade-in-up delay-5" style="margin-top:20px">&#10022; &#10023; &#10022;</div>
+
+  <!-- Swipe down indicator -->
+  <div id="swipe-hint" class="swipe-hint-el">
+    <span class="swipe-hint-label">Swipe</span>
+    <svg class="swipe-hint-mouse" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="7" y="0" width="6" height="16" rx="3" fill="none" stroke="var(--brown-mid)" stroke-width="1.5"/>
+      <circle cx="10" cy="5" r="2" fill="var(--brown-mid)" style="animation:scrollDot 2s ease-in-out infinite;"/>
+    </svg>
+    <svg class="swipe-hint-chevron" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1 1L7 7L13 1" stroke="var(--brown-mid)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
 </section>
+
+<style>
+.swipe-hint-el {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: swipeFloat 2s ease-in-out infinite;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.swipe-hint-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  color: var(--brown-mid);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.swipe-hint-mouse {
+  width: 20px; height: 28px;
+  opacity: 0.6;
+}
+.swipe-hint-chevron {
+  width: 14px; height: 8px;
+  opacity: 0.5;
+  animation: chevronFade 2s ease-in-out infinite 0.2s;
+}
+
+/* ── Mobile: sedikit lebih kecil & bottom lebih tinggi hindari safe-area ── */
+@media (max-width: 600px) {
+  .swipe-hint-el {
+    bottom: max(20px, env(safe-area-inset-bottom, 16px));
+    gap: 4px;
+  }
+  .swipe-hint-label { font-size: 10px; letter-spacing: 3px; }
+  .swipe-hint-mouse  { width: 16px; height: 22px; }
+  .swipe-hint-chevron { width: 11px; height: 7px; }
+}
+
+@keyframes swipeFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 1;   }
+  50%       { transform: translateX(-50%) translateY(7px); opacity: 0.65; }
+}
+@keyframes scrollDot {
+  0%        { opacity: 1; }
+  55%       { opacity: 0.2; }
+  56%       { opacity: 0; }
+  70%       { opacity: 1; }
+  100%      { opacity: 1; }
+}
+@keyframes chevronFade {
+  0%, 100% { opacity: 0.5; transform: translateY(0);  }
+  50%      { opacity: 0.1; transform: translateY(3px); }
+}
+.swipe-hint-el.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  animation: none !important;
+}
+</style>
+
+<script>
+(function() {
+  var hero = document.querySelector('.hero');
+  var hint = document.getElementById('swipe-hint');
+  if (!hero || !hint) return;
+
+  function hideHint() {
+    hint.classList.add('hidden');
+  }
+
+  /* IntersectionObserver: hilang saat hero < 15% terlihat */
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) {
+        hideHint();
+        observer.disconnect();
+        document.removeEventListener('touchstart', onTouch);
+      }
+    });
+  }, { threshold: 0.15 });
+  observer.observe(hero);
+
+  /* Mobile: langsung hilang begitu ada touch pertama (swipe gesture) */
+  function onTouch() {
+    hideHint();
+    observer.disconnect();
+    document.removeEventListener('touchstart', onTouch);
+  }
+  document.addEventListener('touchstart', onTouch, { passive: true, once: true });
+})();
+</script>
 
 <!-- ===== COUPLE + FOTO MEMPELAI ===== -->
 <section class="section" style="background:linear-gradient(160deg,var(--section-bg1),var(--ivory));position:relative;overflow:hidden;">
