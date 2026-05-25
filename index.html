@@ -1392,29 +1392,55 @@ function submitRSVP(e) {
 
 loadComments();
 
-// ── SWIPE COMMENTS ──
+// ── SWIPE / SCROLL COMMENTS ──
 (function(){
   var el = document.getElementById('comments-slider');
   var startY = 0, startX = 0, isDragging = false;
   var THRESHOLD = 30;
 
-  function onStart(y, x) { startY = y; startX = x; isDragging = true; }
-  function onEnd(y, x) {
+  // ── Mouse wheel (PC scroll) ──
+  var wheelAcc = 0, wheelTimer = null;
+  el.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    wheelAcc += e.deltaY;
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(function(){
+      if (Math.abs(wheelAcc) > 20) { cmntNav(wheelAcc > 0 ? 1 : -1); }
+      wheelAcc = 0;
+    }, 60);
+  }, { passive: false });
+
+  // ── Touch (mobile) ──
+  var touchStartY = 0, touchStartX = 0;
+  el.addEventListener('touchstart', function(e){
+    var t = e.touches[0];
+    touchStartY = t.clientY; touchStartX = t.clientX;
+  }, { passive: true });
+
+  el.addEventListener('touchmove', function(e){
+    var dy = Math.abs(e.touches[0].clientY - touchStartY);
+    var dx = Math.abs(e.touches[0].clientX - touchStartX);
+    if (dy > dx && dy > 8) { e.preventDefault(); }
+  }, { passive: false });
+
+  el.addEventListener('touchend', function(e){
+    var t = e.changedTouches[0];
+    var dy = t.clientY - touchStartY;
+    var dx = t.clientX - touchStartX;
+    if (Math.abs(dy) < THRESHOLD || Math.abs(dx) > Math.abs(dy)) return;
+    cmntNav(dy < 0 ? 1 : -1);
+  }, { passive: true });
+
+  // ── Mouse drag (desktop fallback) ──
+  el.addEventListener('mousedown', function(e){ startY = e.clientY; startX = e.clientX; isDragging = true; });
+  window.addEventListener('mouseup', function(e){
     if (!isDragging) return;
     isDragging = false;
-    var dy = y - startY;
-    var dx = x - startX;
+    var dy = e.clientY - startY;
+    var dx = e.clientX - startX;
     if (Math.abs(dy) < THRESHOLD || Math.abs(dx) > Math.abs(dy)) return;
-    cmntNav(dy < 0 ? 1 : -1); // swipe up = next, swipe down = prev
-  }
-
-  // Touch
-  el.addEventListener('touchstart', function(e){ var t=e.touches[0]; onStart(t.clientY, t.clientX); }, {passive:true});
-  el.addEventListener('touchend',   function(e){ var t=e.changedTouches[0]; onEnd(t.clientY, t.clientX); }, {passive:true});
-
-  // Mouse drag (desktop)
-  el.addEventListener('mousedown', function(e){ onStart(e.clientY, e.clientX); });
-  window.addEventListener('mouseup', function(e){ onEnd(e.clientY, e.clientX); });
+    cmntNav(dy < 0 ? 1 : -1);
+  });
 })();
 
 // ══════════════════════════════════
