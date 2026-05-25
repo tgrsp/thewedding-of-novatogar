@@ -1565,10 +1565,20 @@ function submitRSVP(e) {
       method:'PUT',
       headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
       body:JSON.stringify({ comments:comments })
-    }).then(function(){ return newComment; });
+    }).then(function(){ return comments; }); // return full list
   })
-  .then(function(nc){
-    prependToSlider(nc);
+  .then(function(allComments){
+    // Rebuild slider with ALL comments so nothing gets lost
+    buildSlider(allComments);
+    cmntIndex = 0;
+    markActive();
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        resizeSlider();
+        applyTranslate(false);
+        updateScrollbar();
+      });
+    });
     document.getElementById('rsvp-name').value = '';
     document.getElementById('rsvp-msg').value = '';
     document.getElementById('rsvp-hadir').selectedIndex = 0;
