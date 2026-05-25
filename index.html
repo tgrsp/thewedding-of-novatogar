@@ -784,7 +784,7 @@ body {
   align-items: center;
   gap: 6px;
   animation: swipeFloat 2s ease-in-out infinite;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
   pointer-events: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -849,17 +849,15 @@ body {
     hint.classList.add('hidden');
   }
 
-  /* IntersectionObserver: hilang saat hero < 15% terlihat */
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (!entry.isIntersecting) {
-        hideHint();
-        observer.disconnect();
-        document.removeEventListener('touchstart', onTouch);
-      }
-    });
-  }, { threshold: 0.15 });
-  observer.observe(hero);
+  /* Desktop: scroll event — hilang begitu user mulai scroll */
+  function onScroll() {
+    if (window.scrollY > 30) {
+      hideHint();
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('touchstart', onTouch);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   /* Mobile: langsung hilang begitu ada touch pertama (swipe gesture) */
   function onTouch() {
