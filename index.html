@@ -960,16 +960,7 @@ body {
     </form>
 
     <div class="comments-list" id="comments-list">
-      <div class="comment-card fade-in-up delay-3">
-        <p class="comment-name">Sarah Amalia</p>
-        <span class="comment-badge badge-hadir">Pasti Hadir</span>
-        <p class="comment-text">Selamat ya Nova &amp; Togar! Semoga menjadi keluarga yang sakinah mawaddah warahmah. Bahagia selalu!</p>
-      </div>
-      <div class="comment-card fade-in-up delay-4">
-        <p class="comment-name">Rizki Pratama</p>
-        <span class="comment-badge badge-maybe">Masih Belum Pasti</span>
-        <p class="comment-text">Congratulations! Semoga langgeng sampai kakek nenek ya. Doa terbaik dari kami sekeluarga.</p>
-      </div>
+      <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
     </div>
 
     <div class="ornament-row fade-in-up delay-5" style="margin-top:28px">&#10022; &#10023; &#10022;</div>
@@ -1069,23 +1060,93 @@ function showToast() {
   setTimeout(function(){ toast.classList.remove('show'); }, 2200);
 }
 
-// ── RSVP ──
+// ── RSVP + JSONBIN ──
+var JSONBIN_ID  = '6a138ff46877513b27c8dcc7';
+var JSONBIN_KEY = '$2a$10$XLdskAVFSGsiVTqCR2X09OdwXkJmlQrdmArInIBbdKVHXAg3MgFM2';
+var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_ID;
+
+function getBadge(hadir) {
+  if (hadir === 'hadir')  return { cls: 'badge-hadir', label: 'Pasti Hadir' };
+  if (hadir === 'tidak')  return { cls: 'badge-tidak', label: 'Mohon Maaf Tidak Hadir' };
+  return { cls: 'badge-maybe', label: 'Masih Belum Pasti' };
+}
+
+function renderComment(c, prepend) {
+  var b = getBadge(c.hadir);
+  var card = document.createElement('div');
+  card.className = 'comment-card';
+  if (prepend) card.style.animation = 'fadeIn 0.4s ease';
+  card.innerHTML = '<p class="comment-name">'+c.name+'</p><span class="comment-badge '+b.cls+'">'+b.label+'</span><p class="comment-text">'+c.msg+'</p>';
+  var list = document.getElementById('comments-list');
+  if (prepend) list.prepend(card); else list.appendChild(card);
+}
+
+function loadComments() {
+  fetch(JSONBIN_URL + '/latest', {
+    headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var list = document.getElementById('comments-list');
+    list.innerHTML = '';
+    var comments = (data && data.comments) ? data.comments : [];
+    if (comments.length === 0) {
+      list.innerHTML = '<p style="text-align:center;font-family:\'Cormorant Garamond\',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Jadilah yang pertama memberikan ucapan ✨</p>';
+    } else {
+      comments.slice().reverse().forEach(function(c){ renderComment(c, false); });
+    }
+  })
+  .catch(function(){
+    document.getElementById('comments-list').innerHTML = '';
+  });
+}
+
 function submitRSVP(e) {
   e.preventDefault();
-  var name = document.getElementById('rsvp-name').value.trim();
+  var name  = document.getElementById('rsvp-name').value.trim();
   var hadir = document.getElementById('rsvp-hadir').value;
-  var msg = document.getElementById('rsvp-msg').value.trim();
+  var msg   = document.getElementById('rsvp-msg').value.trim();
   if (!name || !msg) return;
-  var badgeClass = hadir === 'hadir' ? 'badge-hadir' : hadir === 'tidak' ? 'badge-tidak' : 'badge-maybe';
-  var badgeLabel = hadir === 'hadir' ? 'Pasti Hadir' : hadir === 'tidak' ? 'Mohon Maaf Tidak Hadir' : 'Masih Belum Pasti';
-  var card = document.createElement('div');
-  card.className = 'comment-card'; card.style.animation = 'fadeIn 0.4s ease';
-  card.innerHTML = '<p class="comment-name">'+name+'</p><span class="comment-badge '+badgeClass+'">'+badgeLabel+'</span><p class="comment-text">'+msg+'</p>';
-  document.getElementById('comments-list').prepend(card);
-  document.getElementById('rsvp-name').value = '';
-  document.getElementById('rsvp-msg').value = '';
-  document.getElementById('rsvp-hadir').selectedIndex = 0;
+
+  var btn = e.target.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Mengirim...';
+
+  // Ambil data terkini dulu, lalu tambahkan komentar baru
+  fetch(JSONBIN_URL + '/latest', {
+    headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var comments = (data && data.comments) ? data.comments : [];
+    var newComment = { name: name, hadir: hadir, msg: msg, time: Date.now() };
+    comments.push(newComment);
+    return fetch(JSONBIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_KEY
+      },
+      body: JSON.stringify({ comments: comments })
+    });
+  })
+  .then(function(){
+    renderComment({ name: name, hadir: hadir, msg: msg }, true);
+    document.getElementById('rsvp-name').value = '';
+    document.getElementById('rsvp-msg').value = '';
+    document.getElementById('rsvp-hadir').selectedIndex = 0;
+    btn.disabled = false;
+    btn.textContent = 'Kirim Ucapan';
+  })
+  .catch(function(){
+    btn.disabled = false;
+    btn.textContent = 'Kirim Ucapan';
+    alert('Gagal mengirim, coba lagi.');
+  });
 }
+
+// Load komentar saat halaman dibuka
+loadComments();
 
 // ══════════════════════════════════
 // FLOWER PETALS ANIMATION (Hero)
