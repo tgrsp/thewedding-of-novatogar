@@ -1277,14 +1277,24 @@ body {
 
 <!-- ===== GALERI FOTO ===== -->
 <section class="gallery-bg" style="position:relative;overflow:hidden;">
+  <!-- Bunga 7 background — repeat-x di bagian bawah -->
+  <div style="position:absolute;bottom:0;left:0;right:0;height:220px;
+    background-image:url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%207.png');
+    background-repeat:repeat-x;
+    background-position:bottom center;
+    background-size:auto 100%;
+    opacity:0.18;
+    pointer-events:none;
+    z-index:0;
+    mix-blend-mode:multiply;"></div>
   <!-- Bunga background pojok kanan bawah — dihapus -->
   <!-- Kupu-kupu di dekat slot foto -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:22%;left:4%;--r:-12deg;animation-duration:5.8s;animation-delay:-1.5s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;opacity:1;top:22%;right:4%;--r:10deg;animation-duration:6.2s;animation-delay:-3.0s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:40px;opacity:1;top:55%;left:5%;--r:-6deg;animation-duration:5.4s;animation-delay:-4.8s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:34px;opacity:1;top:60%;right:5%;--r:8deg;animation-duration:6.6s;animation-delay:-2.2s;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:22%;left:4%;--r:-12deg;animation-duration:5.8s;animation-delay:-1.5s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;opacity:1;top:22%;right:4%;--r:10deg;animation-duration:6.2s;animation-delay:-3.0s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:40px;opacity:1;top:55%;left:5%;--r:-6deg;animation-duration:5.4s;animation-delay:-4.8s;z-index:1;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:34px;opacity:1;top:60%;right:5%;--r:8deg;animation-duration:6.6s;animation-delay:-2.2s;z-index:1;">
 
-  <div class="section-content">
+  <div class="section-content" style="position:relative;z-index:1;">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
     <h2 class="section-title fade-in-up delay-1">Galeri Momen Indah</h2>
     <p class="section-sub fade-in-up delay-2">KENANG-KENANGAN TERINDAH</p>
@@ -1356,7 +1366,7 @@ body {
       display: flex;
       gap: 8px;
       transition: transform 0.38s cubic-bezier(0.25,0.46,0.45,0.94);
-      padding: 4px 2px 28px;
+      padding: 4px 2px 8px;
     }
     .gal-thumb {
       flex: 0 0 calc(20% - 7px);
@@ -1408,8 +1418,17 @@ body {
     }
     </style>
 
-    <!-- Main photo display + thumbnail strip + bunga6 overlay bawah -->
+    <!-- Main photo display + thumbnail strip (thumb di atas) -->
     <div class="gal-photo-outer fade-in-up delay-2">
+
+      <!-- Thumbnail strip — di atas foto utama -->
+      <div class="gal-thumb-strip fade-in-up delay-3" style="margin:0 auto 16px;max-width:520px;">
+        <div class="gal-thumb-track" id="gal-thumb-track">
+          <!-- thumbs injected by JS -->
+        </div>
+      </div>
+
+      <!-- Main photo -->
       <div class="gal-main-wrap" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
         <!-- images injected by JS -->
         <button class="gal-main-nav prev" onclick="event.stopPropagation();galNavMain(-1)" aria-label="Sebelumnya">&#8249;</button>
@@ -1417,15 +1436,6 @@ body {
         <div class="gal-counter" id="gal-counter">1 / 8</div>
       </div>
 
-      <!-- Thumbnail strip (di dalam wrapper agar bunga bisa overlay) -->
-      <div class="gal-thumb-strip fade-in-up delay-3">
-        <div class="gal-thumb-track" id="gal-thumb-track">
-          <!-- thumbs injected by JS -->
-        </div>
-      </div>
-
-      <!-- Bunga6 flip vertikal, menutupi bagian bawah thumbnail strip -->
-      <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%206.png" alt="" class="gal-bunga6" loading="lazy">
     </div>
 
     <script>
