@@ -563,7 +563,7 @@ body {
 </audio>
 
 <div id="music-player">
-  <button id="music-btn" onclick="toggleMusic()" title="Play / Pause musik">&#9654;</button>
+  <button id="music-btn" onclick="toggleMusic()" title="Play / Pause musik"><img id="music-icon" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/play.png" alt="play" style="width:22px;height:22px;object-fit:contain;display:block;"></button>
 </div>
 
 <div class="copy-toast" id="copy-toast">&#10003; Nomor rekening disalin!</div>
@@ -1224,9 +1224,12 @@ var playing = false;
 var audio = document.getElementById('bg-audio');
 var musicBtn = document.getElementById('music-btn');
 
+var ICON_PLAY  = '<img id="music-icon" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/play.png" alt="play" style="width:22px;height:22px;object-fit:contain;display:block;">';
+var ICON_PAUSE = '<img id="music-icon" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/pause.png" alt="pause" style="width:22px;height:22px;object-fit:contain;display:block;">';
+
 function startMusic() {
   audio.play().then(function() {
-    musicBtn.innerHTML = '&#9646;&#9646;';
+    musicBtn.innerHTML = ICON_PAUSE;
     musicBtn.classList.remove('paused');
     playing = true;
   }).catch(function() {
@@ -1239,7 +1242,7 @@ function toggleMusic() {
     startMusic();
   } else {
     audio.pause();
-    musicBtn.innerHTML = '&#9654;';
+    musicBtn.innerHTML = ICON_PLAY;
     musicBtn.classList.add('paused');
     playing = false;
   }
