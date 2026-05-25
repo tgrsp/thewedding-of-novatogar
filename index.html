@@ -1541,7 +1541,7 @@ function updateScrollbar() {
 })();
 
 function loadComments() {
-  fetch(SUPA_URL + '/rest/v1/comments?select=*&order=created_at.asc', {
+  fetch(SUPA_URL + '/rest/v1/comments?select=*&order=created_at.desc', {
     headers: SUPA_HEADERS
   })
   .then(function(r){ return r.json(); })
@@ -1571,14 +1571,14 @@ function submitRSVP(e) {
   .then(function(r){
     if (!r.ok) throw new Error('Gagal');
     // Reload all comments from Supabase after insert
-    return fetch(SUPA_URL + '/rest/v1/comments?select=*&order=created_at.asc', {
+    return fetch(SUPA_URL + '/rest/v1/comments?select=*&order=created_at.desc', {
       headers: SUPA_HEADERS
     });
   })
   .then(function(r){ return r.json(); })
   .then(function(allComments){
     buildSlider(Array.isArray(allComments) ? allComments : []);
-    cmntIndex = Math.max(0, cmntCards.length - 1); // jump to newest
+    cmntIndex = 0; // newest is first (desc order)
     markActive();
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
