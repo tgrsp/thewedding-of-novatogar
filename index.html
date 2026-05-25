@@ -1347,7 +1347,7 @@ body {
     /* Thumbnail strip */
     .gal-thumb-strip {
       max-width: 520px;
-      margin: 60px auto 0;
+      margin: 18px auto 0;
       overflow: hidden;
       position: relative;
     }
@@ -1379,7 +1379,7 @@ body {
       .gal-thumb { flex: 0 0 calc(25% - 7px); }
     }
 
-    /* Wrapper untuk main photo + bunga6 overlay */
+    /* Wrapper untuk main photo + thumb strip + bunga bawah */
     .gal-photo-outer {
       position: relative;
       max-width: 520px;
@@ -1389,12 +1389,13 @@ body {
       max-width: 100%;
       margin: 0;
     }
-    /* Bunga6 frame bawah */
+    /* Bunga6 frame bawah — ditaruh di luar gal-photo-outer, overlay thumb strip */
+    /* Bunga6 frame bawah — flip vertikal, nutupin bagian bawah thumbnail strip */
     .gal-bunga6 {
       position: absolute;
-      bottom: -50px;
+      bottom: -60px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) scaleY(-1);
       width: 140%;
       max-width: 740px;
       pointer-events: none;
@@ -1402,11 +1403,11 @@ body {
       display: block;
     }
     @media (max-width: 540px) {
-      .gal-bunga6 { width: 150%; bottom: -35px; }
+      .gal-bunga6 { width: 150%; bottom: -40px; }
     }
     </style>
 
-    <!-- Main photo display + bunga6 overlay -->
+    <!-- Main photo display + thumbnail strip + bunga6 overlay bawah -->
     <div class="gal-photo-outer fade-in-up delay-2">
       <div class="gal-main-wrap" id="gal-main-wrap" onclick="openLightbox(galCurrent)">
         <!-- images injected by JS -->
@@ -1414,15 +1415,16 @@ body {
         <button class="gal-main-nav next" onclick="event.stopPropagation();galNavMain(1)" aria-label="Berikutnya">&#8250;</button>
         <div class="gal-counter" id="gal-counter">1 / 8</div>
       </div>
-      <!-- Bunga6 sebagai frame bawah, tumpang tindih dengan foto -->
-      <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%206.png" alt="" class="gal-bunga6" loading="lazy">
-    </div>
 
-    <!-- Thumbnail strip -->
-    <div class="gal-thumb-strip fade-in-up delay-3">
-      <div class="gal-thumb-track" id="gal-thumb-track">
-        <!-- thumbs injected by JS -->
+      <!-- Thumbnail strip (di dalam wrapper agar bunga bisa overlay) -->
+      <div class="gal-thumb-strip fade-in-up delay-3">
+        <div class="gal-thumb-track" id="gal-thumb-track">
+          <!-- thumbs injected by JS -->
+        </div>
       </div>
+
+      <!-- Bunga6 flip vertikal, menutupi bagian bawah thumbnail strip -->
+      <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%206.png" alt="" class="gal-bunga6" loading="lazy">
     </div>
 
     <script>
