@@ -903,37 +903,35 @@ body {
   height: 220px;
   margin: 0 auto 28px;
 }
-.cp-photo-ring::before {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 4px;
-  border: 1.5px solid rgba(154,122,58,0.35);
-  pointer-events: none;
-}
+/* Hapus ring garis dekoratif */
+.cp-photo-ring::before,
 .cp-photo-ring::after {
-  content: '';
-  position: absolute;
-  inset: -16px;
-  border-radius: 4px;
-  border: 1px dashed rgba(154,122,58,0.2);
-  pointer-events: none;
+  content: none;
 }
 .cp-photo-circle {
   width: 100%; height: 100%;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 12px 48px rgba(60,42,24,0.22);
-  border: 3px solid rgba(200,168,74,0.4);
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  border: none;
   position: relative;
-  background: var(--rose-pale);
+  background: transparent;
 }
 .cp-photo-circle img.cp-photo-main {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: center top;
+  /* Foto duduk di dalam slot frame PNG:
+     frame polaroid punya padding ~10% atas, ~10% kiri/kanan, ~22% bawah
+     jadi foto diperkecil dan diposisikan agar pas di slot */
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 68%;
+  object-fit: cover;
+  object-position: center top;
   display: block;
+  border-radius: 0;
 }
-/* Frame overlay */
+/* Frame overlay — menutupi seluruh area termasuk keluar sedikit */
 .cp-photo-frame {
   position: absolute;
   inset: 0;
@@ -1023,7 +1021,7 @@ body {
   <div class="section-content">
     <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
     <div style="text-align:center;padding:8px 0;font-size:24px;letter-spacing:10px;color:var(--gold-light);" class="fade-in-down delay-1">&#10047; &#10086; &#10047;</div>
-    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Pria &amp; Wanita</h2>
+    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Wanita &amp; Pria</h2>
     <p class="section-sub fade-in-up delay-2">DUA HATI, SATU PERJALANAN</p>
 
     <!-- Mempelai Wanita -->
@@ -1033,10 +1031,6 @@ body {
           <img class="cp-photo-main" src="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" alt="Nova" fetchpriority="high" decoding="async">
           <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo.png" alt="" loading="lazy">
         </div>
-        <span class="cp-orn cp-orn-tl">&#10022;</span>
-        <span class="cp-orn cp-orn-tr">&#10022;</span>
-        <span class="cp-orn cp-orn-bl">&#10022;</span>
-        <span class="cp-orn cp-orn-br">&#10022;</span>
       </div>
       <p class="cp-name">Nova Yusniar</p>
       <p class="cp-role">Mempelai Wanita</p>
@@ -1061,12 +1055,8 @@ body {
           <img class="cp-photo-main" src="https://i.ibb.co.com/twDbWThF/T1.jpg" alt="Togar" fetchpriority="high" decoding="async">
           <img class="cp-photo-frame" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/frame%20photo.png" alt="" loading="lazy">
         </div>
-        <span class="cp-orn cp-orn-tl">&#10022;</span>
-        <span class="cp-orn cp-orn-tr">&#10022;</span>
-        <span class="cp-orn cp-orn-bl">&#10022;</span>
-        <span class="cp-orn cp-orn-br">&#10022;</span>
       </div>
-      <p class="cp-name">Muhammad Togar S.P.</p>
+      <p class="cp-name">Muhammad Togar<br>Singa Putera</p>
       <p class="cp-role">Mempelai Pria</p>
       <div class="cp-parents">
         Putra dari<br>
