@@ -394,9 +394,9 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* No bottom fade — let last card show fully */
-  -webkit-mask-image: none;
-  mask-image: none;
+  /* Fade only top edge — bottom stays sharp so last card is fully visible */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 6%, black 18%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 6%, black 18%, black 100%);
 }
 
 /* Track that slides vertically */
