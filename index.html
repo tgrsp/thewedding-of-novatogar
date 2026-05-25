@@ -895,36 +895,10 @@ body {
 
     <!-- Horizontal Swipeable Slider — 4 foto terlihat, klik untuk zoom -->
 
-    <div class="fade-in-up delay-2" style="position:relative;max-width:640px;margin:0 auto;padding:0 28px;">
+    <div class="fade-in-up delay-2" style="position:relative;max-width:760px;margin:0 auto;padding:0 36px;">
       <div id="gal-slider" style="overflow:hidden;border-radius:6px;touch-action:pan-y;">
-        <div id="gal-track" style="display:flex;gap:10px;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;padding:4px 2px;">
-
-          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(0)">
-            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
-              <img src="https://i.ibb.co.com/21H0FMZr/TNLR-2.jpg" alt="TNLR 2" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(1)">
-            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
-              <img src="https://i.ibb.co.com/1JTz9Z7N/TNLR-3.jpg" alt="TNLR 3" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(2)">
-            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
-              <img src="https://i.ibb.co.com/QFt0PptL/TNLR-4.jpg" alt="TNLR 4" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(3)">
-            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
-              <img src="https://i.ibb.co.com/TBgN19xY/TNLR-5.jpg" alt="TNLR 5" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div style="flex:0 0 calc(50% - 5px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;" onclick="openLightbox(4)">
-            <div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">
-              <img src="https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg" alt="TNLR 6" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-
+        <div id="gal-track" style="display:flex;gap:8px;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;padding:4px 2px;">
+          <!-- items injected by JS after shuffle -->
         </div>
       </div>
 
@@ -938,19 +912,47 @@ body {
 
     <script>
     (function(){
-      var galImgs = [
+      // All photos — will be shuffled on load
+      var allImgs = [
         'https://i.ibb.co.com/21H0FMZr/TNLR-2.jpg',
         'https://i.ibb.co.com/1JTz9Z7N/TNLR-3.jpg',
         'https://i.ibb.co.com/QFt0PptL/TNLR-4.jpg',
         'https://i.ibb.co.com/TBgN19xY/TNLR-5.jpg',
-        'https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg'
+        'https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg',
+        'https://i.ibb.co.com/4gXRfPR0/R542026193834-picked1.jpg',
+        'https://i.ibb.co.com/fVhtCpV8/R542026193834-picked3.jpg',
+        'https://i.ibb.co.com/Rks3GbN6/R542026182158-picked2.jpg'
       ];
-      var lbIdx = 0;
 
+      // Fisher-Yates shuffle
+      for (var i = allImgs.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = allImgs[i]; allImgs[i] = allImgs[j]; allImgs[j] = tmp;
+      }
+      var galImgs = allImgs;
+
+      // Build track items
+      var track = document.getElementById('gal-track');
+      track.innerHTML = '';
+      galImgs.forEach(function(src, idx) {
+        var itemEl = document.createElement('div');
+        // 4 visible on desktop (25%), 2 on mobile handled via responsive style
+        itemEl.className = 'gal-item';
+        itemEl.style.cssText = 'flex:0 0 calc(25% - 6px);border-radius:6px;overflow:hidden;box-shadow:0 6px 20px rgba(60,42,24,0.13);border:1px solid rgba(154,122,58,0.15);cursor:zoom-in;';
+        itemEl.onclick = (function(i){ return function(){ openLightbox(i); }; })(idx);
+        itemEl.innerHTML = '<div style="width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;">'
+          + '<img src="' + src + '" alt="Foto ' + (idx+1) + '" loading="lazy" decoding="async" '
+          + 'style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;" '
+          + 'onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">'
+          + '</div>';
+        track.appendChild(itemEl);
+      });
+
+      var lbIdx = 0;
       window.openLightbox = function(idx){
         lbIdx = idx;
-        var lb = document.getElementById('gal-lightbox');
         document.getElementById('gal-lb-img').src = galImgs[lbIdx];
+        var lb = document.getElementById('gal-lightbox');
         lb.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden';
@@ -974,47 +976,87 @@ body {
         }
       });
 
-      // Slider
-      var track = document.getElementById('gal-track');
+      // Slider — 4 per page desktop, 2 per page mobile
       var slider = document.getElementById('gal-slider');
       var dotsWrap = document.getElementById('gal-dots');
-      var items = track.children;
-      var total = items.length;
-      var perPage = 2;
-      var maxPage = total - perPage;
+      var total = galImgs.length;
       var current = 0;
 
-      for(var i = 0; i <= maxPage; i++){
-        var d = document.createElement('span');
-        d.style.cssText = 'display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold-pale);border:1px solid rgba(154,122,58,0.3);transition:background 0.3s,transform 0.3s;cursor:pointer;';
-        d.onclick = (function(idx){ return function(){ goTo(idx); }; })(i);
-        dotsWrap.appendChild(d);
+      function getPerPage() {
+        return window.innerWidth <= 540 ? 2 : 4;
+      }
+      function getGap() {
+        return 8;
+      }
+      function getItemW() {
+        var items = track.children;
+        return items[0] ? items[0].offsetWidth + getGap() : 0;
+      }
+      function getMaxPage() {
+        return Math.max(0, total - getPerPage());
       }
 
-      function getItemW(){
-        return items[0] ? items[0].offsetWidth + 10 : 0;
+      function buildDots() {
+        dotsWrap.innerHTML = '';
+        var mp = getMaxPage();
+        for(var i = 0; i <= mp; i++){
+          var d = document.createElement('span');
+          d.style.cssText = 'display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold-pale);border:1px solid rgba(154,122,58,0.3);transition:background 0.3s,transform 0.3s;cursor:pointer;';
+          d.onclick = (function(idx){ return function(){ goTo(idx); }; })(i);
+          dotsWrap.appendChild(d);
+        }
+        updateDots();
       }
-      function goTo(idx){
-        current = Math.max(0, Math.min(idx, maxPage));
-        track.style.transform = 'translateX(-' + (current * getItemW()) + 'px)';
+
+      function updateDots() {
         var dots = dotsWrap.children;
-        for(var i=0; i<dots.length; i++){
+        for(var i=0;i<dots.length;i++){
           dots[i].style.background = i===current ? 'var(--gold)' : 'var(--gold-pale)';
           dots[i].style.transform  = i===current ? 'scale(1.3)' : 'scale(1)';
         }
         document.getElementById('gal-prev').style.opacity = current===0 ? '0.3' : '1';
-        document.getElementById('gal-next').style.opacity = current===maxPage ? '0.3' : '1';
+        document.getElementById('gal-next').style.opacity = current>=getMaxPage() ? '0.3' : '1';
       }
-      window.galSlide = function(dir){ goTo(current + dir); };
 
-      var startX = 0;
-      slider.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
-      slider.addEventListener('touchend',   function(e){
-        var dx = e.changedTouches[0].clientX - startX;
+      function goTo(idx) {
+        current = Math.max(0, Math.min(idx, getMaxPage()));
+        track.style.transform = 'translateX(-' + (current * getItemW()) + 'px)';
+        updateDots();
+      }
+
+      function updateItemSize() {
+        var pp = getPerPage();
+        var gap = getGap();
+        Array.prototype.forEach.call(track.children, function(el) {
+          el.style.flex = '0 0 calc(' + (100/pp) + '% - ' + (gap * (pp-1)/pp) + 'px)';
+        });
+        track.style.gap = gap + 'px';
+      }
+
+      window.galSlide = function(dir) { goTo(current + dir); };
+
+      buildDots();
+      updateItemSize();
+
+      // Touch swipe
+      var tsX = 0;
+      slider.addEventListener('touchstart', function(e){ tsX = e.touches[0].clientX; }, {passive:true});
+      slider.addEventListener('touchend', function(e){
+        var dx = e.changedTouches[0].clientX - tsX;
         if(Math.abs(dx) > 40) galSlide(dx < 0 ? 1 : -1);
       }, {passive:true});
 
-      goTo(0);
+      // Rebuild on resize
+      var resizeT;
+      window.addEventListener('resize', function(){
+        clearTimeout(resizeT);
+        resizeT = setTimeout(function(){
+          updateItemSize();
+          current = Math.min(current, getMaxPage());
+          buildDots();
+          goTo(current);
+        }, 120);
+      });
     })();
     </script>
 
