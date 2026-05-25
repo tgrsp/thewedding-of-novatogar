@@ -182,6 +182,29 @@ body {
   100% { transform: translateY(110vh) rotate(540deg) translateX(35px); opacity: 0; }
 }
 
+/* ══════════════════════════════════
+   SECTION BUTTERFLIES — static floating
+══════════════════════════════════ */
+.section-butterfly {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+  animation: btfFloat ease-in-out infinite;
+}
+.section-butterfly img {
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+@keyframes btfFloat {
+  0%   { transform: translateY(0px)   rotate(var(--btf-r, 0deg)) scaleX(var(--btf-sx,1)); }
+  30%  { transform: translateY(-9px)  rotate(calc(var(--btf-r, 0deg) + 4deg))  scaleX(var(--btf-sx,1)); }
+  60%  { transform: translateY(-4px)  rotate(calc(var(--btf-r, 0deg) - 3deg))  scaleX(var(--btf-sx,1)); }
+  100% { transform: translateY(0px)   rotate(var(--btf-r, 0deg)) scaleX(var(--btf-sx,1)); }
+}
+
 /* ── SCROLL FADE ANIMATIONS ── */
 .fade-in-up    { opacity: 0; transform: translateY(36px); transition: opacity 0.75s ease, transform 0.75s ease; }
 .fade-in-down  { opacity: 0; transform: translateY(-36px); transition: opacity 0.75s ease, transform 0.75s ease; }
@@ -1685,13 +1708,93 @@ loadComments();
 
     el.innerHTML = '<img src="' + butterflyUrl + '" alt="" '
       + 'style="width:' + size + 'px;height:auto;display:block;'
-      + 'transform:scaleX(-1);opacity:' + opacity + ';pointer-events:none;">';
+      + 'opacity:' + opacity + ';pointer-events:none;">';
 
     el.style.cssText = 'left:' + left + '%;'
       + 'animation-duration:' + duration + 's;'
       + 'animation-delay:-' + delay + 's;';
     canvas.appendChild(el);
   }
+})();
+
+// ══════════════════════════════════
+// SECTION BUTTERFLIES (non-hero)
+// ══════════════════════════════════
+(function() {
+  var BTF_URL = 'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png';
+
+  // Config per section: how many butterflies, opacity range, size range
+  // Alternating sides/positions so they feel natural & non-repetitive
+  var sectionConfigs = [
+    { count: 3, opMin: 0.18, opMax: 0.38, szMin: 22, szMax: 38 }, // Mempelai
+    { count: 2, opMin: 0.14, opMax: 0.28, szMin: 20, szMax: 32 }, // Quote Togar (dark)
+    { count: 3, opMin: 0.20, opMax: 0.40, szMin: 24, szMax: 40 }, // Countdown
+    { count: 3, opMin: 0.18, opMax: 0.35, szMin: 22, szMax: 36 }, // Quote Nova
+    { count: 4, opMin: 0.22, opMax: 0.42, szMin: 20, szMax: 38 }, // Venue
+    { count: 4, opMin: 0.18, opMax: 0.38, szMin: 22, szMax: 40 }, // Gallery
+    { count: 3, opMin: 0.18, opMax: 0.36, szMin: 20, szMax: 34 }, // Gift
+    { count: 3, opMin: 0.20, opMax: 0.38, szMin: 22, szMax: 36 }, // RSVP
+    { count: 2, opMin: 0.14, opMax: 0.26, szMin: 20, szMax: 30 }, // Footer
+  ];
+
+  // All sections & footer EXCEPT hero
+  var targets = document.querySelectorAll(
+    'section:not(.hero), footer.footer'
+  );
+
+  function rnd(min, max) { return min + Math.random() * (max - min); }
+
+  targets.forEach(function(sec, idx) {
+    var cfg = sectionConfigs[idx] || sectionConfigs[sectionConfigs.length - 1];
+
+    // Ensure section has position:relative/absolute for absolute children
+    var pos = window.getComputedStyle(sec).position;
+    if (pos === 'static') sec.style.position = 'relative';
+
+    for (var i = 0; i < cfg.count; i++) {
+      var el = document.createElement('div');
+      el.className = 'section-butterfly';
+
+      var size    = Math.round(rnd(cfg.szMin, cfg.szMax));
+      var opacity = rnd(cfg.opMin, cfg.opMax).toFixed(2);
+      var rotate  = Math.round(rnd(-20, 20));
+      var dur     = rnd(4, 8).toFixed(1);
+      var delay   = rnd(0, dur).toFixed(1);
+
+      // Distribute across the section area, avoid exact center cluster
+      // Use quadrants to spread them out
+      var zones = [
+        // [leftMin, leftMax, topMin, topMax]
+        [5,  25,  8,  40],
+        [70, 90,  5,  35],
+        [15, 45,  55, 88],
+        [55, 85,  50, 85],
+        [30, 60,  10, 40],
+        [8,  30,  60, 90],
+        [65, 90,  60, 88],
+      ];
+      var zone = zones[i % zones.length];
+      // Add per-section offset so same index doesn't land same spot
+      var leftPct = rnd(zone[0], zone[1]);
+      var topPct  = rnd(zone[2], zone[3]);
+
+      el.style.cssText =
+        'left:' + leftPct.toFixed(1) + '%;'
+        + 'top:'  + topPct.toFixed(1)  + '%;'
+        + '--btf-r:'  + rotate + 'deg;'
+        + '--btf-sx:1;'
+        + 'animation-duration:' + dur + 's;'
+        + 'animation-delay:-'   + delay + 's;';
+
+      el.innerHTML =
+        '<img src="' + BTF_URL + '" alt="" '
+        + 'width="' + size + '" height="auto" loading="lazy" decoding="async" '
+        + 'style="opacity:' + opacity + ';width:' + size + 'px;height:auto;">';
+
+      // Insert as first child so it sits behind content (z-index:1 < content z-index)
+      sec.insertBefore(el, sec.firstChild);
+    }
+  });
 })();
 
 // ── HERO BACKGROUND: force early load via JS Image object ──
