@@ -1020,72 +1020,101 @@ body {
 
 </style>
 
-<section class="couple-section-wrap">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:48px;opacity:1;top:6%;left:5%;--r:-10deg;animation-duration:6.0s;animation-delay:-0.0s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:38px;opacity:1;top:48%;right:6%;--r:12deg;animation-duration:5.4s;animation-delay:-2.2s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:82%;left:7%;--r:-6deg;animation-duration:6.8s;animation-delay:-4.0s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:1;" loading="lazy">
+<style>
+.cp-split-section {
+  position: relative; overflow: hidden;
+  min-height: 100vh;
+  display: flex; align-items: stretch;
+}
+.cp-split-text {
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 64px 36px 64px 40px;
+  text-align: left;
+  position: relative; z-index: 2;
+}
+.cp-split-text.right-align {
+  text-align: right;
+  padding: 64px 40px 64px 36px;
+}
+.cp-split-photo {
+  flex: 0 0 52%;
+  max-width: 52%;
+  position: relative;
+  overflow: hidden;
+}
+.cp-split-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: drop-shadow(-6px 0 18px rgba(60,42,24,0.12));
+}
+.cp-split-photo.left-side img {
+  filter: drop-shadow(6px 0 18px rgba(60,42,24,0.12));
+}
+@media (max-width: 600px) {
+  .cp-split-section { flex-direction: column !important; min-height: auto; }
+  .cp-split-photo { flex: 0 0 auto; max-width: 100%; width: 100%; min-height: 70vw; }
+  .cp-split-text { padding: 40px 28px; text-align: center !important; }
+}
+</style>
 
-  <div class="section-content">
-    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
-    <div style="text-align:center;padding:8px 0;font-size:24px;letter-spacing:10px;color:var(--gold-light);" class="fade-in-down delay-1">&#10047; &#10086; &#10047;</div>
-    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Wanita</h2>
-    <p class="section-sub fade-in-up delay-2">DUA HATI, SATU PERJALANAN</p>
+<section class="cp-split-section" style="background: linear-gradient(160deg, var(--section-bg1), var(--ivory));">
+  <!-- Dekorasi kupu-kupu -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:48px;opacity:1;top:6%;left:5%;--r:-10deg;animation-duration:6.0s;animation-delay:-0.0s;z-index:3;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:38px;opacity:1;top:55%;left:3%;--r:12deg;animation-duration:5.4s;animation-delay:-2.2s;z-index:3;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.22;" loading="lazy">
 
-    <!-- Mempelai Wanita -->
-    <div class="fade-in-up delay-2" style="margin-top:48px;">
-      <div style="display:flex;justify-content:center;margin-bottom:8px;">
-        <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/nova.png" alt="Nova" fetchpriority="high" decoding="async"
-          style="width:min(88vw,420px);display:block;border-radius:0;background:none;border:none;outline:none;
-          filter:drop-shadow(0 18px 48px rgba(60,42,24,0.38)) drop-shadow(0 4px 16px rgba(60,42,24,0.22));">
-      </div>
-      <p class="cp-name">Nova Yusniar</p>
-      <p class="cp-role">Mempelai Wanita</p>
-      <div class="cp-parents">
-        Putri dari<br>
-        <strong>Bapak Jajang Endi Rohaendi</strong>
-        <span>&amp; Ibu Susilawati</span>
-      </div>
+  <!-- Teks kiri -->
+  <div class="cp-split-text fade-in-left">
+    <div class="ornament-row" style="text-align:left;margin-bottom:12px;">&#10022; &#10023; &#10022;</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--gold);letter-spacing:5px;text-transform:uppercase;margin-bottom:10px;">DUA HATI, SATU PERJALANAN</p>
+    <h2 class="section-title" style="text-align:left;margin-bottom:24px;">Sang Mempelai Wanita</h2>
+    <p class="cp-name" style="text-align:left;margin-bottom:20px;">Nova Yusniar</p>
+    <div class="cp-parents" style="text-align:left;">
+      Putri dari<br>
+      <strong>Bapak Jajang Endi Rohaendi</strong>
+      <span>&amp; Ibu Susilawati</span>
     </div>
+  </div>
 
-    <div class="ornament-row fade-in-up delay-5" style="margin-top:48px">&#10022; &#10023; &#10022;</div>
+  <!-- Foto kanan — besar, full height -->
+  <div class="cp-split-photo fade-in-right">
+    <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/nova.png" alt="Nova" fetchpriority="high" decoding="async">
   </div>
 </section>
 
-<!-- ===== COUPLE MEMPELAI PRIA ===== -->
-<section class="couple-section-wrap" style="background: linear-gradient(160deg, var(--ivory), var(--section-bg2));">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:10%;right:6%;--r:14deg;animation-duration:6.2s;animation-delay:-1.5s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:38px;opacity:1;top:70%;left:5%;--r:-8deg;animation-duration:5.6s;animation-delay:-3.0s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:1;" loading="lazy">
+<!-- Separator & -->
+<div style="background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 0;gap:0;position:relative;z-index:2;">
+  <div style="width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold-pale),transparent);"></div>
+  <div class="cp-separator-amp">&amp;</div>
+  <div style="width:1px;height:40px;background:linear-gradient(to bottom,var(--gold-pale),transparent);"></div>
+</div>
 
-  <!-- Separator & di antara kedua section -->
-  <div class="cp-separator fade-in-up" style="margin-top:0;margin-bottom:32px;">
-    <div class="cp-separator-line"></div>
-    <div class="cp-separator-amp">&amp;</div>
-    <div class="cp-separator-line"></div>
+<!-- ===== COUPLE MEMPELAI PRIA ===== -->
+<section class="cp-split-section" style="background: linear-gradient(160deg, var(--ivory), var(--section-bg2));">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;opacity:1;top:10%;right:5%;--r:14deg;animation-duration:6.2s;animation-delay:-1.5s;z-index:3;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:38px;opacity:1;top:70%;right:4%;--r:-8deg;animation-duration:5.6s;animation-delay:-3.0s;z-index:3;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.22;" loading="lazy">
+
+  <!-- Foto kiri — besar, full height -->
+  <div class="cp-split-photo left-side fade-in-left">
+    <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/togar.png" alt="Togar" fetchpriority="high" decoding="async">
   </div>
 
-  <div class="section-content">
-    <h2 class="section-title fade-in-up delay-1">Sang Mempelai Pria</h2>
-    <p class="section-sub fade-in-up delay-2">BERSATU DALAM IKATAN SUCI</p>
-
-    <!-- Mempelai Pria -->
-    <div class="fade-in-up delay-2" style="margin-top:48px;">
-      <div style="display:flex;justify-content:center;margin-bottom:8px;">
-        <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/togar.png" alt="Togar" fetchpriority="high" decoding="async"
-          style="width:min(88vw,420px);display:block;border-radius:0;background:none;border:none;outline:none;
-          filter:drop-shadow(0 18px 48px rgba(60,42,24,0.38)) drop-shadow(0 4px 16px rgba(60,42,24,0.22));">
-      </div>
-      <p class="cp-name">Muhammad Togar<br>Singa Putera</p>
-      <p class="cp-role">Mempelai Pria</p>
-      <div class="cp-parents">
-        Putra dari<br>
-        <strong>Bapak Alm. Ridwan</strong>
-        <span>&amp; Ibu Nurdiana</span>
-      </div>
+  <!-- Teks kanan -->
+  <div class="cp-split-text right-align fade-in-right">
+    <div class="ornament-row" style="text-align:right;margin-bottom:12px;">&#10022; &#10023; &#10022;</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--gold);letter-spacing:5px;text-transform:uppercase;margin-bottom:10px;">BERSATU DALAM IKATAN SUCI</p>
+    <h2 class="section-title" style="text-align:right;margin-bottom:24px;">Sang Mempelai Pria</h2>
+    <p class="cp-name" style="text-align:right;margin-bottom:20px;">Muhammad Togar<br>Singa Putera</p>
+    <div class="cp-parents" style="text-align:right;">
+      Putra dari<br>
+      <strong>Bapak Alm. Ridwan</strong>
+      <span>&amp; Ibu Nurdiana</span>
     </div>
-
-    <div class="ornament-row fade-in-up delay-5" style="margin-top:48px">&#10022; &#10023; &#10022;</div>
   </div>
 </section>
 
