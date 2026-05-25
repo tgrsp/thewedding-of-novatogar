@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Undangan Pernikahan Nova & Togar</title>
+<title>NOVA - TOGAR | Created by Togarsp©</title>
 
 <!-- Open Graph / Link Preview -->
 <meta property="og:type" content="website">
@@ -774,7 +774,7 @@ body {
 
 <style>
 .swipe-hint-el {
-  position: absolute;
+  position: fixed;
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
@@ -790,31 +790,34 @@ body {
 }
 .swipe-hint-label {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  color: var(--brown-mid);
+  font-size: 13px;
+  color: var(--brown-dark);
   letter-spacing: 4px;
   text-transform: uppercase;
-  opacity: 0.7;
+  opacity: 0.85;
+  text-shadow: 0 1px 4px rgba(255,255,255,0.6);
 }
 .swipe-hint-mouse {
-  width: 20px; height: 28px;
-  opacity: 0.6;
+  width: 22px; height: 30px;
+  opacity: 0.75;
+  filter: drop-shadow(0 1px 3px rgba(255,255,255,0.5));
 }
 .swipe-hint-chevron {
-  width: 14px; height: 8px;
-  opacity: 0.5;
+  width: 16px; height: 10px;
+  opacity: 0.65;
   animation: chevronFade 2s ease-in-out infinite 0.2s;
+  filter: drop-shadow(0 1px 3px rgba(255,255,255,0.5));
 }
 
-/* ── Mobile: sedikit lebih kecil & bottom lebih tinggi hindari safe-area ── */
+/* ── Mobile: lebih besar & lebih jelas ── */
 @media (max-width: 600px) {
   .swipe-hint-el {
-    bottom: max(20px, env(safe-area-inset-bottom, 16px));
-    gap: 4px;
+    bottom: 24px;
+    gap: 6px;
   }
-  .swipe-hint-label { font-size: 10px; letter-spacing: 3px; }
-  .swipe-hint-mouse  { width: 16px; height: 22px; }
-  .swipe-hint-chevron { width: 11px; height: 7px; }
+  .swipe-hint-label { font-size: 13px; letter-spacing: 4px; }
+  .swipe-hint-mouse  { width: 22px; height: 30px; }
+  .swipe-hint-chevron { width: 16px; height: 10px; }
 }
 
 @keyframes swipeFloat {
