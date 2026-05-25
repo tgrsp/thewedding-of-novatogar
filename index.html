@@ -344,6 +344,7 @@ body {
 /* ── COMMENTS SLIDER (peek 3-card vertical carousel) ── */
 .comments-slider-wrap {
   max-width: 480px; margin: 28px auto 0; position: relative;
+  padding-right: 18px; /* room for the scrollbar */
 }
 
 /* Outer mask: shows ~3 cards with top/bottom peek */
@@ -453,6 +454,34 @@ body {
   font-family:'Nunito',sans-serif; font-size:11px; font-weight:600;
   color:var(--brown-mid); letter-spacing:1px; text-align:center;
   margin-top:6px;
+}
+
+/* ── COMMENTS SCROLLBAR ── */
+.cmnt-scrollbar {
+  position: absolute;
+  right: -14px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px;
+  background: rgba(154,122,58,0.12);
+  cursor: pointer;
+  z-index: 10;
+}
+.cmnt-scrollbar-thumb {
+  position: absolute;
+  left: 0; right: 0;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  box-shadow: 0 2px 8px rgba(154,122,58,0.35);
+  transition: background 0.2s, height 0.3s, top 0.3s;
+  cursor: grab;
+  min-height: 28px;
+}
+.cmnt-scrollbar-thumb:active { cursor: grabbing; }
+.cmnt-scrollbar:hover .cmnt-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-light), var(--rose));
+  box-shadow: 0 2px 12px rgba(154,122,58,0.5);
 }
 
 /* ── COPY TOAST ── */
@@ -1066,6 +1095,10 @@ body {
           <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
         </div>
       </div>
+      <!-- Custom vertical scrollbar -->
+      <div class="cmnt-scrollbar" id="cmnt-scrollbar" style="display:none;">
+        <div class="cmnt-scrollbar-thumb" id="cmnt-scrollbar-thumb"></div>
+      </div>
       <div class="comments-nav" id="comments-nav" style="display:none;" aria-label="navigasi komentar"></div>
       <div class="comments-counter" id="cmnt-counter" style="display:none;"></div>
     </div>
@@ -1265,6 +1298,7 @@ function buildDots() {
   nav.style.display = 'flex';
   counter.style.display = 'block';
   counter.textContent = (cmntIndex + 1) + '/' + cmntCards.length;
+  updateScrollbar();
 }
 
 function updateCounter() {
@@ -1273,6 +1307,7 @@ function updateCounter() {
   dots.forEach(function(d, i){ d.classList.toggle('active', i === showIdx); });
   var counter = document.getElementById('cmnt-counter');
   if (counter) counter.textContent = (cmntIndex + 1) + '/' + cmntCards.length;
+  updateScrollbar();
 }
 
 function buildSlider(comments) {
@@ -1299,6 +1334,7 @@ function buildSlider(comments) {
     requestAnimationFrame(function(){
       resizeSlider();
       applyTranslate(false);
+      updateScrollbar();
     });
   });
   buildDots();
@@ -1344,7 +1380,79 @@ function prependToSlider(c) {
 window.addEventListener('resize', function(){
   resizeSlider();
   applyTranslate(false);
+  updateScrollbar();
 });
+
+// ── CUSTOM SCROLLBAR ──
+function updateScrollbar() {
+  var track = document.getElementById('cmnt-scrollbar');
+  var thumb = document.getElementById('cmnt-scrollbar-thumb');
+  if (!track || !thumb) return;
+  if (cmntCards.length <= 1) { track.style.display = 'none'; return; }
+  track.style.display = 'block';
+
+  var trackH = track.offsetHeight;
+  // Thumb height proportional to visible (3) vs total cards
+  var ratio = Math.min(3 / cmntCards.length, 1);
+  var thumbH = Math.max(Math.round(trackH * ratio), 28);
+  thumb.style.height = thumbH + 'px';
+
+  // Thumb position: progress = cmntIndex / (total - 1)
+  var progress = cmntCards.length > 1 ? cmntIndex / (cmntCards.length - 1) : 0;
+  var maxTop = trackH - thumbH;
+  thumb.style.top = Math.round(progress * maxTop) + 'px';
+}
+
+// Scrollbar thumb drag
+(function(){
+  var thumb = document.getElementById('cmnt-scrollbar-thumb');
+  var track = document.getElementById('cmnt-scrollbar');
+  if (!thumb || !track) return;
+
+  var dragging = false, startY = 0, startTop = 0;
+
+  function thumbDragStart(y) {
+    dragging = true;
+    startY = y;
+    startTop = parseInt(thumb.style.top) || 0;
+    document.body.style.userSelect = 'none';
+  }
+  function thumbDragMove(y) {
+    if (!dragging) return;
+    var trackH = track.offsetHeight;
+    var thumbH = thumb.offsetHeight;
+    var maxTop = trackH - thumbH;
+    var newTop = Math.max(0, Math.min(maxTop, startTop + (y - startY)));
+    var progress = maxTop > 0 ? newTop / maxTop : 0;
+    var targetIdx = Math.round(progress * (cmntCards.length - 1));
+    if (targetIdx !== cmntIndex) { cmntNav(targetIdx - cmntIndex); }
+  }
+  function thumbDragEnd() {
+    dragging = false;
+    document.body.style.userSelect = '';
+  }
+
+  // Click on track (not thumb) — jump
+  track.addEventListener('click', function(e) {
+    if (e.target === thumb) return;
+    var rect = track.getBoundingClientRect();
+    var clickY = e.clientY - rect.top;
+    var trackH = track.offsetHeight;
+    var progress = Math.max(0, Math.min(1, clickY / trackH));
+    var targetIdx = Math.round(progress * (cmntCards.length - 1));
+    cmntNav(targetIdx - cmntIndex);
+  });
+
+  // Mouse drag on thumb
+  thumb.addEventListener('mousedown', function(e){ e.stopPropagation(); thumbDragStart(e.clientY); });
+  window.addEventListener('mousemove', function(e){ thumbDragMove(e.clientY); });
+  window.addEventListener('mouseup', function(){ thumbDragEnd(); });
+
+  // Touch drag on thumb
+  thumb.addEventListener('touchstart', function(e){ e.stopPropagation(); thumbDragStart(e.touches[0].clientY); }, {passive:true});
+  window.addEventListener('touchmove', function(e){ if (dragging) thumbDragMove(e.touches[0].clientY); }, {passive:true});
+  window.addEventListener('touchend', function(){ thumbDragEnd(); });
+})();
 
 function loadComments() {
   fetch(JSONBIN_URL + '/latest', {
