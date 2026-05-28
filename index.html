@@ -388,24 +388,258 @@ body {
 .bank-owner { font-family:'Cormorant Garamond',serif; font-size:14px; color:var(--brown-mid); margin-bottom:16px; }
 .bank-card .btn { width:100%; text-align:center; }
 
-/* ── RSVP ── */
-.rsvp-form { max-width:420px; margin:0 auto; text-align:left; }
-.form-label { font-family:'Playfair Display',serif; font-size:14px; color:var(--brown-mid); display:block; margin-bottom:6px; }
+/* ══════════════════════════════════════
+   RSVP SECTION — REDESIGN
+══════════════════════════════════════ */
+
+/* Section background — warm parchment with subtle noise texture */
+.rsvp-section-bg {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(200,168,74,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(176,112,80,0.07) 0%, transparent 60%),
+    linear-gradient(170deg, #f5ede0 0%, #ede4d0 50%, #e8dcc8 100%);
+  position: relative;
+}
+
+/* Decorative thin gold border lines flanking the section title */
+.rsvp-title-wrap {
+  position: relative;
+  text-align: center;
+  margin-bottom: 36px;
+}
+.rsvp-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 10px;
+}
+.rsvp-main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 7vw, 40px);
+  font-style: italic;
+  color: var(--brown-dark);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.rsvp-main-title span {
+  font-family: 'Great Vibes', cursive;
+  font-style: normal;
+  font-size: clamp(36px, 9vw, 52px);
+  color: var(--rose);
+  display: block;
+  line-height: 1.1;
+}
+.rsvp-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--brown-pale);
+  margin-top: 6px;
+}
+
+/* Thin horizontal rule with diamond ornament */
+.rsvp-rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 260px;
+  margin: 18px auto 36px;
+}
+.rsvp-rule::before,
+.rsvp-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(154,122,58,0.5), transparent);
+}
+.rsvp-rule-diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── FORM CARD ── */
+.rsvp-form-card {
+  max-width: 440px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(154,122,58,0.2);
+  border-radius: 3px;
+  padding: 36px 32px 32px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 8px 40px rgba(60,42,24,0.10),
+    0 2px 8px rgba(60,42,24,0.06);
+  position: relative;
+  /* Corner ornaments via pseudo-elements */
+}
+
+/* Top-left & bottom-right corner gold accents */
+.rsvp-form-card::before,
+.rsvp-form-card::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(154,122,58,0.45);
+  border-style: solid;
+}
+.rsvp-form-card::before {
+  top: 10px; left: 10px;
+  border-width: 1px 0 0 1px;
+}
+.rsvp-form-card::after {
+  bottom: 10px; right: 10px;
+  border-width: 0 1px 1px 0;
+}
+
+/* Floating label style field groups */
+.rsvp-field {
+  position: relative;
+  margin-bottom: 22px;
+}
+.rsvp-field-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 8px;
+}
 .form-input, .form-select, .form-textarea {
-  width:100%; background:var(--cream); border:1px solid rgba(154,122,58,0.25); border-radius:2px;
-  padding:12px 16px; font-family:'Cormorant Garamond',serif; font-size:16px;
-  color:var(--brown-dark); margin-bottom:18px; outline:none; transition:border-color 0.2s;
+  width: 100%;
+  background: rgba(250,246,238,0.8);
+  border: none;
+  border-bottom: 1.5px solid rgba(154,122,58,0.3);
+  border-radius: 0;
+  padding: 10px 2px 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: var(--brown-dark);
+  outline: none;
+  transition: border-color 0.25s;
   appearance: none; -webkit-appearance: none;
+  box-shadow: none;
+  letter-spacing: 0.3px;
 }
-.form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); }
-.form-textarea { height:100px; resize:vertical; }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-bottom-color: var(--gold);
+  background: rgba(250,246,238,0.95);
+}
+.form-input::placeholder, .form-textarea::placeholder {
+  color: rgba(122,90,56,0.38);
+  font-style: italic;
+  font-size: 15px;
+}
+.form-textarea { height: 88px; resize: none; line-height: 1.7; }
 
-/* ── COMMENTS SLIDER (peek 3-card vertical carousel) ── */
+/* Select arrow */
+.rsvp-select-wrap {
+  position: relative;
+}
+.rsvp-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--gold);
+  pointer-events: none;
+}
+
+/* Submit button — full width, elegant */
+.rsvp-submit-btn {
+  width: 100%;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #c9937a 0%, #b07050 50%, #9a6040 100%);
+  color: #fff;
+  border: none;
+  padding: 15px 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  letter-spacing: 3px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(176,112,80,0.35);
+}
+.rsvp-submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.45s ease;
+}
+.rsvp-submit-btn:hover::before { left: 100%; }
+.rsvp-submit-btn:hover {
+  opacity: 0.93;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(176,112,80,0.45);
+}
+.rsvp-submit-btn:active { transform: translateY(1px); }
+
+/* Legacy .form-label kept for JS compat */
+.form-label { display: none; }
+
+/* ═══════════════════════════════════════
+   UCAPAN / COMMENTS — REDESIGN
+═══════════════════════════════════════ */
+
+.rsvp-divider-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 40px auto 32px;
+  max-width: 320px;
+}
+.rsvp-divider-block::before,
+.rsvp-divider-block::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(154,122,58,0.4));
+}
+.rsvp-divider-block::after {
+  background: linear-gradient(to left, transparent, rgba(154,122,58,0.4));
+}
+.rsvp-divider-label {
+  font-family: 'Great Vibes', cursive;
+  font-size: 22px;
+  color: var(--rose);
+  white-space: nowrap;
+}
+
+/* Ucapan header text */
+.ucapan-intro {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--brown-pale);
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+/* ── COMMENTS SLIDER (vertical scroll, peek 3 cards) ── */
 .comments-slider-wrap {
-  max-width: 480px; margin: 28px auto 0; position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
 }
 
-/* Outer mask: shows ~3 cards with top/bottom peek */
 .comments-slider {
   position: relative;
   height: calc(var(--card-h, 140px) * 3 + 24px + 20px);
@@ -415,128 +649,192 @@ body {
 }
 .comments-slider:active { cursor: grabbing; }
 
-/* Clip only the cards, not the scrollbar */
 .comments-slider-clip {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* Default: no fade at top (posisi awal) */
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 100%);
   mask-image: linear-gradient(to bottom, black 0%, black 100%);
   transition: -webkit-mask-image 0.3s, mask-image 0.3s;
 }
-/* Fade atas muncul hanya saat sudah scroll ke bawah */
 .comments-slider-clip.scrolled {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 6%, black 18%, black 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 6%, black 18%, black 100%);
 }
 
-/* Track that slides vertically */
 #comments-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   transition: transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
 }
 
+/* ── COMMENT CARD — redesigned ── */
 .comment-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 16px 16px 14px;
+  background: rgba(255,255,255,0.82);
+  border-radius: 2px;
+  padding: 18px 20px 16px;
   width: 100%;
   box-sizing: border-box;
   text-align: left;
-  border: none;
-  box-shadow: 0 2px 16px rgba(60,42,24,0.10);
+  border: 1px solid rgba(154,122,58,0.13);
+  box-shadow: 0 2px 18px rgba(60,42,24,0.08);
   flex-shrink: 0;
-  /* Reset old absolute positioning */
   position: static;
   opacity: 1;
   pointer-events: auto;
   transform: none;
-  transition: box-shadow 0.3s, opacity 0.3s;
+  transition: box-shadow 0.3s, border-color 0.3s;
+  position: relative;
 }
-/* Highlight the "active" (center) card */
+/* Left accent bar */
+.comment-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 16px; bottom: 16px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold-light), var(--rose-light));
+  border-radius: 2px;
+}
 .comment-card.active {
-  box-shadow: 0 4px 24px rgba(154,122,58,0.18);
+  box-shadow: 0 6px 32px rgba(154,122,58,0.16);
+  border-color: rgba(154,122,58,0.28);
 }
-/* Remove old animation classes — not needed anymore */
 .comment-card.exit-up, .comment-card.exit-down { opacity: 1; transform: none; }
 
 /* Row: avatar + name/badge */
-.comment-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-.comment-avatar {
-  width:38px; height:38px; border-radius:50%; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Playfair Display',serif; font-size:16px; font-weight:700;
-  color:#fff; text-transform:uppercase;
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
-.comment-meta { flex:1; min-width:0; }
+.comment-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  box-shadow: 0 2px 10px rgba(60,42,24,0.18);
+}
+.comment-meta { flex: 1; min-width: 0; }
 .comment-name {
-  font-family:'Nunito',sans-serif; font-size:14px; font-weight:700;
-  color:#1a1a1a; margin-bottom:2px; white-space:nowrap;
-  overflow:hidden; text-overflow:ellipsis;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--brown-dark);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .comment-badge {
-  display:inline-flex; align-items:center; gap:4px;
-  font-size:10px; padding:2px 8px; border-radius:20px;
-  font-family:'Nunito',sans-serif; font-weight:600; letter-spacing:0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
-.badge-hadir { background:#e8f5e9; color:#2e7d32; }
-.badge-tidak { background:#fce4ec; color:#c62828; }
-.badge-maybe { background:#fff8e1; color:#f57f17; }
+.badge-hadir  { background: rgba(46,125,50,0.08);  color: #2e7d32; border: 1px solid rgba(46,125,50,0.2); }
+.badge-tidak  { background: rgba(198,40,40,0.07);  color: #c62828; border: 1px solid rgba(198,40,40,0.18); }
+.badge-maybe  { background: rgba(245,127,23,0.08); color: #e65100; border: 1px solid rgba(245,127,23,0.2); }
 
-/* Message bubble */
+/* Message area */
 .comment-bubble {
-  background:#f5f5f5; border-radius:0 12px 12px 12px;
-  padding:10px 14px; display:inline-block; width:100%; box-sizing:border-box;
+  background: transparent;
+  padding: 0;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 .comment-text {
-  font-family:'Nunito',sans-serif; font-size:14px;
-  color:#333; line-height:1.6; margin:0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--brown-mid);
+  line-height: 1.7;
+  margin: 0;
+  position: relative;
+  padding-left: 18px;
+}
+.comment-text::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: rgba(154,122,58,0.22);
+  position: absolute;
+  left: 0;
+  top: -8px;
+  line-height: 1;
 }
 
 /* Dots pagination */
-.comments-nav { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; }
-.cmnt-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:rgba(154,122,58,0.25); transition:all 0.3s;
-  cursor:pointer;
+.comments-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 14px;
 }
-.cmnt-dot.active { width:18px; border-radius:4px; background:var(--gold); }
+.cmnt-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(154,122,58,0.22);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.cmnt-dot.active {
+  width: 20px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--gold-light), var(--rose-light));
+}
 .comments-counter {
-  font-family:'Nunito',sans-serif; font-size:11px; font-weight:600;
-  color:var(--brown-mid); letter-spacing:1px; text-align:center;
-  margin-top:6px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--brown-pale);
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 8px;
 }
 
 /* ── COMMENTS SCROLLBAR ── */
 .cmnt-scrollbar {
   position: absolute;
-  right: -10px;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  border-radius: 4px;
-  background: rgba(154,122,58,0.12);
+  right: -12px;
+  top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: rgba(154,122,58,0.10);
   cursor: pointer;
   z-index: 10;
 }
 .cmnt-scrollbar-thumb {
   position: absolute;
   left: 0; right: 0;
-  border-radius: 4px;
-  background: linear-gradient(180deg, var(--gold-light), var(--gold));
-  box-shadow: 0 2px 8px rgba(154,122,58,0.35);
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--gold-light), var(--rose-light));
+  box-shadow: 0 2px 8px rgba(154,122,58,0.3);
   transition: background 0.2s, height 0.3s, top 0.3s;
   cursor: grab;
   min-height: 28px;
 }
 .cmnt-scrollbar-thumb:active { cursor: grabbing; }
 .cmnt-scrollbar:hover .cmnt-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--gold-light), var(--rose));
-  box-shadow: 0 2px 12px rgba(154,122,58,0.5);
+  background: linear-gradient(180deg, var(--gold), var(--rose));
 }
 
 /* ── COPY TOAST ── */
@@ -607,6 +905,47 @@ body {
 #tap-overlay .ov-note {
   font-family: 'Cormorant Garamond', serif; font-size: 13px;
   color: rgba(245,232,204,0.4); font-style: italic;
+}
+
+/* ── NAMA TAMU DI OVERLAY ── */
+#ov-guest-wrap {
+  display: none; /* ditampilkan via JS kalau ada ?to= */
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  animation: fadeIn 0.7s ease both;
+}
+#ov-guest-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgba(245,232,204,0.45);
+}
+#ov-guest-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(32px, 9vw, 48px);
+  color: #f5e8cc;
+  line-height: 1.2;
+  text-shadow: 0 2px 18px rgba(200,168,74,0.35);
+}
+#ov-guest-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+#ov-guest-divider::before,
+#ov-guest-divider::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: rgba(200,168,74,0.35);
+}
+#ov-guest-divider span {
+  font-size: 8px;
+  color: rgba(200,168,74,0.5);
+  letter-spacing: 4px;
 }
 
 .bg-yellow-tag {
@@ -705,6 +1044,14 @@ body {
   <div class="ov-sub">Undangan Pernikahan</div>
   <div class="ov-title">Nova &amp; Togar</div>
   <div class="ov-sub">8 · 8 · 2026</div>
+
+  <!-- Nama tamu — ditampilkan kalau URL mengandung ?to=NamaTamu -->
+  <div id="ov-guest-wrap" style="position:relative;z-index:1;">
+    <span id="ov-guest-label">Kepada Yth.</span>
+    <span id="ov-guest-name"></span>
+    <div id="ov-guest-divider"><span>✦ ✦ ✦</span></div>
+  </div>
+
   <button class="ov-btn" onclick="openInvitation()">Buka Undangan</button>
   <div class="ov-note">♪ Ketuk "BUKA UNDANGAN" sambil enjoy musik pilihan kita~</div>
 </div>
@@ -2044,55 +2391,109 @@ body {
   </div>
 </section>
 
-<!-- ===== RSVP & UCAPAN ===== -->
-<section class="section" style="background:var(--section-bg1);position:relative;overflow:hidden;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:50px;opacity:1;top:7%;left:6%;--r:-13deg;animation-duration:5.6s;animation-delay:-0.0s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:42px;opacity:1;top:65%;right:5%;--r:10deg;animation-duration:6.4s;animation-delay:-2.4s;">
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:36px;opacity:1;top:35%;left:80%;--r:-5deg;animation-duration:5.2s;animation-delay:-4.8s;">
-  <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:1;" loading="lazy">
+<!-- ===== RSVP & UCAPAN — REDESIGN ===== -->
+<section class="section rsvp-section-bg" style="padding:72px 24px 80px;position:relative;overflow:hidden;">
+
+  <!-- Dekorasi bunga kiri bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:0.75;" loading="lazy">
+  <!-- Dekorasi bunga kanan bawah -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:0.75;" loading="lazy">
+
+  <!-- Kupu-kupu melayang -->
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:44px;top:6%;left:5%;--r:-13deg;animation-duration:5.6s;animation-delay:-0.0s;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:34px;top:70%;right:6%;--r:10deg;animation-duration:6.4s;animation-delay:-2.4s;">
+  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/kupu-kupu.png" alt="" class="btf" loading="lazy" style="width:28px;top:40%;right:4%;--r:-5deg;animation-duration:5.2s;animation-delay:-4.8s;">
+
+  <!-- Subtle watercolor SVG flourish — top center -->
+  <svg aria-hidden="true" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:260px;height:60px;pointer-events:none;opacity:0.18;" viewBox="0 0 260 60" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <path d="M130 55 Q90 40 50 48 Q20 52 5 44" stroke="#9a7a3a" stroke-width="1" stroke-linecap="round"/>
+    <path d="M130 55 Q170 40 210 48 Q240 52 255 44" stroke="#9a7a3a" stroke-width="1" stroke-linecap="round"/>
+    <path d="M50 48 Q42 38 46 28 Q50 20 56 22" stroke="#b07050" stroke-width="0.8" stroke-linecap="round"/>
+    <path d="M210 48 Q218 38 214 28 Q210 20 204 22" stroke="#b07050" stroke-width="0.8" stroke-linecap="round"/>
+    <circle cx="46" cy="22" r="5" fill="#e8a4b8" opacity="0.9"/>
+    <circle cx="42" cy="17" r="3" fill="#f2c4d0" opacity="0.8"/>
+    <circle cx="50" cy="17" r="3" fill="#f2c4d0" opacity="0.75"/>
+    <circle cx="46" cy="13" r="3" fill="#f2c4d0" opacity="0.75"/>
+    <circle cx="204" cy="22" r="5" fill="#f0d090" opacity="0.9"/>
+    <circle cx="200" cy="17" r="3" fill="#f7e0b0" opacity="0.8"/>
+    <circle cx="208" cy="17" r="3" fill="#f7e0b0" opacity="0.75"/>
+    <circle cx="204" cy="13" r="3" fill="#f7e0b0" opacity="0.75"/>
+    <circle cx="130" cy="8" r="2" fill="#c4a8d8" opacity="0.6"/>
+    <circle cx="120" cy="12" r="1.5" fill="#9a7a3a" opacity="0.4"/>
+    <circle cx="140" cy="12" r="1.5" fill="#9a7a3a" opacity="0.4"/>
+  </svg>
 
   <div class="section-content">
-    <div class="ornament-row fade-in-down">&#10022; &#10023; &#10022;</div>
-    <h2 class="section-title fade-in-up delay-1">Ucapan &amp; Doa</h2>
-    <p class="section-sub fade-in-up delay-2">SAMPAIKAN DOAMU</p>
 
-    <form class="rsvp-form fade-in-up delay-2" onsubmit="submitRSVP(event)">
-      <label class="form-label">&#9993; Nama Lengkap</label>
-      <input class="form-input" type="text" id="rsvp-name" placeholder="Nama kamu..." required>
+    <!-- ── FORM RSVP ── -->
+    <div class="rsvp-title-wrap fade-in-up">
+      <span class="rsvp-eyebrow">Kehadiran &amp; Ucapan</span>
+      <h2 class="rsvp-main-title">
+        Titipkan Doa<span>untuk kami</span>
+      </h2>
+      <p class="rsvp-subtitle">Setiap ucapan adalah hadiah yang kami simpan selamanya</p>
+    </div>
 
-      <label class="form-label">&#129681; Kehadiran</label>
-      <select class="form-select" id="rsvp-hadir">
-        <option value="hadir">Pasti Hadir</option>
-        <option value="tidak">Mohon Maaf Tidak Hadir</option>
-        <option value="belum">Masih Belum Pasti</option>
-      </select>
+    <div class="rsvp-rule fade-in-up delay-1">
+      <div class="rsvp-rule-diamond"></div>
+    </div>
 
-      <label class="form-label">&#128172; Ucapan &amp; Doa</label>
-      <textarea class="form-textarea" id="rsvp-msg" placeholder="Tulis ucapan dan doamu untuk Nova &amp; Togar..."></textarea>
+    <div class="rsvp-form-card fade-in-up delay-2">
+      <form onsubmit="submitRSVP(event)" style="margin:0;">
 
-      <button type="submit" class="btn btn-rose" style="width:100%;font-size:16px;font-style:italic;padding:14px;letter-spacing:2px">
-        Kirim Ucapan &#10022;
-      </button>
-    </form>
+        <div class="rsvp-field">
+          <label class="rsvp-field-label form-label" for="rsvp-name">Nama Lengkap</label>
+          <input class="form-input" type="text" id="rsvp-name" placeholder="Nama kamu…" required autocomplete="name">
+        </div>
 
-    <div class="comments-slider-wrap">
+        <div class="rsvp-field">
+          <label class="rsvp-field-label form-label" for="rsvp-hadir">Konfirmasi Kehadiran</label>
+          <div class="rsvp-select-wrap">
+            <select class="form-select" id="rsvp-hadir">
+              <option value="hadir">✓ &nbsp;Pasti Hadir</option>
+              <option value="tidak">✗ &nbsp;Mohon Maaf Tidak Hadir</option>
+              <option value="belum">? &nbsp;Masih Belum Pasti</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="rsvp-field" style="margin-bottom:8px;">
+          <label class="rsvp-field-label form-label" for="rsvp-msg">Ucapan &amp; Doa</label>
+          <textarea class="form-textarea" id="rsvp-msg" placeholder="Tuliskan doa &amp; harapan terbaikmu untuk Nova &amp; Togar…"></textarea>
+        </div>
+
+        <button type="submit" class="rsvp-submit-btn">
+          Kirim Ucapan &nbsp;✦
+        </button>
+
+      </form>
+    </div>
+
+    <!-- ── DIVIDER antara form dan ucapan ── -->
+    <div class="rsvp-divider-block fade-in-up delay-3">
+      <span class="rsvp-divider-label">Ucapan Tamu</span>
+    </div>
+
+    <p class="ucapan-intro fade-in-up delay-3">Doa dan harapan dari orang-orang terkasih</p>
+
+    <!-- ── COMMENT CARDS ── -->
+    <div class="comments-slider-wrap fade-in-up delay-4">
       <div class="comments-slider" id="comments-slider">
         <div class="comments-slider-clip">
           <div id="comments-list">
-            <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown-mid);padding:20px 0;">Memuat ucapan...</p>
+            <p id="comments-loading" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--brown-pale);padding:24px 0;">Memuat ucapan...</p>
           </div>
         </div>
-        <!-- Custom vertical scrollbar — inside slider, outside clip -->
         <div class="cmnt-scrollbar" id="cmnt-scrollbar" style="display:none;">
           <div class="cmnt-scrollbar-thumb" id="cmnt-scrollbar-thumb"></div>
         </div>
       </div>
-      <div class="comments-nav" id="comments-nav" style="display:none;" aria-label="navigasi komentar"></div>
+      <div class="comments-nav" id="comments-nav" style="display:none;" aria-label="navigasi ucapan"></div>
       <div class="comments-counter" id="cmnt-counter" style="display:none;"></div>
     </div>
 
-    <div class="ornament-row fade-in-up delay-5" style="margin-top:28px">&#10022; &#10023; &#10022;</div>
+    <div class="ornament-row fade-in-up delay-5" style="margin-top:36px;color:var(--gold-light);">&#10022; &#10023; &#10022;</div>
+
   </div>
 </section>
 
@@ -2169,6 +2570,30 @@ function toggleMusic() {
 
 // Auto play — try immediately (desktop), fallback overlay (mobile)
 setTimeout(function(){ startMusic(); }, 800);
+
+// ── NAMA TAMU dari URL ?to=NamaTamu ──
+(function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var name = params.get('to') || params.get('nama') || params.get('guest') || '';
+    if (name) {
+      // Decode & sanitize
+      name = decodeURIComponent(name).replace(/[<>"'&]/g, '');
+      name = name.trim().slice(0, 60); // max 60 karakter
+      if (name) {
+        var wrap = document.getElementById('ov-guest-wrap');
+        var nameEl = document.getElementById('ov-guest-name');
+        if (wrap && nameEl) {
+          nameEl.textContent = name;
+          wrap.style.display = 'flex';
+          // Juga pre-fill field nama di RSVP jika masih kosong
+          var rsvpName = document.getElementById('rsvp-name');
+          if (rsvpName && !rsvpName.value) rsvpName.value = name;
+        }
+      }
+    }
+  } catch(e) {}
+})();
 
 function openInvitation() {
   var overlay = document.getElementById('tap-overlay');
