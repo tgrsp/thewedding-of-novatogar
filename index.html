@@ -25,6 +25,8 @@
 <link rel="dns-prefetch" href="https://i.ibb.co.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Preload LCP overlay image (tap-to-open background, this loads first) -->
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%209.jpg" fetchpriority="high">
 <!-- Preload LCP hero image (background-image via CSS needs this tag to be discovered early) -->
 <link rel="preload" as="image" href="https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg" fetchpriority="high">
 <!-- Preload above-the-fold couple photos -->
@@ -913,11 +915,24 @@ body {
 /* ── TAP TO OPEN OVERLAY ── */
 #tap-overlay {
   position: fixed; inset: 0; z-index: 99998;
-  background: linear-gradient(160deg, rgba(44,30,16,0.93) 0%, rgba(74,46,24,0.96) 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 20px; text-align: center; padding: 32px;
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  background-color: #0d0905;
+  background-image:
+    linear-gradient(180deg, rgba(20,14,8,0.25) 0%, rgba(20,14,8,0.15) 45%, rgba(15,10,6,0.78) 75%, rgba(10,7,4,0.94) 100%),
+    url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%209.jpg');
+  background-repeat: no-repeat;
+  background-position: center 18%, center top;
+  background-size: cover, cover;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  gap: 18px; text-align: center; padding: 32px; padding-bottom: 8vh;
   transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+/* Layar lebar (desktop/tablet horizontal): foto portrait jangan di-cover penuh
+   supaya tidak over-zoom dan memotong wajah; tampilkan utuh, sisanya warna gelap senada. */
+@media (min-aspect-ratio: 4/5) {
+  #tap-overlay {
+    background-size: cover, contain;
+    background-position: center 18%, center 92%;
+  }
 }
 #tap-overlay.hidden {
   opacity: 0; visibility: hidden; pointer-events: none;
@@ -925,10 +940,12 @@ body {
 #tap-overlay .ov-title {
   font-family: 'Great Vibes', cursive; font-size: clamp(38px, 10vw, 58px);
   color: #e8c87a; line-height: 1.2;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.55);
 }
 #tap-overlay .ov-sub {
   font-family: 'Cormorant Garamond', serif; font-size: 13px;
-  color: rgba(245,232,204,0.65); letter-spacing: 5px; text-transform: uppercase;
+  color: rgba(245,232,204,0.8); letter-spacing: 5px; text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
 }
 #tap-overlay .ov-btn {
   margin-top: 8px;
@@ -946,7 +963,8 @@ body {
 }
 #tap-overlay .ov-note {
   font-family: 'Cormorant Garamond', serif; font-size: 13px;
-  color: rgba(245,232,204,0.4); font-style: italic;
+  color: rgba(245,232,204,0.65); font-style: italic;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
 }
 
 /* ── NAMA TAMU DI OVERLAY ── */
@@ -1142,14 +1160,8 @@ body {
 
 <!-- ===== TAP TO OPEN OVERLAY ===== -->
 <div id="tap-overlay">
-  <!-- Bunga background pojok kiri bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left" style="opacity:1;" loading="lazy">
-
-  <!-- Bunga background pojok kanan bawah -->
-  <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--right" style="opacity:1;" loading="lazy">
-
   <!-- Copyright pojok kanan atas -->
-  <div style="position:absolute;top:18px;right:20px;z-index:2;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(245,232,204,0.45);letter-spacing:1px;">&#169; togarsp</div>
+  <div style="position:absolute;top:18px;right:20px;z-index:2;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(245,232,204,0.7);letter-spacing:1px;text-shadow:0 1px 6px rgba(0,0,0,0.6);">&#169; togarsp</div>
 
   <div class="ov-sub">Undangan Pernikahan</div>
   <div class="ov-title">Nova &amp; Togar</div>
