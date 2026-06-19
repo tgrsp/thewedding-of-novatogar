@@ -1071,6 +1071,75 @@ body {
 
 <div class="copy-toast" id="copy-toast">&#10003; Nomor rekening disalin!</div>
 
+<!-- ===== ROTATE DEVICE HINT (muncul sebentar setelah web full load, lalu hilang sendiri) ===== -->
+<div id="rotate-overlay">
+  <div class="rotate-icon">
+    <svg viewBox="0 0 100 100" width="60" height="60" fill="none">
+      <rect x="32" y="14" width="36" height="60" rx="6" stroke="#f5e8cc" stroke-width="4"/>
+      <circle cx="50" cy="66" r="2.2" fill="#f5e8cc"/>
+      <line x1="40" y1="22" x2="60" y2="22" stroke="#f5e8cc" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <p class="rotate-text">Rotate for the best experience</p>
+  <p class="rotate-subtext">Putar layar untuk pengalaman terbaik</p>
+</div>
+
+<style>
+  #rotate-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 99999;
+    background: linear-gradient(160deg, #2a1d12 0%, #1c130a 100%);
+    align-items: center; justify-content: center;
+    flex-direction: column; text-align: center;
+    padding: 24px;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    pointer-events: none; /* tidak menghalangi/menghadang interaksi user */
+  }
+  #rotate-overlay.show { display: flex; }
+  #rotate-overlay.hide { opacity: 0; }
+  @media (min-width: 901px) {
+    #rotate-overlay { display: none !important; } /* tidak tampil di desktop/PC */
+  }
+  #rotate-overlay .rotate-icon { animation: rotateHint 1.8s ease-in-out infinite; }
+  @keyframes rotateHint {
+    0%, 18% { transform: rotate(0deg); }
+    50%, 68% { transform: rotate(90deg); }
+    100% { transform: rotate(90deg); }
+  }
+  #rotate-overlay .rotate-text {
+    margin-top: 22px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: #f5e8cc;
+  }
+  #rotate-overlay .rotate-subtext {
+    margin-top: 6px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: rgba(245,232,204,0.6);
+  }
+</style>
+<script>
+  // Tampilkan hint rotate sebentar setelah halaman benar-benar selesai dimuat (load event),
+  // lalu hilang otomatis — tidak memaksa/menghalangi user untuk membuka undangan.
+  window.addEventListener('load', function () {
+    if (window.innerWidth > 900) return; // hanya untuk mobile
+    var rotateEl = document.getElementById('rotate-overlay');
+    if (!rotateEl) return;
+    setTimeout(function () {
+      rotateEl.classList.add('show');
+      setTimeout(function () {
+        rotateEl.classList.add('hide');
+        setTimeout(function () { rotateEl.style.display = 'none'; }, 650);
+      }, 3000); // tampil selama 3 detik
+    }, 300); // beri sedikit jeda setelah load penuh
+  });
+</script>
+
 <!-- ===== TAP TO OPEN OVERLAY ===== -->
 <div id="tap-overlay">
   <!-- Bunga background pojok kiri bawah -->
