@@ -289,6 +289,48 @@ body {
 .venue-name { font-family:'Playfair Display',serif; font-size:27px; font-weight:700; color:var(--brown-dark); margin-bottom:8px; }
 .venue-addr { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--brown-mid); line-height:1.8; margin-bottom:24px; }
 
+/* ── LOKASI ACARA (sub section + map preview) ── */
+.lokasi-label {
+  font-family:'Playfair Display',serif; font-size:33px; font-style:italic; font-weight:700;
+  color:var(--brown-dark); text-align:center; margin-bottom:24px;
+}
+.lokasi-wrap {
+  display:flex; align-items:stretch; gap:28px;
+  max-width:760px; margin:0 auto; text-align:left;
+}
+.lokasi-info {
+  flex:1 1 46%; max-width:46%;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.lokasi-map {
+  flex:1 1 54%; max-width:54%;
+  border-radius:6px; overflow:hidden;
+  border:1px solid rgba(154,122,58,0.18);
+  box-shadow:0 4px 22px rgba(60,42,24,0.10);
+  min-height:260px; position:relative;
+  background:linear-gradient(90deg,#e8dece 25%,#f5ede0 50%,#e8dece 75%);
+  background-size:800px 100%;
+  animation:shimmer 1.4s infinite linear;
+}
+.lokasi-map iframe { width:100%; height:100%; min-height:260px; border:0; display:block; position:relative; z-index:1; }
+.lokasi-map.map-loaded { animation:none; background:none; }
+
+@media (max-width:600px){
+  .lokasi-label { font-size:25px; margin-bottom:18px; }
+  .lokasi-wrap { flex-direction:column; gap:18px; }
+  .lokasi-info, .lokasi-map { max-width:100%; flex:1 1 auto; }
+  .lokasi-info { text-align:center; align-items:center; }
+  .lokasi-info .venue-addr { text-align:center; }
+  .lokasi-info .btn { align-self:center !important; width:100%; max-width:280px; text-align:center; }
+  .lokasi-map { order:-1; min-height:200px; aspect-ratio:4/3; }
+  .lokasi-map iframe { min-height:200px; }
+}
+@media (max-width:380px){
+  .lokasi-label { font-size:21px; }
+  .lokasi-map { min-height:180px; }
+  .lokasi-map iframe { min-height:180px; }
+}
+
 /* ── BUTTONS ── */
 .btn {
   display:inline-block; padding:12px 32px; border-radius:2px;
@@ -1657,18 +1699,37 @@ body {
       </div>
     </div>
 
-    <div style="margin:36px auto 0;max-width:420px;text-align:center" class="fade-in-up delay-4">
-      <div style="font-size:28px;margin-bottom:14px;color:var(--gold);letter-spacing:6px">&#10022; &#10023; &#10022;</div>
-      <p class="venue-name">Biang Coffee &amp; Casual Dining</p>
-      <p class="venue-addr">
-        Jl. Pasundan No.78, Kota Kulon<br>
-        (Sebrang Denpal III/2 Garut)<br>
-        Kec. Garut Kota, Kabupaten Garut<br>
-        Jawa Barat.
-      </p>
-      <a href="https://maps.google.com/?q=Biang+Coffee+Garut" target="_blank" class="btn btn-rose">
-        &#128506;&nbsp; Buka Google Maps
-      </a>
+    <div style="margin:36px auto 0;max-width:760px" class="fade-in-up delay-4">
+      <div style="font-size:28px;margin-bottom:10px;color:var(--gold);letter-spacing:6px;text-align:center">&#10022; &#10023; &#10022;</div>
+      <h2 class="lokasi-label">Lokasi Acara</h2>
+
+      <div class="lokasi-wrap">
+        <!-- Kiri: Info lokasi -->
+        <div class="lokasi-info">
+          <p class="venue-name">Biang Coffee &amp; Casual Dining</p>
+          <p class="venue-addr">
+            Jl. Pasundan No.78, Kota Kulon<br>
+            (Sebrang Denpal III/2 Garut)<br>
+            Kec. Garut Kota, Kabupaten Garut<br>
+            Jawa Barat.
+          </p>
+          <a href="https://maps.google.com/?q=Biang+Coffee+Garut" target="_blank" class="btn btn-rose" style="align-self:flex-start">
+            &#128506;&nbsp; Buka Google Maps
+          </a>
+        </div>
+
+        <!-- Kanan: Preview Google Maps -->
+        <div class="lokasi-map" id="lokasi-map-frame">
+          <iframe
+            src="https://www.google.com/maps?q=Biang+Coffee+%26+Casual+Dining,+Jl.+Pasundan+No.78,+Garut&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+            title="Peta lokasi Biang Coffee & Casual Dining"
+            onload="this.closest('.lokasi-map').classList.add('map-loaded')">
+          </iframe>
+        </div>
+      </div>
     </div>
     <div class="ornament-row fade-in-up delay-5" style="margin-top:36px">&#10022; &#10023; &#10022;</div>
   </div>
@@ -2342,9 +2403,15 @@ body {
         if(Math.abs(dx) > 40) galNavMain(dx < 0 ? 1 : -1);
       }, {passive:true});
 
-      // Auto-advance every 4s
-      var autoT = setInterval(function(){ galNavMain(1); }, 4000);
-      mainWrap.addEventListener('touchstart', function(){ clearInterval(autoT); }, {passive:true, once:true});
+      // Auto-advance every 4s — pause sementara saat disentuh/swipe, lalu lanjut lagi
+      var autoT;
+      function startAutoAdvance() {
+        clearInterval(autoT);
+        autoT = setInterval(function(){ galNavMain(1); }, 4000);
+      }
+      startAutoAdvance();
+      mainWrap.addEventListener('touchstart', function(){ clearInterval(autoT); }, {passive:true});
+      mainWrap.addEventListener('touchend', function(){ startAutoAdvance(); }, {passive:true});
     })();
     </script>
 
