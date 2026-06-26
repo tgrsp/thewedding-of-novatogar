@@ -154,16 +154,8 @@ body {
   box-shadow: none;
   pointer-events: none;
 }
-/* Muncul lagi saat cursor diarahkan ke baris musik (desktop hover) */
-#music-row:hover #music-info.collapsed {
-  max-width: 168px;
-  padding-left: 16px;
-  padding-right: 32px;
-  opacity: 1;
-  border-color: rgba(200,168,74,0.55);
-  box-shadow: 0 4px 14px rgba(154,122,58,0.22);
-  pointer-events: auto;
-}
+/* Catatan: reveal saat hover ditangani via JS (mouseenter/mouseleave pada #music-row)
+   supaya bisa sinkron dengan timer auto-hide & jadwal ulang 5 detik. */
 #music-title {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
@@ -234,10 +226,6 @@ body {
     border-radius: 18px;
   }
   #music-info.collapsed { padding-right: 18px; }
-  #music-row:hover #music-info.collapsed {
-    max-width: 124px;
-    padding: 5px 24px 5px 11px;
-  }
   #music-title { font-size: 10.5px; }
   #music-artist { font-size: 8px; }
   #music-notif { font-size: 9.5px; padding: 4px 10px; }
