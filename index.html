@@ -927,12 +927,91 @@ body {
   gap: 18px; text-align: center; padding: 32px; padding-bottom: 8vh;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
-/* Layar lebar (desktop/tablet horizontal): foto portrait jangan di-cover penuh
-   supaya tidak over-zoom dan memotong wajah; tampilkan utuh, sisanya warna gelap senada. */
-@media (min-aspect-ratio: 4/5) {
+/* ── LANDSCAPE MOBILE/TABLET & PC: layout 2-kolom ── */
+@media (orientation: landscape) and (max-width: 1024px), (min-width: 901px) {
   #tap-overlay {
-    background-size: cover, contain;
-    background-position: center 18%, center 92%;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+    padding-bottom: 0;
+    gap: 0;
+    background-image:
+      linear-gradient(180deg, rgba(20,14,8,0.18) 0%, rgba(15,10,6,0.65) 100%),
+      url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/foto%2010.png');
+    background-size: cover, cover;
+    background-position: center center, center center;
+  }
+  #tap-overlay .ov-photo-col {
+    display: flex !important;
+    flex: 0 0 45%;
+    max-width: 45%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  #tap-overlay .ov-photo-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  #tap-overlay .ov-content-col {
+    display: flex !important;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 40px 36px;
+    background: linear-gradient(135deg, rgba(13,9,5,0.72) 0%, rgba(20,14,8,0.60) 100%);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+}
+
+/* PC only (>900px): same 2-col layout */
+@media (min-width: 901px) {
+  #tap-overlay {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+    padding-bottom: 0;
+    gap: 0;
+    background-image:
+      linear-gradient(180deg, rgba(20,14,8,0.18) 0%, rgba(15,10,6,0.65) 100%),
+      url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/foto%2010.png');
+    background-size: cover, cover;
+    background-position: center center, center center;
+  }
+  #tap-overlay .ov-photo-col {
+    display: flex !important;
+    flex: 0 0 45%;
+    max-width: 45%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  #tap-overlay .ov-photo-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  #tap-overlay .ov-content-col {
+    display: flex !important;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 40px 36px;
+    background: linear-gradient(135deg, rgba(13,9,5,0.72) 0%, rgba(20,14,8,0.60) 100%);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
 }
 #tap-overlay.hidden {
@@ -1162,21 +1241,29 @@ body {
 <!-- ===== TAP TO OPEN OVERLAY ===== -->
 <div id="tap-overlay">
   <!-- Copyright pojok kanan atas -->
-  <div style="position:absolute;top:18px;right:20px;z-index:2;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(245,232,204,0.7);letter-spacing:1px;text-shadow:0 1px 6px rgba(0,0,0,0.6);">&#169; togarsp</div>
+  <div style="position:absolute;top:18px;right:20px;z-index:10;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(245,232,204,0.7);letter-spacing:1px;text-shadow:0 1px 6px rgba(0,0,0,0.6);">&#169; togarsp</div>
 
-  <div class="ov-sub">Undangan Pernikahan</div>
-  <div class="ov-title">Nova &amp; Togar</div>
-  <div class="ov-sub">8 · 8 · 2026</div>
-
-  <!-- Nama tamu — ditampilkan kalau URL mengandung ?to=NamaTamu -->
-  <div id="ov-guest-wrap" style="position:relative;z-index:1;">
-    <span id="ov-guest-label">Kepada Yth.</span>
-    <span id="ov-guest-name"></span>
-    <div id="ov-guest-divider"><span>✦ ✦ ✦</span></div>
+  <!-- Kolom foto — hanya tampil di landscape/PC, hidden di portrait mobile via CSS -->
+  <div class="ov-photo-col" style="display:none;">
+    <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/foto%2010.png" alt="Nova & Togar" loading="eager">
   </div>
 
-  <button class="ov-btn" onclick="openInvitation()">Buka Undangan</button>
-  <div class="ov-note">♪ Ketuk "BUKA UNDANGAN" sambil enjoy musik pilihan kita~</div>
+  <!-- Kolom konten — di portrait mode ini menjadi konten utama yang di-center -->
+  <div class="ov-content-col" style="display:contents;">
+    <div class="ov-sub">Undangan Pernikahan</div>
+    <div class="ov-title">Nova &amp; Togar</div>
+    <div class="ov-sub">8 · 8 · 2026</div>
+
+    <!-- Nama tamu — ditampilkan kalau URL mengandung ?to=NamaTamu -->
+    <div id="ov-guest-wrap" style="position:relative;z-index:1;">
+      <span id="ov-guest-label">Kepada Yth.</span>
+      <span id="ov-guest-name"></span>
+      <div id="ov-guest-divider"><span>✦ ✦ ✦</span></div>
+    </div>
+
+    <button class="ov-btn" onclick="openInvitation()">Buka Undangan</button>
+    <div class="ov-note">♪ Ketuk "BUKA UNDANGAN" sambil enjoy musik pilihan kita~</div>
+  </div>
 </div>
 
 <!-- ===== HERO ===== -->
