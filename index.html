@@ -918,7 +918,7 @@ body {
   position: fixed; inset: 0; z-index: 99998;
   background-color: #0d0905;
   background-image:
-    linear-gradient(180deg, rgba(20,14,8,0.25) 0%, rgba(20,14,8,0.15) 45%, rgba(15,10,6,0.78) 75%, rgba(10,7,4,0.94) 100%),
+    linear-gradient(180deg, rgba(10,7,4,0.52) 0%, rgba(10,7,4,0.40) 30%, rgba(8,5,2,0.82) 68%, rgba(5,3,1,0.96) 100%),
     url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%209.jpg');
   background-repeat: no-repeat;
   background-position: center 18%, center top;
@@ -927,17 +927,16 @@ body {
   gap: 18px; text-align: center; padding: 32px; padding-bottom: 8vh;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
-/* ── LANDSCAPE MOBILE/TABLET & PC: full overlay, no photo column ── */
+/* ── LANDSCAPE MOBILE/TABLET & PC: full overlay, centered ── */
 @media (orientation: landscape) and (max-width: 1024px), (min-width: 901px) {
   #tap-overlay {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 36px;
-    padding-bottom: 8vh;
-    gap: 18px;
+    padding: 32px 40px;
+    gap: 14px;
     background-image:
-      linear-gradient(180deg, rgba(20,14,8,0.25) 0%, rgba(20,14,8,0.15) 45%, rgba(15,10,6,0.78) 75%, rgba(10,7,4,0.94) 100%),
+      linear-gradient(180deg, rgba(10,7,4,0.55) 0%, rgba(8,5,2,0.45) 35%, rgba(8,5,2,0.80) 75%, rgba(5,3,1,0.96) 100%),
       url('https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/foto%2010.png');
     background-size: cover, cover;
     background-position: center center, center top;
@@ -949,6 +948,7 @@ body {
     justify-content: center;
     gap: 14px;
     padding: 0;
+    width: 100%;
     background: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1187,7 +1187,7 @@ body {
 
 
   <!-- Kolom konten — di portrait mode ini menjadi konten utama yang di-center -->
-  <div class="ov-content-col" style="display:contents;">
+  <div class="ov-content-col" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
     <div class="ov-sub">Undangan Pernikahan</div>
     <div class="ov-title">Nova &amp; Togar</div>
     <div class="ov-sub">8 · 8 · 2026</div>
