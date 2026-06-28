@@ -24,8 +24,11 @@
 <!-- Preconnect: image CDN & Google Fonts (eliminates DNS+TLS latency) -->
 <link rel="preconnect" href="https://i.ibb.co.com" crossorigin>
 <link rel="dns-prefetch" href="https://i.ibb.co.com">
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+<link rel="dns-prefetch" href="https://raw.githubusercontent.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://uwohezxsiuovgiqnjtre.supabase.co" crossorigin>
 <!-- Preload LCP overlay image (tap-to-open background, this loads first) -->
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%209.jpg" fetchpriority="high">
 <!-- Preload LCP hero image (background-image via CSS needs this tag to be discovered early) -->
@@ -1192,7 +1195,7 @@ body {
       <div id="music-title">L.O.V.E</div>
       <div id="music-artist">Nat King Cole (1965)</div>
     </div>
-    <button id="music-btn" onclick="toggleMusic()" title="Play / Pause musik"><img id="music-icon" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/play.png" alt="play" style="width:22px;height:22px;object-fit:contain;display:block;"></button>
+    <button id="music-btn" onclick="toggleMusic()" title="Play / Pause musik"><img class="music-icon-img" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/play.png" alt="play" width="22" height="22" style="width:22px;height:22px;object-fit:contain;display:block;"></button>
   </div>
 </div>
 
@@ -1851,9 +1854,9 @@ body {
 
   <style>
     @media(max-width:600px){
-      #quote-nova-wrap  { flex-direction:row !important; }
-      #quote-nova-photo { flex:0 0 42% !important; max-width:42% !important; width:42% !important; }
-      #quote-nova-text  { padding:24px 16px !important; }
+      #quote-nova-wrap   { flex-direction:column !important; }
+      #quote-nova-photo  { flex:0 0 300px !important; max-width:100% !important; width:100% !important; }
+      #quote-nova-text   { padding:40px 28px !important; }
     }
   </style>
 </section>
@@ -2807,8 +2810,8 @@ var playing = false;
 var audio = document.getElementById('bg-audio');
 var musicBtn = document.getElementById('music-btn');
 
-var ICON_PLAY  = '<img id="music-icon" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/play.png" alt="play" style="width:22px;height:22px;object-fit:contain;display:block;">';
-var ICON_PAUSE = '<img id="music-icon" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/pause.png" alt="pause" style="width:22px;height:22px;object-fit:contain;display:block;">';
+var ICON_PLAY  = '<img class="music-icon-img" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/play.png" alt="play" width="22" height="22" style="width:22px;height:22px;object-fit:contain;display:block;">';
+var ICON_PAUSE = '<img class="music-icon-img" src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/pause.png" alt="pause" width="22" height="22" style="width:22px;height:22px;object-fit:contain;display:block;">';
 
 var _notifTimer = null;
 function showMusicNotif(text) {
@@ -3264,8 +3267,16 @@ loadComments();
   var THRESHOLD = 30;
 
   // ── Mouse wheel (PC scroll) ──
+  // Hanya "menangkap" wheel selama masih ada card ke arah tersebut.
+  // Begitu sudah di card pertama/terakhir, scroll dilepas ke halaman (tidak terjebak).
   var wheelAcc = 0, wheelTimer = null;
   el.addEventListener('wheel', function(e) {
+    var atTop    = cmntIndex <= 0;
+    var atBottom = cmntIndex >= cmntCards.length - 1;
+    if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+      // Lepas ke scroll halaman, jangan block
+      return;
+    }
     e.preventDefault();
     wheelAcc += e.deltaY;
     clearTimeout(wheelTimer);
@@ -3283,9 +3294,14 @@ loadComments();
   }, { passive: true });
 
   el.addEventListener('touchmove', function(e){
-    var dy = Math.abs(e.touches[0].clientY - touchStartY);
+    var dy = e.touches[0].clientY - touchStartY;
     var dx = Math.abs(e.touches[0].clientX - touchStartX);
-    if (dy > dx && dy > 8) { e.preventDefault(); }
+    var atTop    = cmntIndex <= 0;
+    var atBottom = cmntIndex >= cmntCards.length - 1;
+    // Swipe ke bawah (dy>0) di card pertama, atau swipe ke atas (dy<0) di card terakhir
+    // → lepas ke scroll halaman, jangan block
+    if ((dy > 0 && atTop) || (dy < 0 && atBottom)) return;
+    if (Math.abs(dy) > dx && Math.abs(dy) > 8) { e.preventDefault(); }
   }, { passive: false });
 
   el.addEventListener('touchend', function(e){
@@ -3313,7 +3329,8 @@ loadComments();
 // ══════════════════════════════════
 (function() {
   var canvas = document.getElementById('petal-canvas');
-  var PETAL_COUNT = 24;
+  // Lebih sedikit petal di mobile/tablet sempit (kurangi beban DOM + animasi)
+  var PETAL_COUNT = window.innerWidth <= 600 ? 14 : 24;
 
   // Elegant classic petal shapes — warm golds and rose tones
   function makePetal(type, opacity) {
@@ -3363,7 +3380,7 @@ loadComments();
 (function() {
   var canvas = document.getElementById('rsvp-petal-canvas');
   if (!canvas) return;
-  var PETAL_COUNT = 18;
+  var PETAL_COUNT = window.innerWidth <= 600 ? 10 : 18;
 
   function makePetal(type, opacity) {
     var colors = [
