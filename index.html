@@ -2721,7 +2721,7 @@ body {
 
         <div class="rsvp-field">
           <label class="rsvp-field-label form-label" for="rsvp-name">Nama Lengkap</label>
-          <input class="form-input" type="text" id="rsvp-name" placeholder="Nama kamu…" required autocomplete="name">
+          <input class="form-input" type="text" id="rsvp-name" placeholder="Nama kamu…" required autocomplete="off">
         </div>
 
         <div class="rsvp-field">
@@ -2896,9 +2896,6 @@ setTimeout(function(){ startMusic(); }, 800);
         if (wrap && nameEl) {
           nameEl.textContent = name;
           wrap.style.display = 'flex';
-          // Juga pre-fill field nama di RSVP jika masih kosong
-          var rsvpName = document.getElementById('rsvp-name');
-          if (rsvpName && !rsvpName.value) rsvpName.value = name;
         }
       }
     }
