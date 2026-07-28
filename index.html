@@ -24,6 +24,8 @@
 <!-- Preconnect: image CDN & Google Fonts (eliminates DNS+TLS latency) -->
 <link rel="preconnect" href="https://i.ibb.co.com" crossorigin>
 <link rel="dns-prefetch" href="https://i.ibb.co.com">
+<link rel="preconnect" href="https://wsrv.nl" crossorigin>
+<link rel="dns-prefetch" href="https://wsrv.nl">
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 <link rel="dns-prefetch" href="https://raw.githubusercontent.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,10 +34,7 @@
 <!-- Preload LCP overlay image (tap-to-open background, this loads first) -->
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%209.jpg" fetchpriority="high">
 <!-- Preload LCP hero image (background-image via CSS needs this tag to be discovered early) -->
-<link rel="preload" as="image" href="https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg" fetchpriority="high">
-<!-- Preload above-the-fold couple photos -->
-<link rel="preload" as="image" href="https://i.ibb.co.com/Hp4Gr3Hc/N1.jpg" fetchpriority="high">
-<link rel="preload" as="image" href="https://i.ibb.co.com/twDbWThF/T1.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="https://wsrv.nl/?url=i.ibb.co.com/0pbRnLFw/TNLR-6.jpg&amp;w=1400&amp;q=78&amp;output=webp" fetchpriority="high">
 <!-- Fonts: slimmed to only weights actually used, font-display=swap prevents render-blocking -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;600&family=Great+Vibes&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet"></noscript>
@@ -1298,7 +1297,7 @@ body {
 
 <section class="hero" style="background:
     linear-gradient(165deg, rgba(249,244,232,0.82) 0%, rgba(237,226,204,0.85) 55%, rgba(232,216,192,0.88) 100%),
-    url('https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg') center center / cover no-repeat;">
+    url('https://wsrv.nl/?url=i.ibb.co.com/0pbRnLFw/TNLR-6.jpg&w=1400&q=78&output=webp') center center / cover no-repeat;">
   <div class="petal-canvas" id="petal-canvas"></div>
   <!-- Bunga background pojok kiri bawah -->
   <img src="https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/bunga%201.png" alt="" class="section-flower section-flower--left section-flower--dark" style="opacity:0.12;" loading="lazy">
@@ -1783,7 +1782,7 @@ body {
 
     <!-- Kanan: Foto besar -->
     <div id="quote-togar-photo" class="fade-in-right" style="flex:0 0 42%;max-width:42%;position:relative;overflow:hidden;">
-      <img src="https://i.ibb.co.com/JjpNZcW4/R542026193834-picked5.jpg" alt="Togar"
+      <img src="https://wsrv.nl/?url=i.ibb.co.com/JjpNZcW4/R542026193834-picked5.jpg&w=900&q=78&output=webp" alt="Togar"
         loading="lazy" decoding="async"
         style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;">
       <!-- subtle dark overlay on left edge to blend with text column -->
@@ -2483,32 +2482,27 @@ body {
         <!-- images injected by JS -->
         <button class="gal-main-nav prev" onclick="event.stopPropagation();galNavMain(-1)" aria-label="Sebelumnya">&#8249;</button>
         <button class="gal-main-nav next" onclick="event.stopPropagation();galNavMain(1)" aria-label="Berikutnya">&#8250;</button>
-        <div class="gal-counter" id="gal-counter">1 / 5</div>
+        <div class="gal-counter" id="gal-counter">1 / 11</div>
       </div><!-- /gal-main-wrap -->
       </div><!-- /gal-frame-outer -->
     </div><!-- /gal-photo-outer -->
 
     <script>
     (function(){
-      // Foto 1_1 & Foto 11_1 selalu tampil di posisi pertama & kedua (tidak ikut diacak)
-      var galFixed = [
+      // Urutan foto galeri tetap (fixed), tidak diacak lagi
+      var galImgs = [
         'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%201_1.jpg',
-        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%2011_1.jpg'
-      ];
-
-      var galRest = [
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%2011_1.jpg',
         'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%206_1.jpg',
         'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%204_1.jpg',
-        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%2012_1.jpg'
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/Foto%2012_1.jpg',
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/TNLR-6.webp',
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/TNLR-5.webp',
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/TNLR-4.webp',
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/TNLR-3.webp',
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/TNLR-2.webp',
+        'https://raw.githubusercontent.com/tgrsp/thewedding-of-novatogar/main/TNLR-1.webp'
       ];
-
-      // Acak urutan foto sisanya (Fisher-Yates shuffle), 2 foto pertama tetap
-      for (var si = galRest.length - 1; si > 0; si--) {
-        var sj = Math.floor(Math.random() * (si + 1));
-        var stmp = galRest[si]; galRest[si] = galRest[sj]; galRest[sj] = stmp;
-      }
-
-      var galImgs = galFixed.concat(galRest);
 
       window.galCurrent = 0;
       var mainWrap = document.getElementById('gal-main-wrap');
@@ -3359,7 +3353,7 @@ loadComments();
 
 // ── HERO BACKGROUND: force early load via JS Image object ──
 (function(){
-  var heroUrl = 'https://i.ibb.co.com/0pbRnLFw/TNLR-6.jpg';
+  var heroUrl = 'https://wsrv.nl/?url=i.ibb.co.com/0pbRnLFw/TNLR-6.jpg&w=1400&q=78&output=webp';
   var img = new Image();
   img.fetchPriority = 'high';
   img.src = heroUrl;
